@@ -22,9 +22,6 @@ public class Authentication {
     private static boolean checkUniqueEmail(String email){
         // TODO: Decide method to store data
         String auxEmail = "example email";
-        if (email.equals(auxEmail)) {
-            return true;
-        }
-        return false;
+        return email.equals(auxEmail);
     }
 }
