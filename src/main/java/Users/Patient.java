@@ -13,9 +13,9 @@ public class Patient extends User {
 
     public void addAppointment(Date date){
         Date now = new Date();
-        Appointment newAppointment = fetchAppointment(1, now); // How do we want to make users select a doctor?
+        Appointment newAppointment = fetchAppointment(1, now); // TODO: How do we want to make users select a doctor?
         newAppointment.setPatient(this);
-        // Update it in the database
+        // TODO: Update it in the database
         this.appointments.add(newAppointment);
     }
 }

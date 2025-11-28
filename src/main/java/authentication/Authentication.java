@@ -21,4 +21,6 @@ public class Authentication {
         }
         return null;
     }
+
+    // TODO: Doctor singUp
 }

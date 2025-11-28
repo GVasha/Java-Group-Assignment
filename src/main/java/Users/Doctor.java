@@ -10,11 +10,12 @@ public class Doctor extends User {
     }
 
     public Appointment createAppointment(Date date){
-        Appointment newAppointment = new Appointment(this, date);
-        // Store it in the database
+        // TODO: Check if the date is valid
+        Appointment newAppointment = new Appointment(0, this, null, date);
+        // TODO: Store it in the database
         return newAppointment;
     }
-    @Override
+
     public void addAppointment(Date date){
         Appointment newAppointment = createAppointment(date);
         this.appointments.add(newAppointment);
