@@ -4,8 +4,8 @@ import java.net.http.*;
 
 public class SupabaseClient {
 
-    private static final String URL = "https://YOUR_PROJECT_ID.supabase.co/rest/v1/";
-    private static final String API_KEY = "YOUR_SERVICE_ROLE_KEY";
+    private static final String URL = "https://zwfjbeiquyscxgcssgby.supabase.co";
+    private static final String API_KEY = "sb_secret_L-Uod-6tGwRItsCURXpMHw_rnCtuWBL";
 
     private static final HttpClient client = HttpClient.newHttpClient();
 
