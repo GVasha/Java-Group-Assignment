@@ -4,6 +4,7 @@ import Appointments.Appointment;
 
 import java.util.ArrayList;
 import java.util.Date;
+import DatabaseManagement.SupabaseClient;
 
 public abstract class User {
     private int id;

@@ -3,7 +3,7 @@ module com.example.javagroupassignment {
     requires javafx.fxml;
     requires java.desktop;
     // requires com.example.javagroupassignment;
-    requires gson;
+
     requires java.net.http;
     requires com.google.gson;
 
