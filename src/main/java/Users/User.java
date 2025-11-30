@@ -65,6 +65,4 @@ public abstract class User {
         this.specialization = specialization;
         UserService.updateUser(this);
     }
-
-    abstract User createUser(String email, String firstName, String lastName, String password, String specialization) throws Exception;
 }

@@ -8,7 +8,7 @@ public class UserService {
     public static User fetchUser(String email) throws Exception {
 
         // Fetch by name (match both doctors and patients)
-        String json = SupabaseClient.get("user?email=eq." + email);
+        String json = SupabaseClient.get("User?email=eq." + email);
 
         JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
         if (arr.isEmpty()) return null;
@@ -35,7 +35,7 @@ public class UserService {
     public static User fetchUser(int id) throws Exception {
 
         // Fetch by ID (match both doctors and patients)
-        String json = SupabaseClient.get("users?id=eq." + id);
+        String json = SupabaseClient.get("User?id=eq." + id);
 
         JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
         if (arr.isEmpty()) return null;

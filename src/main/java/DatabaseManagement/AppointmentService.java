@@ -6,13 +6,12 @@ import com.google.gson.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class AppointmentService {
     private static final Gson gson = new Gson();
 
     public static Appointment fetchAppointment(int appointmentId) throws Exception{
-        String json = SupabaseClient.get("appointment?id=eq." + appointmentId);
+        String json = SupabaseClient.get("Appointment?id=eq." + appointmentId);
 
         JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
         if (arr.isEmpty()) return null;

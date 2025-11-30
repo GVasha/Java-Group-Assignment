@@ -47,8 +47,9 @@ public class Appointment {
     public String getStatus(){return this.status;}
 
     // Setters
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctor doctor) throws Exception {
         this.doctor = doctor;
+        AppointmentService.updateAppointment(this);
     }
     public void setPatient(Patient patient) throws Exception {
         this.patient = patient;
@@ -57,11 +58,13 @@ public class Appointment {
         }else{
             setStatus("AVAILABLE");
         }
+    }
+    public void setDate(LocalDateTime date) throws Exception {
+        this.date = date;
         AppointmentService.updateAppointment(this);
     }
-    public void setDate(LocalDateTime date){
-        this.date = date;
-    }
-    public void setStatus(String status){this.status = status;}
+    public void setStatus(String status) throws Exception {
+        this.status = status;
+        AppointmentService.updateAppointment(this);}
 
 }
