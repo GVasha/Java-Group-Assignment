@@ -1,5 +1,5 @@
-package DatabaseManagement;
-import Users.*;
+package database_management;
+import users.*;
 import com.google.gson.*;
 
 public class UserService {

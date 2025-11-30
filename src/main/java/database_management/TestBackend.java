@@ -1,13 +1,13 @@
-package DatabaseManagement;
+package database_management;
 
-import Authentication.Authentication;
-import Users.*;
+import authentication.Authentication;
+import users.*;
 
 public class TestBackend {
     public static void main(String[] args) throws Exception {
 
         // Test create user
-        Doctor doctor = Authentication.doctorSingUp("ruben@test.com", "Rubén", "de Juan", "test", "allergy");
+        Doctor doctor = Authentication.doctorSingUp("oskar@test.com", "Rubén", "de Juan", "test", "allergy");
         if(doctor == null){
             System.out.println("Existing email");
             return;

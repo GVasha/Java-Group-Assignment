@@ -1,14 +1,9 @@
-package Users;
+package users;
 
-import Appointments.Appointment;
-import java.util.Date;
-
-import DatabaseManagement.AppointmentService;
-import DatabaseManagement.SupabaseClient;
-import DatabaseManagement.UserService;
+import appointments.Appointment;
 
 
-import static DatabaseManagement.AppointmentService.fetchAppointment;
+import static database_management.AppointmentService.fetchAppointment;
 
 public class Patient extends User {
     // Constructor

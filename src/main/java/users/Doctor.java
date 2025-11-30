@@ -1,16 +1,11 @@
-package Users;
+package users;
 
-import Appointments.Appointment;
-import DatabaseManagement.AppointmentService;
-import DatabaseManagement.SupabaseClient;
-import DatabaseManagement.UserService;
+import appointments.Appointment;
+import database_management.AppointmentService;
 
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class Doctor extends User {
 
