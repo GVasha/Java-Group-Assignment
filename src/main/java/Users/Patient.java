@@ -2,6 +2,8 @@ package Users;
 
 import Appointments.Appointment;
 import java.util.Date;
+
+import DatabaseManagement.AppointmentService;
 import DatabaseManagement.SupabaseClient;
 import DatabaseManagement.UserService;
 
@@ -14,12 +16,10 @@ public class Patient extends User {
         super(firstName, lastName, email, password, "none");
     }
 
-    public void addAppointment(Appointment appointment) throws Exception {
-        Appointment newAppointment = fetchAppointment(1); // TODO: How do we want to make users select a doctor? good question ruben
-        newAppointment.setPatient(this);
-        // TODO: Update it in the database
-        this.appointments.add(newAppointment);
+    public String bookAppointment(int appointmentId) throws Exception {
+        return AppointmentService.bookAppointment(appointmentId, this.getId());
     }
+
     public void cancelAppointment(Appointment appointment){
         appointment.setPatient(null);
         this.appointments.remove(appointment);
