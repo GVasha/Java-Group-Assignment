@@ -28,6 +28,7 @@ public class Doctor extends User {
     // TODO: Allow doctor to create a schedule slot (availability)
     public void createScheduleSlot(LocalDateTime start, LocalDateTime end) {
 
+
     }
 
     // TODO: Allow doctor to view all their appointments
