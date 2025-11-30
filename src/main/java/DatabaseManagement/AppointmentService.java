@@ -52,6 +52,17 @@ public class AppointmentService {
         return SupabaseClient.get(endpoint);
     }
 
+    //For patients: book an AVAILABLE slot (set patient_id + change status)
+    public static String bookAppointment(int appointmentId, int patientId) throws Exception {
+        JsonObject body = new JsonObject();
+        body.addProperty("patient_id", patientId);
+        body.addProperty("status", "BOOKED");   // or "CONFIRMED", just be consistent
+
+        // this will hit: /rest/v1/Appointment?id=eq.<appointmentId>
+        return SupabaseClient.patch("Appointment", appointmentId, body.toString());
+    }
+
+
 
 }
 
