@@ -2,6 +2,8 @@ package Users;
 
 import Appointments.Appointment;
 import java.util.Date;
+
+import DatabaseManagement.AppointmentService;
 import DatabaseManagement.SupabaseClient;
 import DatabaseManagement.UserService;
 
