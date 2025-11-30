@@ -1,6 +1,7 @@
 package database_management;
 import users.*;
 import com.google.gson.*;
+import utils.JsonTransformer;
 
 public class UserService {
     private static final Gson gson = new Gson();
@@ -15,21 +16,7 @@ public class UserService {
 
         JsonObject obj = arr.get(0).getAsJsonObject();
 
-        int id = obj.get("id").getAsInt();
-        String firstName = obj.get("first_name").getAsString();
-        String lastName = obj.get("last_name").getAsString();
-        String password = obj.get("password").getAsString();
-        String specialization = obj.get("specialization").getAsString();
-
-        // MOST IMPORTANT: check the type column
-        String role = obj.get("role").getAsString();
-
-        // Create the correct child class
-        return switch (role) {
-            case "doctor" -> new Doctor(email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(email, firstName, lastName, password);
-            default -> throw new IllegalStateException("Unknown user role: " + role);
-        };
+        return JsonTransformer.jsonObjToUser(obj);
     }
 
     public static User fetchUser(int id) throws Exception {
@@ -42,22 +29,7 @@ public class UserService {
 
         JsonObject obj = arr.get(0).getAsJsonObject();
 
-        int userId = obj.get("id").getAsInt();
-        String email = obj.get("email").getAsString();
-        String firstName = obj.get("first_name").getAsString();
-        String lastName = obj.get("last_name").getAsString();
-        String password = obj.get("password").getAsString();
-        String specialization = obj.has("specialization") ? obj.get("specialization").getAsString() : "";
-
-        // MOST IMPORTANT: check the role column
-        String role = obj.get("role").getAsString();
-
-        // Create the correct child class
-        return switch (role) {
-            case "doctor" -> new Doctor(email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(email, firstName, lastName, password);
-            default -> throw new IllegalStateException("Unknown user role: " + role);
-        };
+        return JsonTransformer.jsonObjToUser(obj);
     }
 
 
