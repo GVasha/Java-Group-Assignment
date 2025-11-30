@@ -6,6 +6,7 @@ module com.example.javagroupassignment {
 
     requires java.net.http;
     requires com.google.gson;
+    requires com.example.javagroupassignment;
 
 
     opens com.example.javagroupassignment to javafx.fxml;

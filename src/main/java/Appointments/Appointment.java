@@ -1,22 +1,29 @@
 package Appointments;
 
+import DatabaseManagement.UserService;
 import Users.Doctor;
 import Users.Patient;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Appointment {
     private int id;
     private Doctor doctor;
     private Patient patient;
-    private Date date;
+    private LocalDateTime date;
 
     // Constructor
-    public Appointment(int id, Doctor doctor, Patient patient, Date date) {
+    public Appointment(int id, int doctorId, LocalDateTime date) throws Exception {
         this.id = id;
-        this.doctor = doctor;
-        this.patient = patient;
+        this.doctor = (Doctor) UserService.fetchUser(doctorId);
+        this.date = date;
+    }
+    public Appointment(int id, int doctorId, int patientId, LocalDateTime date) throws Exception {
+        this.id = id;
+        this.doctor = (Doctor) UserService.fetchUser(doctorId);
+        this.patient = (Patient) UserService.fetchUser(patientId);
         this.date = date;
     }
 
@@ -30,7 +37,7 @@ public class Appointment {
     public Patient getPatient() {
         return this.patient;
     }
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return this.date;
     }
 
@@ -41,7 +48,7 @@ public class Appointment {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
-    public void setDate(Date date){
+    public void setDate(LocalDateTime date){
         this.date = date;
     }
 
