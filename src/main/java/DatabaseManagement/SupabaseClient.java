@@ -27,6 +27,7 @@ public class SupabaseClient {
                 .header("apikey", API_KEY)
                 .header("Authorization", "Bearer " + API_KEY)
                 .header("Content-Type", "application/json")
+                .header("Prefer", "return=representation")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
