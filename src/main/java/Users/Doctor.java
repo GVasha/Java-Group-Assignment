@@ -1,6 +1,7 @@
 package Users;
 
 import Appointments.Appointment;
+import DatabaseManagement.AppointmentService;
 import DatabaseManagement.SupabaseClient;
 import DatabaseManagement.UserService;
 
@@ -25,10 +26,8 @@ public class Doctor extends User {
         return doctor;
     }
 
-    // TODO: Allow doctor to create a schedule slot (availability)
-    public void createScheduleSlot(LocalDateTime start, LocalDateTime end) {
-
-
+    public void createAvailableSlot(LocalDateTime dateTime, String notes) throws Exception {
+        AppointmentService.createAvailableSlot(this.getId(), dateTime, notes);
     }
 
     // TODO: Allow doctor to view all their appointments
