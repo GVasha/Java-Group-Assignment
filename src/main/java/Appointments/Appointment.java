@@ -1,5 +1,6 @@
 package Appointments;
 
+import DatabaseManagement.AppointmentService;
 import DatabaseManagement.UserService;
 import Users.Doctor;
 import Users.Patient;
@@ -13,12 +14,15 @@ public class Appointment {
     private Doctor doctor;
     private Patient patient;
     private LocalDateTime date;
+    private String status;
 
     // Constructor
-    public Appointment(int id, int doctorId, LocalDateTime date) throws Exception {
+    public Appointment(int id, int doctorId, LocalDateTime date, String status) throws Exception {
         this.id = id;
         this.doctor = (Doctor) UserService.fetchUser(doctorId);
         this.date = date;
+        this.patient = null;
+        this.status = status;
     }
     public Appointment(int id, int doctorId, int patientId, LocalDateTime date) throws Exception {
         this.id = id;
@@ -40,16 +44,27 @@ public class Appointment {
     public LocalDateTime getDate() {
         return this.date;
     }
+    public String getStatus(){return this.status;}
 
     // Setters
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctor doctor) throws Exception {
         this.doctor = doctor;
+        AppointmentService.updateAppointment(this);
     }
-    public void setPatient(Patient patient) {
+    public void setPatient(Patient patient) throws Exception {
         this.patient = patient;
+        if(patient != null){
+            setStatus("SCHEDULED");
+        }else{
+            setStatus("AVAILABLE");
+        }
     }
-    public void setDate(LocalDateTime date){
+    public void setDate(LocalDateTime date) throws Exception {
         this.date = date;
+        AppointmentService.updateAppointment(this);
     }
+    public void setStatus(String status) throws Exception {
+        this.status = status;
+        AppointmentService.updateAppointment(this);}
 
 }
