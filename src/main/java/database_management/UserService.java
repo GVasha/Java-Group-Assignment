@@ -16,7 +16,7 @@ public class UserService {
 
         JsonObject obj = arr.get(0).getAsJsonObject();
 
-        return JsonTransformer.jsonObjToUser(obj);
+        return JsonTransformer.jsonToUser(obj);
     }
 
     public static User fetchUser(int id) throws Exception {
@@ -29,18 +29,12 @@ public class UserService {
 
         JsonObject obj = arr.get(0).getAsJsonObject();
 
-        return JsonTransformer.jsonObjToUser(obj);
+        return JsonTransformer.jsonToUser(obj);
     }
 
 
     public static int saveUser(User user, String role) throws Exception {
-        JsonObject json = new JsonObject();
-        json.addProperty("first_name", user.getFirstName());
-        json.addProperty("last_name", user.getLastName());
-        json.addProperty("email", user.getEmail());
-        json.addProperty("password", user.getPassword());
-        json.addProperty("role", role);
-        json.addProperty("specialization", user.getSpecialization());
+        JsonObject json = JsonTransformer.userToJson(user, role);
 
         String result = SupabaseClient.post("User", json.toString());
 
@@ -59,14 +53,7 @@ public class UserService {
             throw new IllegalArgumentException("User ID must be set to update");
         }
 
-        JsonObject json = new JsonObject();
-        json.addProperty("first_name", user.getFirstName());
-        json.addProperty("last_name", user.getLastName());
-        json.addProperty("email", user.getEmail());
-        json.addProperty("password", user.getPassword());
-        if (user instanceof Doctor doctor) {
-            json.addProperty("specialization", doctor.getSpecialization());
-        }
+        JsonObject json = JsonTransformer.userToJson(user);
 
         String result = SupabaseClient.patch("User", user.getId(), json.toString());
 
