@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class AppointmentService {
-    // unified user fetcher
+    private static final Gson gson = new Gson();
 
     public static Appointment fetchAppointment(int appointmentId) throws Exception{
         String json = SupabaseClient.get("appointment?id=eq." + appointmentId);
@@ -24,9 +24,10 @@ public class AppointmentService {
         int patientId = obj.get("patient_id").getAsInt();
         String dateTimeStr = obj.get("date_time").getAsString(); // e.g. "2025-11-30T14:00:00"
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String status = obj.get("status").getAsString();
 
         if(patientId < 0){
-            return new Appointment(id, doctorId, dateTime);
+            return new Appointment(id, doctorId, dateTime, status);
         }else{
             return new Appointment(id, doctorId, patientId, dateTime);
         }
@@ -42,7 +43,6 @@ public class AppointmentService {
         body.addProperty("status", "AVAILABLE");
         body.addProperty("notes", notes == null ? "" : notes);
 
-        // hits /rest/v1/Appointment
         return SupabaseClient.post("Appointment", body.toString());
     }
 
@@ -50,6 +50,31 @@ public class AppointmentService {
     public static String getAvailableSlotsForDoctor(int doctorId) throws Exception {
         String endpoint = "Appointment?doctor_id=eq." + doctorId + "&status=eq.AVAILABLE";
         return SupabaseClient.get(endpoint);
+    }
+
+    public static int updateAppointment(Appointment appointment) throws Exception {
+        if (appointment.getId() <= 0) {
+            throw new IllegalArgumentException("Appointment ID must be set to update");
+        }
+
+        JsonObject json = new JsonObject();
+        Patient patient = appointment.getPatient();
+        if(patient != null){
+            json.addProperty("patient_id", patient.getId());
+        }else{
+            json.addProperty("patient_id", -1);
+        }
+        json.addProperty("status", appointment.getStatus());
+
+        String result = SupabaseClient.patch("Appointment", appointment.getId(), json.toString());
+
+        // Return the id of the updated appointment (should be same as before)
+        JsonArray arr = gson.fromJson(result, JsonArray.class);
+        if (!arr.isEmpty()) {
+            return arr.get(0).getAsJsonObject().get("id").getAsInt();
+        } else {
+            throw new Exception("Failed to update appointment, no response returned.");
+        }
     }
 
 

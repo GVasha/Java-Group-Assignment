@@ -14,13 +14,12 @@ public class Patient extends User {
         super(firstName, lastName, email, password, "none");
     }
 
-    public void addAppointment(Appointment appointment) throws Exception {
-        Appointment newAppointment = fetchAppointment(1); // TODO: How do we want to make users select a doctor? good question ruben
+    public void addAppointment(int appointmentId) throws Exception {
+        Appointment newAppointment = fetchAppointment(appointmentId);
         newAppointment.setPatient(this);
-        // TODO: Update it in the database
         this.appointments.add(newAppointment);
     }
-    public void cancelAppointment(Appointment appointment){
+    public void cancelAppointment(Appointment appointment) throws Exception {
         appointment.setPatient(null);
         this.appointments.remove(appointment);
     }
