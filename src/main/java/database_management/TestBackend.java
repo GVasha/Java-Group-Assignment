@@ -1,8 +1,8 @@
-package DatabaseManagement;
+package database_management;
 
-import Authentication.Authentication;
-import Users.*;
-import Appointments.Appointment;
+import authentication.Authentication;
+import users.*;
+import appointments.Appointment;
 
 import java.util.List;
 

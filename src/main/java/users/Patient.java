@@ -1,12 +1,12 @@
-package Users;
+package users;
 
-import Appointments.Appointment;
+import appointments.Appointment;
 import java.util.List;
 
-import DatabaseManagement.AppointmentService;
+import database_management.AppointmentService;
 
 
-import static DatabaseManagement.AppointmentService.fetchAppointmentById;
+import static database_management.AppointmentService.fetchAppointmentById;
 
 public class Patient extends User {
     // Constructor
@@ -25,6 +25,7 @@ public class Patient extends User {
         AppointmentService.updateAppointment(fetchedAppointment);
         return true;
     }
+
     public boolean cancelAppointment(int appointmentId) throws Exception {
         Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
         if(fetchedAppointment == null){

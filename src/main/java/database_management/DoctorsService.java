@@ -1,4 +1,4 @@
-package DatabaseManagement;
+package database_management;
 
 // This class is for methods that only doctors can use
 

@@ -1,9 +1,9 @@
-package Authentication;
+package authentication;
 
-import DatabaseManagement.UserService;
-import Users.*;
+import database_management.UserService;
+import users.*;
 
-import static DatabaseManagement.UserService.fetchUser;
+import static database_management.UserService.fetchUser;
 
 public class Authentication {
     public static User logIn(String email, String password) throws Exception {

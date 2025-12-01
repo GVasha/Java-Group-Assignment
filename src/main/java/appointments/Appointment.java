@@ -1,13 +1,10 @@
-package Appointments;
+package appointments;
 
-import DatabaseManagement.AppointmentService;
-import DatabaseManagement.UserService;
-import Users.Doctor;
-import Users.Patient;
+import database_management.UserService;
+import users.Doctor;
+import users.Patient;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Appointment {
     private int id;

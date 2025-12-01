@@ -1,14 +1,10 @@
-package Users;
+package users;
 
-import Appointments.Appointment;
+import appointments.Appointment;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import DatabaseManagement.AppointmentService;
-import DatabaseManagement.SupabaseClient;
-import DatabaseManagement.UserService;
+import database_management.UserService;
 
 public abstract class User {
     private int id;

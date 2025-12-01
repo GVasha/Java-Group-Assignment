@@ -1,7 +1,7 @@
-package DatabaseManagement;
+package database_management;
 
-import Appointments.Appointment;
-import Users.*;
+import appointments.Appointment;
+import users.*;
 import com.google.gson.*;
 
 import java.time.LocalDateTime;

@@ -1,8 +1,8 @@
-package Users;
+package users;
 
-import Appointments.Appointment;
-import DatabaseManagement.AppointmentService;
-import DatabaseManagement.DoctorsService;
+import appointments.Appointment;
+import database_management.AppointmentService;
+import database_management.DoctorsService;
 
 import java.time.LocalDateTime;
 import java.util.List;
