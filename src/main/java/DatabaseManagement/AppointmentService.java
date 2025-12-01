@@ -70,7 +70,7 @@ public class AppointmentService {
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public static List<Appointment> fetchAppointmentByUserId(int userId, String role) throws Exception {
+    public static List<Appointment> fetchAppointmentsByUserId(int userId, String role) throws Exception {
 
         if (!role.equals("doctor") && !role.equals("patient")) {
             throw new IllegalArgumentException("Invalid role: " + role);
