@@ -36,12 +36,25 @@ public class SupabaseClient {
     }
     public static String patch(String endpoint, int id, String json) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(URL + endpoint + "?id=eq." + id)) // filter by id
+                .uri(URI.create(URL + endpoint + "?id=eq." + id))
                 .header("apikey", API_KEY)
                 .header("Authorization", "Bearer " + API_KEY)
                 .header("Content-Type", "application/json")
                 .header("Prefer", "return=representation")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
+    public static String delete(String endpoint, int id, String json) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(URL + endpoint + "?id=eq." + id))
+                .header("apikey", API_KEY)
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Prefer", "return=representation") // This returns the deleted row
+                .DELETE()
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
