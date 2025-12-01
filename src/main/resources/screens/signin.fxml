@@ -37,13 +37,13 @@
                             </font>
                         </Text>
 
-                        <TextField promptText="Username" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <TextField fx:id="usernameSignUp" promptText="Username" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
-                        <TextField promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <TextField fx:id="emailSignUp" promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
-                        <PasswordField promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
+                        <PasswordField fx:id="passwordSignUp" promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
 
-                        <Button prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Account" />
+                        <Button onAction="#handleSignUpSubmit" prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Account" />
                     </children>
                 </VBox>
 
