@@ -15,9 +15,10 @@ public class Appointment {
     private Patient patient;
     private LocalDateTime date;
     private String status;
+    private String notes;
 
     // Constructor
-    public Appointment(int id, int doctorId, int patientId, LocalDateTime date, String status) throws Exception {
+    public Appointment(int id, int doctorId, int patientId, LocalDateTime date, String status, String notes) throws Exception {
         this.id = id;
         this.doctor = (Doctor) UserService.fetchUser(doctorId);
         this.date = date;
@@ -27,6 +28,7 @@ public class Appointment {
             this.patient = (Patient) UserService.fetchUser(patientId);
         }
         this.status = status;
+        this.notes = notes;
     }
 
     // Getters
@@ -42,27 +44,28 @@ public class Appointment {
     public LocalDateTime getDate() {
         return this.date;
     }
-    public String getStatus(){return this.status;}
+    public String getStatus(){
+        return this.status;
+    }
+    public String getNotes(){
+        return this.notes;
+    }
 
     // Setters
-    public void setDoctor(Doctor doctor) throws Exception {
+    public void setDoctor(Doctor doctor){
         this.doctor = doctor;
-        AppointmentService.updateAppointment(this);
     }
-    public void setPatient(Patient patient) throws Exception {
+    public void setPatient(Patient patient){
         this.patient = patient;
-        if(patient != null){
-            setStatus("SCHEDULED");
-        }else{
-            setStatus("AVAILABLE");
-        }
     }
-    public void setDate(LocalDateTime date) throws Exception {
+    public void setDate(LocalDateTime date) {
         this.date = date;
-        AppointmentService.updateAppointment(this);
     }
-    public void setStatus(String status) throws Exception {
+    public void setStatus(String status) {
         this.status = status;
-        AppointmentService.updateAppointment(this);}
+    }
+    public void setNotes(String notes){
+        this.notes = notes;
+    }
 
 }

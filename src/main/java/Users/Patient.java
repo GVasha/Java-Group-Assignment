@@ -1,26 +1,42 @@
 package Users;
 
 import Appointments.Appointment;
-import java.util.Date;
+import java.util.List;
 
 import DatabaseManagement.AppointmentService;
-import DatabaseManagement.SupabaseClient;
-import DatabaseManagement.UserService;
 
 
 import static DatabaseManagement.AppointmentService.fetchAppointmentById;
 
 public class Patient extends User {
     // Constructor
-    public Patient(String email, String firstName, String lastName, String password) throws Exception {
-        super(email, firstName, lastName, password, "none");
+    public Patient(int id, String email, String firstName, String lastName, String password) throws Exception {
+        super(id, email, firstName, lastName, password, "none");
     }
 
-    public void bookAppointment(int appointmentId) throws Exception {
+
+    public boolean bookAppointment(int appointmentId) throws Exception {
         Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
+        if(fetchedAppointment == null){
+            return false;
+        }
         fetchedAppointment.setPatient(this);
+        fetchedAppointment.setStatus("SCHEDULED");
+        AppointmentService.updateAppointment(fetchedAppointment);
+        return true;
     }
-    public void cancelAppointment(Appointment appointment) throws Exception {
-        appointment.setPatient(null);
+    public boolean cancelAppointment(int appointmentId) throws Exception {
+        Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
+        if(fetchedAppointment == null){
+            return false;
+        }
+        fetchedAppointment.setPatient(null);
+        fetchedAppointment.setStatus("AVAILABLE");
+        AppointmentService.updateAppointment(fetchedAppointment);
+        return true;
+    }
+
+    public List<Appointment> getMyAppointments() throws Exception {
+        return AppointmentService.fetchAppointmentsByUserId(this.getId(), "patient");
     }
 }

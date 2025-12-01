@@ -4,6 +4,9 @@ import Appointments.Appointment;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import DatabaseManagement.AppointmentService;
 import DatabaseManagement.SupabaseClient;
 import DatabaseManagement.UserService;
 
@@ -16,7 +19,8 @@ public abstract class User {
     private String specialization;
 
     // Constructor
-    public User(String email, String firstName, String lastName, String password, String specialization){
+    public User(int id, String email, String firstName, String lastName, String password, String specialization){
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -61,4 +65,6 @@ public abstract class User {
         this.specialization = specialization;
         UserService.updateUser(this);
     }
+
+    public abstract List<Appointment> getMyAppointments() throws Exception;
 }

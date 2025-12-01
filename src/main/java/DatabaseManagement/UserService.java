@@ -2,6 +2,9 @@ package DatabaseManagement;
 import Users.*;
 import com.google.gson.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserService {
     private static final Gson gson = new Gson();
 
@@ -26,8 +29,8 @@ public class UserService {
 
         // Create the correct child class
         return switch (role) {
-            case "doctor" -> new Doctor(email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(email, firstName, lastName, password);
+            case "doctor" -> new Doctor(id, email, firstName, lastName, password, specialization);
+            case "patient" -> new Patient(id, email, firstName, lastName, password);
             default -> throw new IllegalStateException("Unknown user role: " + role);
         };
     }
@@ -54,10 +57,33 @@ public class UserService {
 
         // Create the correct child class
         return switch (role) {
-            case "doctor" -> new Doctor(email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(email, firstName, lastName, password);
+            case "doctor" -> new Doctor(userId ,email, firstName, lastName, password, specialization);
+            case "patient" -> new Patient(userId, email, firstName, lastName, password);
             default -> throw new IllegalStateException("Unknown user role: " + role);
         };
+    }
+
+    public static List<Doctor> fetchDoctors(String specialization) throws Exception {
+        String json = SupabaseClient.get("User?specialization=eq." + specialization);
+
+        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
+
+        List<Doctor> doctors = new ArrayList<>();
+
+        for(JsonElement elem : arr){
+            JsonObject obj = elem.getAsJsonObject();
+
+            int userId = obj.get("id").getAsInt();
+            String email = obj.get("email").getAsString();
+            String firstName = obj.get("first_name").getAsString();
+            String lastName = obj.get("last_name").getAsString();
+            String password = obj.get("password").getAsString();
+
+            Doctor doctor = new Doctor(userId, email, firstName, lastName, password, specialization);
+            doctors.add(doctor);
+        }
+
+        return doctors;
     }
 
 
