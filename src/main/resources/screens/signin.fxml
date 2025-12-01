@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,69 +10,84 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<AnchorPane prefHeight="420.0" prefWidth="620.0" style="-fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
+
     <children>
 
         <!-- Title -->
-        <Text layoutX="30.0" layoutY="60.0" style="-fx-fill: white;" text="Welcome">
+        <Text layoutX="30.0" layoutY="60.0" style="-fx-fill: white;" text="Create Account">
             <font>
-                <Font size="36.0" />
+                <Font size="32.0" />
             </font>
         </Text>
-        <Text layoutX="30.0" layoutY="85.0" style="-fx-fill: #cbd5f5;" text="Please sign in or create an account">
+        <Text layoutX="30.0" layoutY="85.0" style="-fx-fill: #cbd5f5;" text="Choose your role and sign up">
             <font>
                 <Font size="14.0" />
             </font>
         </Text>
 
-        <!-- Main container for Sign Up / Sign In cards -->
-        <HBox layoutX="30.0" layoutY="110.0" spacing="20.0">
+        <!-- Role selector: Patient / Doctor -->
+        <HBox layoutX="30.0" layoutY="110.0" spacing="10.0">
+            <children>
+                <Button fx:id="patientTab" onAction="#showPatientForm" prefHeight="29.0" prefWidth="271.0" style="-fx-background-radius: 999;                                -fx-background-color: #3b82f6;                                -fx-text-fill: white;                                -fx-font-weight: bold;                                -fx-padding: 6 16 6 16;" text="Patient" />
+            </children>
+        </HBox>
+
+        <!-- SIGN UP CARD -->
+        <VBox layoutX="30.0" layoutY="150.0" prefHeight="254.0" prefWidth="545.0" spacing="10.0" style="-fx-background-color: rgba(15,23,42,0.9);                      -fx-background-radius: 16;                      -fx-padding: 18;">
             <children>
 
-                <!-- SIGN UP CARD -->
-                <VBox prefHeight="240.0" prefWidth="260.0" spacing="10.0" style="-fx-background-color: rgba(15,23,42,0.9);                              -fx-background-radius: 16;                              -fx-padding: 18;">
+                <Text style="-fx-fill: white;" text="Sign Up">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Text>
+
+                <!-- PATIENT FORM -->
+                <VBox fx:id="patientForm" spacing="10.0">
                     <children>
-                        <Text style="-fx-fill: white;" text="Sign Up">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Text>
+                        <TextField fx:id="patientName" promptText="Name" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
-                        <TextField fx:id="usernameSignUp" promptText="Username" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <TextField fx:id="patientEmail" promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
-                        <TextField fx:id="emailSignUp" promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <PasswordField fx:id="patientPassword" promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
 
-                        <PasswordField fx:id="passwordSignUp" promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
-
-                        <Button onAction="#handleSignUpSubmit" prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Account" />
+                        <Button fx:id="patientSignUpButton" onAction="#handlePatientSignUp" prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Patient Account" />
                     </children>
                 </VBox>
 
-                <!-- SIGN IN CARD -->
-                <VBox prefHeight="240.0" prefWidth="260.0" spacing="10.0" style="-fx-background-color: rgba(15,23,42,0.9);                              -fx-background-radius: 16;                              -fx-padding: 18;">
+                <!-- DOCTOR FORM -->
+                <VBox fx:id="doctorForm" managed="false" spacing="10.0" visible="false">
                     <children>
-                        <Text style="-fx-fill: white;" text="Sign In">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Text>
+                        <TextField fx:id="doctorName" promptText="Name" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
-                        <TextField promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <TextField fx:id="doctorEmail" promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
-                        <PasswordField promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
+                        <PasswordField fx:id="doctorPassword" promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
 
-                        <Button prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #3b82f6;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Sign In" />
+                        <ComboBox fx:id="doctorSpecialization" promptText="Specialization" style="-fx-background-radius: 10;                                          -fx-padding: 4;                                          -fx-background-color: #020617;                                          -fx-text-fill: white;">
+                            <!-- You can also populate items in the controller -->
+                        </ComboBox>
 
-                        <Text style="-fx-fill: #9ca3af;" text="Forgot your password?">
+                        <Button fx:id="doctorSignUpButton" onAction="#handleDoctorSignUp" prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Doctor Account" />
+                    </children>
+                </VBox>
+
+                <!-- Switch back to Login -->
+                <HBox spacing="6.0">
+                    <children>
+                        <Text style="-fx-fill: #9ca3af;" text="Already have an account?">
                             <font>
                                 <Font size="11.0" />
                             </font>
                         </Text>
+                        <Button onAction="#handleGoToLogin" style="-fx-background-color: transparent;                                        -fx-text-fill: #3b82f6;                                        -fx-padding: 0;                                        -fx-font-size: 11;" text="Log in" />
                     </children>
-                </VBox>
+                </HBox>
 
             </children>
-        </HBox>
+        </VBox>
+          <Button fx:id="doctorTab" layoutX="304.0" layoutY="109.0" onAction="#showDoctorForm" prefHeight="31.0" prefWidth="271.0" style="-fx-background-radius: 999;                                -fx-background-color: transparent;                                -fx-border-color: #64748b;                                -fx-border-radius: 999;                                -fx-text-fill: #cbd5f5;                                -fx-padding: 6 16 6 16;" text="Doctor" />
 
     </children>
 </AnchorPane>
