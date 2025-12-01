@@ -4,6 +4,7 @@ import com.google.gson.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import utils.JsonTransformer;
 
 public class UserService {
     private static final Gson gson = new Gson();
@@ -18,21 +19,7 @@ public class UserService {
 
         JsonObject obj = arr.get(0).getAsJsonObject();
 
-        int id = obj.get("id").getAsInt();
-        String firstName = obj.get("first_name").getAsString();
-        String lastName = obj.get("last_name").getAsString();
-        String password = obj.get("password").getAsString();
-        String specialization = obj.get("specialization").getAsString();
-
-        // MOST IMPORTANT: check the type column
-        String role = obj.get("role").getAsString();
-
-        // Create the correct child class
-        return switch (role) {
-            case "doctor" -> new Doctor(id, email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(id, email, firstName, lastName, password);
-            default -> throw new IllegalStateException("Unknown user role: " + role);
-        };
+        return JsonTransformer.jsonToUser(obj);
     }
 
     public static User fetchUser(int id) throws Exception {
@@ -45,22 +32,7 @@ public class UserService {
 
         JsonObject obj = arr.get(0).getAsJsonObject();
 
-        int userId = obj.get("id").getAsInt();
-        String email = obj.get("email").getAsString();
-        String firstName = obj.get("first_name").getAsString();
-        String lastName = obj.get("last_name").getAsString();
-        String password = obj.get("password").getAsString();
-        String specialization = obj.has("specialization") ? obj.get("specialization").getAsString() : "";
-
-        // MOST IMPORTANT: check the role column
-        String role = obj.get("role").getAsString();
-
-        // Create the correct child class
-        return switch (role) {
-            case "doctor" -> new Doctor(userId ,email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(userId, email, firstName, lastName, password);
-            default -> throw new IllegalStateException("Unknown user role: " + role);
-        };
+        return JsonTransformer.jsonToUser(obj);
     }
 
     public static List<Doctor> fetchDoctors(String specialization) throws Exception {
@@ -88,13 +60,7 @@ public class UserService {
 
 
     public static int saveUser(User user, String role) throws Exception {
-        JsonObject json = new JsonObject();
-        json.addProperty("first_name", user.getFirstName());
-        json.addProperty("last_name", user.getLastName());
-        json.addProperty("email", user.getEmail());
-        json.addProperty("password", user.getPassword());
-        json.addProperty("role", role);
-        json.addProperty("specialization", user.getSpecialization());
+        JsonObject json = JsonTransformer.userToJson(user, role);
 
         String result = SupabaseClient.post("User", json.toString());
 
@@ -113,14 +79,7 @@ public class UserService {
             throw new IllegalArgumentException("User ID must be set to update");
         }
 
-        JsonObject json = new JsonObject();
-        json.addProperty("first_name", user.getFirstName());
-        json.addProperty("last_name", user.getLastName());
-        json.addProperty("email", user.getEmail());
-        json.addProperty("password", user.getPassword());
-        if (user instanceof Doctor doctor) {
-            json.addProperty("specialization", doctor.getSpecialization());
-        }
+        JsonObject json = JsonTransformer.userToJson(user);
 
         String result = SupabaseClient.patch("User", user.getId(), json.toString());
 

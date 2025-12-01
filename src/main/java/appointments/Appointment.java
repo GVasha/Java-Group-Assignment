@@ -1,5 +1,6 @@
 package appointments;
 
+import database_management.AppointmentService;
 import database_management.UserService;
 import users.Doctor;
 import users.Patient;
