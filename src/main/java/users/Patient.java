@@ -26,6 +26,7 @@ public class Patient extends User {
         return true;
     }
 
+    @Override
     public boolean cancelAppointment(int appointmentId) throws Exception {
         Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
         if(fetchedAppointment == null){
@@ -37,7 +38,10 @@ public class Patient extends User {
         return true;
     }
 
+    @Override
     public List<Appointment> getMyAppointments() throws Exception {
         return AppointmentService.fetchAppointmentsByUserId(this.getId(), "patient");
     }
+
+    // TODO: Allow the user to search for available appointments with different parameters (date, speciality, specific doctor)
 }

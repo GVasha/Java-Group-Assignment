@@ -1,6 +1,9 @@
-package database_management;
+package Testing;
 
 import authentication.Authentication;
+import database_management.AppointmentService;
+import database_management.DoctorsService;
+import database_management.SupabaseClient;
 import users.*;
 import appointments.Appointment;
 
