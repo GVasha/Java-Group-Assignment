@@ -27,7 +27,7 @@
                 <!-- Spacer to push buttons to the right -->
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <!-- Right: nav buttons (Book, My Appointments, Profile) -->
+                <!-- Right: nav buttons (Book, My appointments, Profile) -->
                 <Button text="Book"
                         prefHeight="32" prefWidth="90"
                         style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;">
@@ -36,7 +36,7 @@
                     </padding>
                 </Button>
 
-                <Button text="My Appointments"
+                <Button text="My appointments"
                         prefHeight="32" prefWidth="150"
                         style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;">
                     <padding>
@@ -65,7 +65,7 @@
             <children>
 
                 <!-- Main heading similar to "Hello, Patient" -->
-                <Label text="Your Appointments"
+                <Label text="Your appointments"
                        style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
 
                 <!-- Optional subtitle -->

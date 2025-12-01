@@ -28,7 +28,7 @@
 
                 <Button fx:id="bookButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="Book" />
 
-                <Button fx:id="appointmentsButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="My Appointments" />
+                <Button fx:id="appointmentsButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="My appointments" />
 
                 <Button fx:id="profileButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="Profile" />
             </children>

@@ -1,11 +1,10 @@
-package Users;
+package users;
 
-import Appointments.Appointment;
+import appointments.Appointment;
 
-import java.util.ArrayList;
-import java.util.Date;
-import DatabaseManagement.SupabaseClient;
-import DatabaseManagement.UserService;
+import java.util.List;
+
+import database_management.UserService;
 
 public abstract class User {
     private int id;
@@ -14,10 +13,10 @@ public abstract class User {
     private String lastName;
     private String password;
     private String specialization;
-    ArrayList<Appointment> appointments;
 
     // Constructor
-    public User(String email, String firstName, String lastName, String password, String specialization){
+    public User(int id, String email, String firstName, String lastName, String password, String specialization){
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,9 +46,6 @@ public abstract class User {
     public String getSpecialization(){
         return this.specialization;
     }
-    public ArrayList<Appointment> getAppointments(){
-        return this.appointments;
-    }
 
     // Setters
     public void setId(int id){this.id = id;}
@@ -65,4 +61,6 @@ public abstract class User {
         this.specialization = specialization;
         UserService.updateUser(this);
     }
+
+    public abstract List<Appointment> getMyAppointments() throws Exception;
 }

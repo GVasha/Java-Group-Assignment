@@ -1,4 +1,4 @@
-package DatabaseManagement;
+package database_management;
 import java.net.URI;
 import java.net.http.*;
 

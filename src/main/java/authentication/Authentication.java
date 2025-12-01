@@ -1,9 +1,9 @@
-package Authentication;
+package authentication;
 
-import DatabaseManagement.UserService;
-import Users.*;
+import database_management.UserService;
+import users.*;
 
-import static DatabaseManagement.UserService.fetchUser;
+import static database_management.UserService.fetchUser;
 
 public class Authentication {
     public static User logIn(String email, String password) throws Exception {
@@ -14,9 +14,9 @@ public class Authentication {
         return null;
     }
 
-    public static Patient patientSingUp(String email, String firstName, String lastName, String password) throws Exception {
+    public static Patient patientSignUp(String email, String firstName, String lastName, String password) throws Exception {
         if(fetchUser(email) == null){
-            Patient patient = new Patient(email, firstName, lastName, password);
+            Patient patient = new Patient(-1, email, firstName, lastName, password);
             int id = UserService.saveUser(patient, "patient");
             patient.setId(id);
             return patient;
@@ -24,9 +24,9 @@ public class Authentication {
         return null;
     }
 
-    public static Doctor doctorSingUp(String email, String firstName, String lastName, String password, String specialization) throws Exception {
+    public static Doctor doctorSignUp(String email, String firstName, String lastName, String password, String specialization) throws Exception {
         if(fetchUser(email) == null){
-            Doctor doctor = new Doctor(email, firstName, lastName, password, specialization);
+            Doctor doctor = new Doctor(-1 ,email, firstName, lastName, password, specialization);
             int id = UserService.saveUser(doctor, "doctor");
             doctor.setId(id);
             return doctor;
