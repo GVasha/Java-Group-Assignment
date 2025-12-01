@@ -6,49 +6,79 @@ import com.google.gson.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AppointmentService {
     private static final Gson gson = new Gson();
 
-    public static Appointment fetchAppointment(int appointmentId) throws Exception{
-        String json = SupabaseClient.get("Appointment?id=eq." + appointmentId);
 
-        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
-        if (arr.isEmpty()) return null;
+    public static List<Appointment> fetchAppointments(Map<String, Object> filters) throws Exception {
 
-        JsonObject obj = arr.get(0).getAsJsonObject();
+        if (filters == null || filters.isEmpty())
+            throw new IllegalArgumentException("At least one filter must be provided.");
 
-        int id = obj.get("id").getAsInt();
-        int doctorId = obj.get("doctor_id").getAsInt();
-        int patientId = obj.get("patient_id").getAsInt();
-        String dateTimeStr = obj.get("date_time").getAsString(); // e.g. "2025-11-30T14:00:00"
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        String status = obj.get("status").getAsString();
+        StringBuilder query = new StringBuilder("Appointment?"); // Dynamic query
 
-        if(patientId < 0){
-            return new Appointment(id, doctorId, dateTime, status);
-        }else{
-            return new Appointment(id, doctorId, patientId, dateTime);
+        for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            query.append(entry.getKey())
+                    .append("=eq.")
+                    .append(entry.getValue())
+                    .append("&");
         }
 
+        query.setLength(query.length() - 1); // Remove the last '&'
+
+        String json = SupabaseClient.get(query.toString());
+        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
+
+        List<Appointment> result = new ArrayList<>();
+
+        for (JsonElement elem : arr) {
+            JsonObject obj = elem.getAsJsonObject();
+
+            int id = obj.get("id").getAsInt();
+            int doctorId = obj.get("doctor_id").getAsInt();
+            int patientId;
+            if(obj.get("patient_id").isJsonNull()) {
+                patientId = -1; // -1 indicates no patient
+            }else{
+                patientId = obj.get("patient_id").getAsInt();
+            }
+            String dateTimeStr = obj.get("date_time").getAsString(); // e.g. "2025-11-30T14:00:00"
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            String status = obj.get("status").getAsString();
+            String notes = obj.get("notes").getAsString();
+
+            Appointment appointment = new Appointment(id, doctorId, patientId, dateTime, status, notes);
+
+            result.add(appointment);
+        }
+
+        return result;
     }
 
-    // For doctors only: to create available slots
-    public static String createAvailableSlot(int doctorId, LocalDateTime dateTime, String notes) throws Exception {
-        JsonObject body = new JsonObject();
-        body.addProperty("doctor_id", doctorId);
-        body.add("patient_id", JsonNull.INSTANCE);         // must be NULL for AVAILABLE
-        body.addProperty("date_time", dateTime.toString()); // 2025-12-01T10:00
-        body.addProperty("status", "AVAILABLE");
-        body.addProperty("notes", notes == null ? "" : notes);
+    public static Appointment fetchAppointmentById(int appointmentId) throws Exception {
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("id", appointmentId);
 
-        return SupabaseClient.post("Appointment", body.toString());
+        List<Appointment> results = fetchAppointments(filters);
+
+        return results.isEmpty() ? null : results.get(0);
     }
 
-    //For doctors only: to fetch doctors available slots
-    public static String getAvailableSlotsForDoctor(int doctorId) throws Exception {
-        String endpoint = "Appointment?doctor_id=eq." + doctorId + "&status=eq.AVAILABLE";
-        return SupabaseClient.get(endpoint);
+    public static List<Appointment> fetchAppointmentsByUserId(int userId, String role) throws Exception {
+
+        if (!role.equals("doctor") && !role.equals("patient")) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
+
+        Map<String, Object> filters = new HashMap<>();
+        filters.put(role + "_id", userId);
+
+        return fetchAppointments(filters);
     }
 
     public static int updateAppointment(Appointment appointment) throws Exception {
@@ -57,20 +87,35 @@ public class AppointmentService {
         }
 
         JsonObject json = new JsonObject();
+
+        // Use the same "style" as your parsing code
+        int doctorId = appointment.getDoctor().getId();
+        json.addProperty("doctor_id", doctorId);
+
+        LocalDateTime date = appointment.getDate();
+        json.addProperty("date_time", date.toString());
+
+        String status = appointment.getStatus();
+        json.addProperty("status", status);
+
+        String notes = appointment.getNotes();
+        json.addProperty("notes", notes == null ? "" : notes);
+
         Patient patient = appointment.getPatient();
-        if(patient != null){
-            json.addProperty("patient_id", patient.getId());
-        }else{
-            json.addProperty("patient_id", -1);
+        if (patient != null) {
+            int patientId = patient.getId();
+            json.addProperty("patient_id", patientId);
+        } else {
+            json.add("patient_id", JsonNull.INSTANCE);
         }
-        json.addProperty("status", appointment.getStatus());
 
         String result = SupabaseClient.patch("Appointment", appointment.getId(), json.toString());
 
-        // Return the id of the updated appointment (should be same as before)
-        JsonArray arr = gson.fromJson(result, JsonArray.class);
+        JsonArray arr = JsonParser.parseString(result).getAsJsonArray();
         if (!arr.isEmpty()) {
-            return arr.get(0).getAsJsonObject().get("id").getAsInt();
+            JsonObject obj = arr.get(0).getAsJsonObject();
+            int id = obj.get("id").getAsInt();
+            return id;
         } else {
             throw new Exception("Failed to update appointment, no response returned.");
         }
