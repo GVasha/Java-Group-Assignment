@@ -17,18 +17,16 @@ public class Appointment {
     private String status;
 
     // Constructor
-    public Appointment(int id, int doctorId, LocalDateTime date, String status) throws Exception {
+    public Appointment(int id, int doctorId, int patientId, LocalDateTime date, String status) throws Exception {
         this.id = id;
         this.doctor = (Doctor) UserService.fetchUser(doctorId);
         this.date = date;
-        this.patient = null;
+        if(patientId < 0){
+            this.patient = null;
+        }else {
+            this.patient = (Patient) UserService.fetchUser(patientId);
+        }
         this.status = status;
-    }
-    public Appointment(int id, int doctorId, int patientId, LocalDateTime date) throws Exception {
-        this.id = id;
-        this.doctor = (Doctor) UserService.fetchUser(doctorId);
-        this.patient = (Patient) UserService.fetchUser(patientId);
-        this.date = date;
     }
 
     // Getters

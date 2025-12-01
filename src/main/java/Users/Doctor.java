@@ -17,10 +17,10 @@ public class Doctor extends User {
     public Doctor(String email, String firstName, String lastName, String password, String specialization){
         super(email, firstName, lastName, password, specialization);
     }
-    // TODO: Do id setting
+    // TODO: Do id setting --> Is done in the signup
 
     public void createAvailableSlot(LocalDateTime dateTime, String notes) throws Exception {
-        AppointmentService.createAvailableSlot(this.getId(), dateTime, notes);
+        String json = AppointmentService.createAvailableSlot(this.getId(), dateTime, notes);
     }
 
     // TODO: Allow doctor to view all their appointments

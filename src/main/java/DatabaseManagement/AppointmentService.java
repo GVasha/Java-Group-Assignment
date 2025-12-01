@@ -6,32 +6,82 @@ import com.google.gson.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AppointmentService {
     private static final Gson gson = new Gson();
 
-    public static Appointment fetchAppointment(int appointmentId) throws Exception{
-        String json = SupabaseClient.get("Appointment?id=eq." + appointmentId);
 
-        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
-        if (arr.isEmpty()) return null;
+    public static List<Appointment> fetchAppointments(Map<String, Object> filters) throws Exception {
 
-        JsonObject obj = arr.get(0).getAsJsonObject();
+        if (filters == null || filters.isEmpty())
+            throw new IllegalArgumentException("At least one filter must be provided.");
 
-        int id = obj.get("id").getAsInt();
-        int doctorId = obj.get("doctor_id").getAsInt();
-        int patientId = obj.get("patient_id").getAsInt();
-        String dateTimeStr = obj.get("date_time").getAsString(); // e.g. "2025-11-30T14:00:00"
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        String status = obj.get("status").getAsString();
+        // Build query dynamically
+        StringBuilder query = new StringBuilder("Appointment?");
 
-        if(patientId < 0){
-            return new Appointment(id, doctorId, dateTime, status);
-        }else{
-            return new Appointment(id, doctorId, patientId, dateTime);
+        for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            query.append(entry.getKey())
+                    .append("=eq.")
+                    .append(entry.getValue())
+                    .append("&");
         }
 
+        // Remove last "&"
+        query.setLength(query.length() - 1);
+
+        String json = SupabaseClient.get(query.toString());
+        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
+
+        List<Appointment> result = new ArrayList<>();
+
+        for (JsonElement elem : arr) {
+            JsonObject obj = elem.getAsJsonObject();
+
+            int id = obj.get("id").getAsInt();
+            int doctorId = obj.get("doctor_id").getAsInt();
+            int patientId;
+            if(obj.get("patient_id").isJsonNull()) {
+                patientId = -1; // -1 indicates no patient
+            }else{
+                patientId = obj.get("patient_id").getAsInt();
+            }
+            String dateTimeStr = obj.get("date_time").getAsString(); // e.g. "2025-11-30T14:00:00"
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            String status = obj.get("status").getAsString();
+
+            Appointment appointment = new Appointment(id, doctorId, patientId, dateTime, status);
+
+            result.add(appointment);
+        }
+
+        return result;
     }
+
+    public static Appointment fetchAppointmentById(int appointmentId) throws Exception {
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("id", appointmentId);
+
+        List<Appointment> results = fetchAppointments(filters);
+
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    public static List<Appointment> fetchAppointmentByUserId(int userId, String role) throws Exception {
+
+        if (!role.equals("doctor") && !role.equals("patient")) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
+
+        Map<String, Object> filters = new HashMap<>();
+        filters.put(role + "_id", userId);
+
+        return fetchAppointments(filters);
+    }
+
 
     // For doctors only: to create available slots
     public static String createAvailableSlot(int doctorId, LocalDateTime dateTime, String notes) throws Exception {

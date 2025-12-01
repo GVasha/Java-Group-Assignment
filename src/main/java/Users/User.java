@@ -14,7 +14,6 @@ public abstract class User {
     private String lastName;
     private String password;
     private String specialization;
-    ArrayList<Appointment> appointments;
 
     // Constructor
     public User(String email, String firstName, String lastName, String password, String specialization){
@@ -46,9 +45,6 @@ public abstract class User {
     }
     public String getSpecialization(){
         return this.specialization;
-    }
-    public ArrayList<Appointment> getAppointments(){
-        return this.appointments;
     }
 
     // Setters

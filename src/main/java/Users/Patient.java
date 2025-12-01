@@ -8,7 +8,7 @@ import DatabaseManagement.SupabaseClient;
 import DatabaseManagement.UserService;
 
 
-import static DatabaseManagement.AppointmentService.fetchAppointment;
+import static DatabaseManagement.AppointmentService.fetchAppointmentById;
 
 public class Patient extends User {
     // Constructor
@@ -16,13 +16,11 @@ public class Patient extends User {
         super(email, firstName, lastName, password, "none");
     }
 
-    public void addAppointment(int appointmentId) throws Exception {
-        Appointment newAppointment = fetchAppointment(appointmentId);
-        newAppointment.setPatient(this);
-        this.appointments.add(newAppointment);
+    public void bookAppointment(int appointmentId) throws Exception {
+        Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
+        fetchedAppointment.setPatient(this);
     }
     public void cancelAppointment(Appointment appointment) throws Exception {
         appointment.setPatient(null);
-        this.appointments.remove(appointment);
     }
 }
