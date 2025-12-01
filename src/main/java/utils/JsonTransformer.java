@@ -7,6 +7,7 @@ public final class JsonTransformer {
 
     // Used for getting the user object from the Supabase endpoint
     public static User jsonToUser(JsonObject obj) throws Exception {
+        int id = obj.get("id").getAsInt();
         String email = obj.get("email").getAsString();
         String firstName = obj.get("first_name").getAsString();
         String lastName = obj.get("last_name").getAsString();
@@ -16,8 +17,8 @@ public final class JsonTransformer {
         String role = obj.get("role").getAsString();
 
         return switch (role) {
-            case "doctor" -> new Doctor(email, firstName, lastName, password, specialization);
-            case "patient" -> new Patient(email, firstName, lastName, password);
+            case "doctor" -> new Doctor(id, email, firstName, lastName, password, specialization);
+            case "patient" -> new Patient(id, email, firstName, lastName, password);
             default -> throw new IllegalStateException("Unknown user role: " + role);
         };
     }
