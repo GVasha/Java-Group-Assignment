@@ -31,7 +31,11 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <!-- Right: nav buttons (Book, My appointments, Profile) -->
-                <Button prefHeight="32" prefWidth="90" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="Book">
+                <Button fx:id="createAppointmentButton"
+                        prefHeight="32" prefWidth="150"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
+                        text="Create appointment"
+                        onAction="#onCreateAppointmentClicked">
                     <padding>
                         <Insets bottom="4" left="16" right="16" top="4" />
                     </padding>

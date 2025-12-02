@@ -10,7 +10,9 @@ import javafx.scene.control.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 public class DoctorPageController extends BaseController {
 
@@ -162,6 +164,72 @@ public class DoctorPageController extends BaseController {
         if (startDatePicker != null) startDatePicker.setValue(null);
         if (endDatePicker != null) endDatePicker.setValue(null);
         if (patientIdField != null) patientIdField.clear();
+    }
+
+    @FXML
+    private void onCreateAppointmentClicked() {
+        try {
+            // 1) Ask for date & time
+            TextInputDialog dateDialog = new TextInputDialog();
+            dateDialog.setTitle("Create available appointment");
+            dateDialog.setHeaderText("Enter date and time for the available slot");
+            dateDialog.setContentText("Format: yyyy-MM-dd HH:mm");
+
+            Optional<String> dateResult = dateDialog.showAndWait();
+            if (dateResult.isEmpty()) {
+                return; // user cancelled
+            }
+
+            String dateTimeInput = dateResult.get().trim();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime dateTime;
+
+            try {
+                dateTime = LocalDateTime.parse(dateTimeInput, formatter);
+            } catch (DateTimeParseException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid date/time");
+                alert.setHeaderText(null);
+                alert.setContentText("Please use format: yyyy-MM-dd HH:mm");
+                alert.showAndWait();
+                return;
+            }
+
+            // 2) Ask for notes / reason (optional)
+            TextInputDialog notesDialog = new TextInputDialog();
+            notesDialog.setTitle("Appointment notes");
+            notesDialog.setHeaderText("Optional: describe the appointment");
+            notesDialog.setContentText("Notes / reason:");
+
+            String notes = notesDialog.showAndWait().orElse("").trim();
+
+            // 3) Get the logged-in doctor and create the slot
+            // We assume the logged-in user is a Doctor
+            if (appState.getUser() instanceof users.Doctor doctor) {
+                doctor.createAvailableSlot(dateTime, notes);
+            } else {
+                // Fallback: call the service directly using the current user id as doctor_id
+                int doctorId = appState.getUserId();
+                DoctorService.createAvailableSlot(doctorId, dateTime, notes);
+            }
+
+            // 4) Refresh the table so the new slot appears
+            loadAppointments();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Available appointment created for " + dateTime.format(formatter));
+            alert.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Could not create appointment");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 }
 
