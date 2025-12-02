@@ -259,8 +259,8 @@ public class DoctorPageController extends BaseController {
             });
         }
 
-        if (reasonColumn != null) {
-            reasonColumn.setCellValueFactory(cell -> {
+        if (notesColumn != null) {
+            notesColumn.setCellValueFactory(cell -> {
                 String notes = cell.getValue().getNotes();
                 return new SimpleStringProperty(notes != null ? notes : "");
             });
