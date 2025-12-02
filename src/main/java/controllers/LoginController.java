@@ -1,16 +1,9 @@
 package controllers;
 
-import core.ScreenManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class LoginController extends BaseController {
-
-    private ScreenManager screenManager;
-
-    public void setScreenManager(ScreenManager screenManager) {
-        this.screenManager = screenManager;
-    }
 
     @FXML
     private void handleSignIn(ActionEvent event) {

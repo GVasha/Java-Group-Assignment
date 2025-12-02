@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="420.0" prefWidth="620.0" style="-fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
+<AnchorPane prefHeight="500.0" prefWidth="620.0" style="-fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
 
     <children>
 
@@ -43,14 +43,32 @@
                     </font>
                 </Text>
 
+                <Text fx:id="formMessage"
+                      visible="false"
+                      style="-fx-fill: white;"
+                      wrappingWidth="500"
+                />
+
                 <!-- PATIENT FORM -->
                 <VBox fx:id="patientForm" spacing="10.0">
                     <children>
-                        <TextField fx:id="patientName" promptText="Name" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <HBox spacing="10.0">
+                            <children>
+                                <TextField fx:id="patientName" promptText="First Name"
+                                           HBox.hgrow="ALWAYS"
+                                           style="-fx-background-radius: 10; -fx-padding: 8; -fx-background-color: #020617; -fx-text-fill: white; -fx-prompt-text-fill: #64748b;" />
+
+                                <TextField fx:id="patientLastName" promptText="Last Name"
+                                           HBox.hgrow="ALWAYS"
+                                           style="-fx-background-radius: 10; -fx-padding: 8; -fx-background-color: #020617; -fx-text-fill: white; -fx-prompt-text-fill: #64748b;" />
+                            </children>
+                        </HBox>
 
                         <TextField fx:id="patientEmail" promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
                         <PasswordField fx:id="patientPassword" promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
+
+                        <PasswordField fx:id="patientConfirmPassword" promptText="Confirm Password" style="-fx-background-radius: 10; -fx-padding: 8; -fx-background-color: #020617; -fx-text-fill: white; -fx-prompt-text-fill: #64748b;" />
 
                         <Button fx:id="patientSignUpButton" onAction="#handlePatientSignUp" prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Patient Account" />
                     </children>
@@ -59,11 +77,22 @@
                 <!-- DOCTOR FORM -->
                 <VBox fx:id="doctorForm" managed="false" spacing="10.0" visible="false">
                     <children>
-                        <TextField fx:id="doctorName" promptText="Name" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
+                        <HBox spacing="10.0">
+                            <children>
+                                <TextField fx:id="doctorName" promptText="First Name"
+                                           HBox.hgrow="ALWAYS"
+                                           style="-fx-background-radius: 10; -fx-padding: 8; -fx-background-color: #020617; -fx-text-fill: white; -fx-prompt-text-fill: #64748b;" />
 
+                                <TextField fx:id="doctorLastName" promptText="Last Name"
+                                           HBox.hgrow="ALWAYS"
+                                           style="-fx-background-radius: 10; -fx-padding: 8; -fx-background-color: #020617; -fx-text-fill: white; -fx-prompt-text-fill: #64748b;" />
+                            </children>
+                        </HBox>
                         <TextField fx:id="doctorEmail" promptText="Email" style="-fx-background-radius: 10;                                           -fx-padding: 8;                                           -fx-background-color: #020617;                                           -fx-text-fill: white;                                           -fx-prompt-text-fill: #64748b;" />
 
                         <PasswordField fx:id="doctorPassword" promptText="Password" style="-fx-background-radius: 10;                                               -fx-padding: 8;                                               -fx-background-color: #020617;                                               -fx-text-fill: white;                                               -fx-prompt-text-fill: #64748b;" />
+
+                        <PasswordField fx:id="doctorConfirmPassword" promptText="Confirm Password" style="-fx-background-radius: 10; -fx-padding: 8; -fx-background-color: #020617; -fx-text-fill: white; -fx-prompt-text-fill: #64748b;" />
 
                         <ComboBox fx:id="doctorSpecialization" promptText="Specialization" style="-fx-background-radius: 10;                                          -fx-padding: 4;                                          -fx-background-color: #020617;                                          -fx-text-fill: white;">
                             <!-- You can also populate items in the controller -->
