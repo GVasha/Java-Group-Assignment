@@ -1,4 +1,4 @@
-package Testing;
+package testing;
 
 import database_management.AppointmentService;
 import appointments.Appointment;
