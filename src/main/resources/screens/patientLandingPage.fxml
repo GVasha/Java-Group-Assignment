@@ -2,129 +2,224 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="650" prefWidth="1000" style="-fx-background-color: #f5f5f5;"
+<AnchorPane prefHeight="700" prefWidth="1200" style="-fx-background-color: #f8fafc;"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.PatientPageController">
 
     <children>
 
-        <!-- Background Image with Blur -->
-        <ImageView fitHeight="650" fitWidth="1000" preserveRatio="false"
-                   opacity="0.40"
-                   style="-fx-effect: gaussian-blur(22px);">
-            <image>
-                <Image url="@../images/patient_page.jpg"/>
-            </image>
-        </ImageView>
-
-        <!-- Top Navigation Bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="70" prefWidth="1000"
-              spacing="30"
-              style="-fx-background-color: rgba(0,0,0,0.45);
-                     -fx-padding: 0 40;
-                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 16, 0, 0, 3);">
-
+        <!-- Modern Top Navigation Bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="80" prefWidth="1200"
+              spacing="20"
+              style="-fx-background-color: #ffffff;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);
+                     -fx-border-color: #e2e8f0;
+                     -fx-border-width: 0 0 1 0;">
+            <padding>
+                <Insets left="40" right="40" top="15" bottom="15"/>
+            </padding>
             <children>
 
-                <!-- Greeting -->
-                <Label fx:id="patientGreetingLabel"
-                       style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;"
-                       text="Hello, Patient"/>
+                <!-- Logo/Title Section -->
+                <VBox spacing="2">
+                    <Label text="Patient Portal"
+                           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                    <Label fx:id="patientGreetingLabel"
+                           style="-fx-font-size: 14px; -fx-text-fill: #64748b;"
+                           text="Hello, Patient"/>
+                </VBox>
 
-                <Pane HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS"/>
 
-                <!-- Navigation Buttons -->
+                <!-- Navigation Buttons with Modern Design -->
                 <Button fx:id="bookButton"
-                        text="Book"
-                        style="-fx-background-radius: 20;
-                               -fx-background-color: #1E90FF;
+                        text="Book Appointment"
+                        onAction="#handleBookButton"
+                        style="-fx-background-radius: 12;
+                               -fx-background-color: #3b82f6;
                                -fx-text-fill: white;
-                               -fx-font-size: 16;
-                               -fx-padding: 6 18;
-                               -fx-cursor: hand;"/>
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-padding: 10 24;
+                               -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.3), 8, 0, 0, 2);"/>
 
                 <Button fx:id="appointmentsButton"
                         text="My Appointments"
-                        style="-fx-background-radius: 20;
-                               -fx-background-color: #1E90FF;
-                               -fx-text-fill: white;
-                               -fx-font-size: 16;
-                               -fx-padding: 6 18;
-                               -fx-cursor: hand;"/>
+                        onAction="#handleAppointmentsButton"
+                        style="-fx-background-radius: 12;
+                               -fx-background-color: #f1f5f9;
+                               -fx-text-fill: #475569;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-padding: 10 24;
+                               -fx-cursor: hand;
+                               -fx-border-color: #e2e8f0;
+                               -fx-border-width: 1;
+                               -fx-border-radius: 12;"/>
 
                 <Button fx:id="profileButton"
                         text="Profile"
-                        style="-fx-background-radius: 20;
-                               -fx-background-color: #1E90FF;
-                               -fx-text-fill: white;
-                               -fx-font-size: 16;
-                               -fx-padding: 6 18;
-                               -fx-cursor: hand;"/>
+                        onAction="#handleProfileButton"
+                        style="-fx-background-radius: 12;
+                               -fx-background-color: #f1f5f9;
+                               -fx-text-fill: #475569;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-padding: 10 24;
+                               -fx-cursor: hand;
+                               -fx-border-color: #e2e8f0;
+                               -fx-border-width: 1;
+                               -fx-border-radius: 12;"/>
             </children>
         </HBox>
 
-        <!-- Main content -->
-        <VBox alignment="TOP_CENTER" spacing="25"
-              layoutY="90"
-              prefWidth="1000">
-
+        <!-- Main Content Container -->
+        <VBox alignment="TOP_CENTER" spacing="30"
+              layoutY="80"
+              prefWidth="1200"
+              style="-fx-background-color: #f8fafc;">
+            <padding>
+                <Insets top="40" bottom="40" left="40" right="40"/>
+            </padding>
             <children>
 
-                <Label text="Your Appointments"
-                       style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #222;"/>
+                <!-- Page Title Section -->
+                <HBox alignment="CENTER_LEFT" spacing="15" prefWidth="1120">
+                    <Label text="Your Appointments"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                </HBox>
 
-                <!-- Card -->
-                <VBox spacing="18"
-                      maxWidth="880"
-                      style="-fx-background-color: rgba(255,255,255,0.9);
-                             -fx-background-radius: 14;
-                             -fx-padding: 20;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 18, 0, 0, 4);">
+                <!-- Main Card Container -->
+                <VBox spacing="25"
+                      maxWidth="1120"
+                      style="-fx-background-color: #ffffff;
+                             -fx-background-radius: 16;
+                             -fx-padding: 30;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 20, 0, 0, 4);
+                             -fx-border-color: #e2e8f0;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 16;">
 
-                    <!-- Filters -->
-                    <HBox spacing="12">
+                    <!-- Filters Section with Modern Design -->
+                    <VBox spacing="15">
+                        <Label text="Filter Appointments"
+                               style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: #1e293b;"/>
+                        
+                        <HBox spacing="20" alignment="CENTER_LEFT">
+                            <VBox spacing="8">
+                                <Label text="Start Date"
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: 500;"/>
+                                <DatePicker fx:id="startDatePicker"
+                                            style="-fx-background-radius: 8;
+                                                   -fx-border-color: #e2e8f0;
+                                                   -fx-border-radius: 8;
+                                                   -fx-pref-width: 180;"/>
+                            </VBox>
 
-                        <Label text="From:"/>
-                        <DatePicker fx:id="startDatePicker"/>
+                            <VBox spacing="8">
+                                <Label text="End Date"
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: 500;"/>
+                                <DatePicker fx:id="endDatePicker"
+                                            style="-fx-background-radius: 8;
+                                                   -fx-border-color: #e2e8f0;
+                                                   -fx-border-radius: 8;
+                                                   -fx-pref-width: 180;"/>
+                            </VBox>
 
-                        <Label text="To:"/>
-                        <DatePicker fx:id="endDatePicker"/>
+                            <VBox spacing="8">
+                                <Label text="Doctor ID"
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: 500;"/>
+                                <TextField fx:id="doctorIdField"
+                                           prefWidth="120"
+                                           promptText="Enter ID"
+                                           style="-fx-background-radius: 8;
+                                                  -fx-border-color: #e2e8f0;
+                                                  -fx-border-radius: 8;
+                                                  -fx-padding: 8 12;"/>
+                            </VBox>
 
-                        <Label text="Doctor ID:"/>
-                        <TextField fx:id="doctorIdField" prefWidth="70"/>
+                            <VBox spacing="8">
+                                <Label text="Status"
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: 500;"/>
+                                <ComboBox fx:id="statusCombo"
+                                          prefWidth="150"
+                                          style="-fx-background-radius: 8;
+                                                 -fx-border-color: #e2e8f0;
+                                                 -fx-border-radius: 8;"/>
+                            </VBox>
 
-                        <Label text="Status:"/>
-                        <ComboBox fx:id="statusCombo" prefWidth="120"/>
+                            <Region HBox.hgrow="ALWAYS"/>
 
-                        <Pane HBox.hgrow="ALWAYS"/>
+                            <VBox spacing="8" alignment="BOTTOM_CENTER">
+                                <Label text=" "/>
+                                <HBox spacing="10" alignment="CENTER_RIGHT">
+                                    <Button text="Apply Filters"
+                                            onAction="#handleFilter"
+                                            style="-fx-background-radius: 8;
+                                                   -fx-background-color: #3b82f6;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-size: 14px;
+                                                   -fx-font-weight: 600;
+                                                   -fx-padding: 10 20;
+                                                   -fx-cursor: hand;
+                                                   -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.25), 6, 0, 0, 2);"/>
 
-                        <Button text="Filter" onAction="#handleFilter"
-                                style="-fx-background-color: #1E90FF; -fx-text-fill: white; -fx-background-radius: 8;"/>
+                                    <Button text="Reset"
+                                            onAction="#handleReset"
+                                            style="-fx-background-radius: 8;
+                                                   -fx-background-color: #f1f5f9;
+                                                   -fx-text-fill: #475569;
+                                                   -fx-font-size: 14px;
+                                                   -fx-font-weight: 600;
+                                                   -fx-padding: 10 20;
+                                                   -fx-cursor: hand;
+                                                   -fx-border-color: #e2e8f0;
+                                                   -fx-border-width: 1;
+                                                   -fx-border-radius: 8;"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
 
-                        <Button text="Reset" onAction="#handleReset"
-                                style="-fx-background-color: #888; -fx-text-fill: white; -fx-background-radius: 8;"/>
-                    </HBox>
+                    <!-- Divider -->
+                    <Separator style="-fx-background-color: #e2e8f0;"/>
 
-                    <!-- Table -->
-                    <TableView fx:id="appointmentsTable" prefHeight="350" prefWidth="850"
-                               style="-fx-background-radius: 10; -fx-border-radius: 10;
-                                      -fx-border-color: #ddd; -fx-border-width: 1;">
+                    <!-- Appointments Table Section -->
+                    <VBox spacing="12">
+                        <Label text="Appointment List"
+                               style="-fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: #1e293b;"/>
+                        
+                        <TableView fx:id="appointmentsTable"
+                                   prefHeight="400"
+                                   prefWidth="1060"
+                                   style="-fx-background-color: #ffffff;
+                                          -fx-background-radius: 12;
+                                          -fx-border-color: #e2e8f0;
+                                          -fx-border-width: 1;
+                                          -fx-border-radius: 12;
+                                          -fx-table-header-border-color: transparent;">
 
-                        <columns>
-                            <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
-                            <TableColumn fx:id="timeColumn" text="Time" prefWidth="100"/>
-                            <TableColumn fx:id="doctorIdColumn" text="Doctor ID" prefWidth="80"/>
-                            <TableColumn fx:id="doctorColumn" text="Doctor" prefWidth="200"/>
-                            <TableColumn fx:id="notesColumn" text="Reason" prefWidth="200"/>
-                            <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
-                        </columns>
-
-                    </TableView>
+                            <columns>
+                                <TableColumn fx:id="dateColumn" text="Date" prefWidth="140"
+                                             style="-fx-font-size: 13px; -fx-font-weight: 600;"/>
+                                <TableColumn fx:id="timeColumn" text="Time" prefWidth="110"
+                                             style="-fx-font-size: 13px; -fx-font-weight: 600;"/>
+                                <TableColumn fx:id="doctorIdColumn" text="Doctor ID" prefWidth="100"
+                                             style="-fx-font-size: 13px; -fx-font-weight: 600;"/>
+                                <TableColumn fx:id="doctorColumn" text="Doctor Name" prefWidth="250"
+                                             style="-fx-font-size: 13px; -fx-font-weight: 600;"/>
+                                <TableColumn fx:id="notesColumn" text="Reason" prefWidth="280"
+                                             style="-fx-font-size: 13px; -fx-font-weight: 600;"/>
+                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="180"
+                                             style="-fx-font-size: 13px; -fx-font-weight: 600;"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
                 </VBox>
             </children>
         </VBox>
