@@ -1,8 +1,10 @@
 package core;
 
+import users.User;
+
 public class AppState {
     private static AppState INSTANCE;
-    private int user_id;
+    private User user;
 
     private AppState(){}
 
@@ -13,11 +15,11 @@ public class AppState {
         return INSTANCE;
     }
 
-    public void setUserId(int user_id){
-        this.user_id = user_id;
+    public void setUser(User user){
+        this.user = user;
     }
 
     public int getUserId(){
-        return this.user_id;
+        return this.user.getId();
     }
 }
