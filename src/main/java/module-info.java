@@ -1,8 +1,16 @@
-module com.example.javagroupassignment {
+module app {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
+    requires java.net.http;
+    requires com.google.gson;
 
+    opens app to javafx.fxml;
+    exports app;
 
-    opens com.example.javagroupassignment to javafx.fxml;
-    exports com.example.javagroupassignment;
+    opens controllers to javafx.fxml;
+    exports controllers;
+
+    opens core to javafx.fxml;
+    exports core;
 }
