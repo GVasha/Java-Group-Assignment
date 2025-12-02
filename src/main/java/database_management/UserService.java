@@ -106,4 +106,37 @@ public class UserService {
         }
         return ids;
     }
+
+    public static List<Integer> fetchUserIdsByName(String fullName) throws Exception {
+        if (fullName == null || fullName.trim().isEmpty()) return java.util.Collections.emptyList();
+
+        String trimmed = fullName.trim();
+        String[] parts = trimmed.split("\\s+", 2);
+        String first = parts[0];
+        String last = parts.length > 1 ? parts[1] : "";
+
+        String endpoint;
+        if (!last.isEmpty()) {
+            endpoint = "User?first_name=eq." + first + "&last_name=eq." + last + "&select=id";
+        } else {
+            // If only one token provided, search by first_name
+            endpoint = "User?first_name=eq." + first + "&select=id";
+        }
+
+        String json = SupabaseClient.get(endpoint);
+        com.google.gson.JsonArray arr = com.google.gson.JsonParser.parseString(json).getAsJsonArray();
+        List<Integer> ids = new ArrayList<>();
+        for (com.google.gson.JsonElement el : arr) {
+            com.google.gson.JsonObject obj = el.getAsJsonObject();
+            ids.add(obj.get("id").getAsInt());
+        }
+        return ids;
+    }
+
+    public static void deleteUser(int userId) throws Exception {
+        if (userId <= 0) {
+            throw new IllegalArgumentException("User ID must be valid to delete");
+        }
+        SupabaseClient.delete("User", userId, "");   // or delete("User", userId, "")
+    }
 }

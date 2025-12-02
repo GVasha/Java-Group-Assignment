@@ -62,7 +62,7 @@ public class AppointmentService {
 
     public static Appointment fetchAppointmentById(int appointmentId) throws Exception {
         Map<String, Object> filters = new HashMap<>();
-        filters.put("id", appointmentId);
+        filters.put("id", "eq." + appointmentId);
 
         List<Appointment> results = fetchAppointments(filters);
 
@@ -76,7 +76,7 @@ public class AppointmentService {
         }
 
         Map<String, Object> filters = new HashMap<>();
-        filters.put(role + "_id", userId);
+        filters.put(role + "_id", "eq." + userId);
 
         return fetchAppointments(filters);
     }
@@ -193,6 +193,49 @@ public class AppointmentService {
         }
 
         return result;
+    }
+
+    public static void deleteAppointment(int appointmentId) throws Exception {
+        if (appointmentId <= 0) {
+            throw new IllegalArgumentException("Appointment ID must be valid to delete");
+        }
+        SupabaseClient.delete("Appointment", appointmentId, null);
+    }
+
+    public static void deleteAllAppointmentsForUser(int userId, String role) throws Exception {
+        if (userId <= 0) throw new IllegalArgumentException("User ID must be valid");
+
+        // Doctor: delete appointments where this user is doctor OR patient
+        if ("doctor".equalsIgnoreCase(role)) {
+            SupabaseClient.deleteByFilter("Appointment", "doctor_id", userId);
+            SupabaseClient.deleteByFilter("Appointment", "patient_id", userId);
+            return;
+        }
+
+        // Patient: do NOT delete rows — mark those appointments CANCELLED and clear the patient
+        if ("patient".equalsIgnoreCase(role)) {
+            Map<String, Object> filters = new java.util.HashMap<>();
+            filters.put("patient_id", "eq." + userId);
+            List<Appointment> appts = fetchAppointments(filters);
+
+            for (Appointment a : appts) {
+                try {
+                    a.setPatient(null);
+                    a.setStatus("CANCELLED");
+                    updateAppointment(a);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return;
+        }
+
+        throw new IllegalArgumentException("Unknown role for deleting appointments: " + role);
+    }
+
+    // Backwards-compatible overload: assume doctor role
+    public static void deleteAllAppointmentsForUser(int userId) throws Exception {
+        deleteAllAppointmentsForUser(userId, "doctor");
     }
 
 

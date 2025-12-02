@@ -9,9 +9,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TextField?>
+
 <BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DoctorPageController">
 
     <!-- Top navbar -->
@@ -31,23 +34,13 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <!-- Right: nav buttons (Book, My appointments, Profile) -->
-                <Button prefHeight="32" prefWidth="90" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="Book">
-                    <padding>
-                        <Insets bottom="4" left="16" right="16" top="4" />
-                    </padding>
-                </Button>
 
-                <Button prefHeight="32" prefWidth="150" style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="My appointments">
-                    <padding>
-                        <Insets bottom="4" left="16" right="16" top="4" />
-                    </padding>
-                </Button>
-
-                <Button prefHeight="32" prefWidth="100" style="-fx-background-color: #8e24aa; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="Profile">
-                    <padding>
-                        <Insets bottom="4" left="16" right="16" top="4" />
-                    </padding>
-                </Button>
+                <MenuButton fx:id="profileMenuButton" text="Profile">
+                    <items>
+                        <MenuItem text="Log out" onAction="#handleLogout" />
+                        <MenuItem text="Delete account" onAction="#handleDeleteAccount" />
+                    </items>
+                </MenuButton>
 
             </children>
         </HBox>
@@ -92,11 +85,34 @@
                             <columns>
                                 <TableColumn fx:id="dateColumn" prefWidth="140.0" text="Date" />
                                 <TableColumn fx:id="timeColumn" prefWidth="100.0" text="Time" />
+                                <TableColumn fx:id="patientIdColumn" prefWidth="40.0" text="ID" />
                                 <TableColumn fx:id="patientColumn" prefWidth="220.0" text="Patient" />
-                                <TableColumn fx:id="reasonColumn" prefWidth="220.0" text="Reason" />
+                                <TableColumn fx:id="notesColumn" prefWidth="220.0" text="Reason" />
                                 <TableColumn fx:id="statusColumn" prefWidth="120.0" text="Status" />
                             </columns>
                         </TableView>
+
+                        <!-- New bottom button bar under the table -->
+                        <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <children>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <!-- Create new slot -->
+                                <Button text="Create appointment"
+                                        onAction="#onCreateAppointmentClicked" />
+                                <!-- Make selected slot AVAILABLE again -->
+                                <Button fx:id="makeAvailableButton"
+                                        text="Make available"
+                                        onAction="#handleMakeAvailable" />
+                                <!-- Cancel selected slot -->
+                                <Button fx:id="cancelAppointmentButton"
+                                        text="Cancel appointment"
+                                        onAction="#handleCancelAppointment" />
+                                <!-- Delete selected slot -->
+                                <Button fx:id="deleteAppointmentButton"
+                                        text="Delete appointment"
+                                        onAction="#handleDeleteAppointment" />
+                            </children>
+                        </HBox>
 
                     </children>
                 </VBox>
