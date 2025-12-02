@@ -13,6 +13,8 @@ import javafx.scene.text.Text;
 import users.Doctor;
 import users.Patient;
 
+import static utils.MessageUtils.*;
+
 
 public class SignUpController extends BaseController {
 
@@ -53,25 +55,6 @@ public class SignUpController extends BaseController {
 
     @FXML private Text formMessage;
 
-    // Some helper functions to manage error/success messages
-    // TODO: make it reusable also for login or any other views that need error or success messages!
-    private void showError(String message) {
-        formMessage.setText(message);
-        formMessage.setStyle("-fx-fill: #ef4444; -fx-font-weight: bold;"); // Red
-        formMessage.setVisible(true);
-    }
-
-    private void showSuccess(String message) {
-        formMessage.setText(message);
-        formMessage.setStyle("-fx-fill: #22c55e; -fx-font-weight: bold;"); // Green
-        formMessage.setVisible(true);
-    }
-
-    private void clearMessage() {
-        formMessage.setVisible(false);
-        formMessage.setText("");
-    }
-
 
     private void activateTab(Button active, Button inactive) {
         active.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 999;");
@@ -93,17 +76,17 @@ public class SignUpController extends BaseController {
                 doctorPassword.isEmpty() ||
                 doctorConfirmPassword.isEmpty()
         ) {
-            showError("Something is missing in the form!");
+            showError(formMessage,"Something is missing in the form!");
             return;
         }
 
         if (doctorSpecialization.getValue() == null) {
-            showError("Please select a specialization.");
+            showError(formMessage,"Please select a specialization.");
             return;
         }
 
         if (!doctorPassword.equals(doctorConfirmPassword)) {
-            showError("Passwords do not match!");
+            showError(formMessage,"Passwords do not match!");
             return;
         }
 
@@ -117,9 +100,9 @@ public class SignUpController extends BaseController {
             );
 
             if (newDoctor == null) {
-                showError("Problem signing up the doctor!");
+                showError(formMessage,"Problem signing up the doctor!");
             } else {
-                showSuccess("Successfully created the doctor!");
+                showSuccess(formMessage,"Successfully created the doctor!");
                 appState.setUserId(newDoctor.getId());
                 screenManager.show("doctorLandingPage.fxml");
             }
@@ -143,20 +126,20 @@ public class SignUpController extends BaseController {
                 patientPassword.isEmpty() ||
                 patientConfirmPassword.isEmpty()
         ){
-            showError("Something is missing in the form!");
+            showError(formMessage,"Something is missing in the form!");
             return;
         }
         if(!patientPassword.equals(patientConfirmPassword)){
-            showError("Passwords do not match!");
+            showError(formMessage,"Passwords do not match!");
             return;
         }
         try{
             Patient newPatient = Authentication.patientSignUp(patientEmail, patientName, patientLastName, patientPassword);
             if(newPatient == null){
-                showError("Problem signing up the user!");
+                showError(formMessage,"Problem signing up the user!");
             }
             else{
-                showSuccess("Successfully created the user!");
+                showSuccess(formMessage,"Successfully created the user!");
                 // TODO: Potentially change app state to store User object not only ID
                 appState.setUserId(newPatient.getId());
                 screenManager.show("patientLandingPage.fxml");
@@ -176,7 +159,7 @@ public class SignUpController extends BaseController {
         doctorForm.setManaged(true);
 
         activateTab(doctorTab, patientTab);
-        clearMessage();
+        clearMessage(formMessage);
     }
 
     @FXML
@@ -188,7 +171,7 @@ public class SignUpController extends BaseController {
         patientForm.setManaged(true);
 
         activateTab(patientTab, doctorTab);
-        clearMessage();
+        clearMessage(formMessage);
     }
 
     @FXML
