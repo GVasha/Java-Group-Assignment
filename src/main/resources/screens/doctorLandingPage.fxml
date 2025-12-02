@@ -31,7 +31,7 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <!-- Right: nav buttons (Book, My appointments, Profile) -->
-                <Button fx:id="createAppointmentButton"
+                <Button fx:id="bookButton"
                         prefHeight="32" prefWidth="150"
                         style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
                         text="Create appointment"
@@ -41,13 +41,21 @@
                     </padding>
                 </Button>
 
-                <Button prefHeight="32" prefWidth="150" style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="My appointments">
+                <Button fx:id="appointmentsButton"
+                        prefHeight="32" prefWidth="150"
+                        style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
+                        text="My appointments"
+                        onAction="#handleAppointmentsButton">
                     <padding>
                         <Insets bottom="4" left="16" right="16" top="4" />
                     </padding>
                 </Button>
 
-                <Button prefHeight="32" prefWidth="100" style="-fx-background-color: #8e24aa; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="Profile">
+                <Button fx:id="profileButton"
+                        prefHeight="32" prefWidth="100"
+                        style="-fx-background-color: #8e24aa; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
+                        text="Profile"
+                        onAction="#handleProfileButton">
                     <padding>
                         <Insets bottom="4" left="16" right="16" top="4" />
                     </padding>
@@ -101,6 +109,28 @@
                                 <TableColumn fx:id="statusColumn" prefWidth="120.0" text="Status" />
                             </columns>
                         </TableView>
+
+                        <!-- New bottom button bar under the table -->
+                        <HBox spacing="10" alignment="CENTER_RIGHT">
+                            <children>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <!-- Create new slot -->
+                                <Button text="Create appointment"
+                                        onAction="#onCreateAppointmentClicked" />
+                                <!-- Make selected slot AVAILABLE again -->
+                                <Button fx:id="makeAvailableButton"
+                                        text="Make available"
+                                        onAction="#handleMakeAvailable" />
+                                <!-- Cancel selected slot -->
+                                <Button fx:id="cancelAppointmentButton"
+                                        text="Cancel appointment"
+                                        onAction="#handleCancelAppointment" />
+                                <!-- Delete selected slot -->
+                                <Button fx:id="deleteAppointmentButton"
+                                        text="Delete appointment"
+                                        onAction="#handleDeleteAppointment" />
+                            </children>
+                        </HBox>
 
                     </children>
                 </VBox>

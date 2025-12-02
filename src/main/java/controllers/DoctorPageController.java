@@ -3,6 +3,7 @@ package controllers;
 import appointments.Appointment;
 import core.AppState;
 import database_management.DoctorService;
+import database_management.AppointmentService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -16,11 +17,18 @@ import java.util.Optional;
 
 public class DoctorPageController extends BaseController {
 
+    // Top nav buttons (optional; can be null if not in FXML)
     @FXML private Button bookButton;
     @FXML private Button appointmentsButton;
     @FXML private Button profileButton;
 
-    // Use concrete generic types so Java can infer correctly
+    // Bottom action buttons
+    @FXML private Button cancelAppointmentButton;
+    @FXML private Button deleteAppointmentButton;
+    @FXML private Button makeAvailableButton;
+    @FXML private Button createAppointmentButton; // if you expose it in FXML
+
+    // Table + columns
     @FXML private TableView<Appointment> appointmentsTable;
     @FXML private TableColumn<Appointment, String> dateColumn;
     @FXML private TableColumn<Appointment, String> timeColumn;
@@ -28,148 +36,143 @@ public class DoctorPageController extends BaseController {
     @FXML private TableColumn<Appointment, String> reasonColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
 
+    // Filters
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private TextField patientIdField;
 
-    private final AppState appState = AppState.getInstance();
+    @FXML private Label doctorGreetingLabel;
 
+    private final AppState appState = AppState.getInstance();
     private final DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
-    @FXML private Label doctorGreetingLabel;
-
-
     @FXML
     public void initialize() {
-        System.out.println("DoctorPageController initialized for user ID: " + appState.getUserId());
-        doctorGreetingLabel.setText("Hello, Dr. " + appState.getUser().getLastName());
+        System.out.println("DoctorPageController initialize(), userId = " + appState.getUserId());
+
+        // Be safe if user is not set yet
+        if (doctorGreetingLabel != null) {
+            if (appState.getUser() != null) {
+                doctorGreetingLabel.setText("Hello, Dr. " + appState.getUser().getLastName());
+            } else {
+                doctorGreetingLabel.setText("Hello, Doctor");
+            }
+        }
+
         setupTableColumns();
         loadAppointments();
+
+        // Initially disable row-dependent buttons
+        if (cancelAppointmentButton != null) cancelAppointmentButton.setDisable(true);
+        if (deleteAppointmentButton != null) deleteAppointmentButton.setDisable(true);
+        if (makeAvailableButton != null) makeAvailableButton.setDisable(true);
+
+        // Guard against null appointmentsTable (in case FXML id is wrong)
+        if (appointmentsTable != null) {
+            appointmentsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+                boolean hasSelection = newSel != null;
+                if (cancelAppointmentButton != null) cancelAppointmentButton.setDisable(!hasSelection);
+                if (deleteAppointmentButton != null) deleteAppointmentButton.setDisable(!hasSelection);
+                if (makeAvailableButton != null) makeAvailableButton.setDisable(!hasSelection);
+            });
+        } else {
+            System.err.println("WARNING: appointmentsTable is null (check fx:id in FXML)");
+        }
     }
 
-    private void setupTableColumns() {
-        // Date column -> formatted date part
-        dateColumn.setCellValueFactory(cell -> {
-            Appointment appt = cell.getValue();
-            LocalDateTime dt = appt.getDate();
-            String dateStr = dt != null ? dt.format(dateFmt) : "";
-            return new SimpleStringProperty(dateStr);
-        });
+    // -------- bottom buttons --------
 
-        // Time column -> formatted time part
-        timeColumn.setCellValueFactory(cell -> {
-            Appointment appt = cell.getValue();
-            LocalDateTime dt = appt.getDate();
-            String timeStr = dt != null ? dt.format(timeFmt) : "";
-            return new SimpleStringProperty(timeStr);
-        });
+    @FXML
+    private void handleMakeAvailable() {
+        Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
 
-        // Patient column -> patient name or (None)
-        patientColumn.setCellValueFactory(cell -> {
-            Appointment appt = cell.getValue();
-            if (appt.getPatient() == null) {
-                return new SimpleStringProperty("(None)");
-            } else {
-                String fullName = appt.getPatient().getName() + " " + appt.getPatient().getLastName();
-                return new SimpleStringProperty(fullName);
-            }
-        });
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Make appointment available");
+        confirm.setHeaderText("Make this appointment available to patients again?");
+        confirm.setContentText("Date/time: " + selected.getDate() +
+                "\nCurrent status: " + selected.getStatus());
 
-        // Reason column -> use notes (or empty)
-        reasonColumn.setCellValueFactory(cell -> {
-            String notes = cell.getValue().getNotes();
-            return new SimpleStringProperty(notes != null ? notes : "");
-        });
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
 
-        // Status column
-        statusColumn.setCellValueFactory(cell -> {
-            String status = cell.getValue().getStatus();
-            return new SimpleStringProperty(status != null ? status : "");
-        });
-
-        // Optional: make columns sortable (TableColumn<String, ...> are sortable by default)
-    }
-
-    private void loadAppointments() {
         try {
-            int doctorId = appState.getUserId();
-            List<Appointment> appointments = DoctorService.fetchAppointmentsForDoctorFiltered(
-                    doctorId, null, null, null
-            );
-            appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
+            selected.setPatient(null);
+            selected.setStatus("AVAILABLE");
+            AppointmentService.updateAppointment(selected);
+            loadAppointments();
         } catch (Exception e) {
             e.printStackTrace();
-            // You may want to show a user-facing error message instead of printing
+            showError("Could not make appointment available", e);
         }
     }
 
     @FXML
-    private void handleBookButton() {
-        System.out.println("Doctor clicked Book");
-        screenManager.show("doctorBookingPage.fxml");
-    }
+    private void handleDeleteAppointment() {
+        Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
 
-    @FXML
-    private void handleAppointmentsButton() {
-        System.out.println("Doctor clicked My Appointments");
-        screenManager.show("doctorAppointmentsPage.fxml");
-    }
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete appointment");
+        confirm.setHeaderText("Delete selected appointment?");
+        confirm.setContentText(
+                "Date/time: " + selected.getDate() +
+                        "\nStatus: " + selected.getStatus() +
+                        "\n\nThis cannot be undone."
+        );
 
-    @FXML
-    private void handleProfileButton() {
-        System.out.println("Doctor clicked Profile");
-        screenManager.show("doctorProfilePage.fxml");
-    }
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
 
-    @FXML
-    private void handleFilter() {
         try {
-            LocalDateTime start = null;
-            LocalDateTime end = null;
-            Integer patientId = null;
-
-            if (startDatePicker != null && startDatePicker.getValue() != null) {
-                start = startDatePicker.getValue().atStartOfDay();
-            }
-            if (endDatePicker != null && endDatePicker.getValue() != null) {
-                end = endDatePicker.getValue().atTime(23, 59, 59);
-            }
-            if (patientIdField != null && !patientIdField.getText().trim().isEmpty()) {
-                patientId = Integer.parseInt(patientIdField.getText().trim());
-            }
-
-            int doctorId = appState.getUserId();
-            List<Appointment> filtered = DoctorService.fetchAppointmentsForDoctorFiltered(
-                    doctorId, start, end, patientId
-            );
-
-            appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
-
-        } catch (NumberFormatException nfe) {
-            System.out.println("Invalid patient ID entered.");
-            Alert a = new Alert(Alert.AlertType.WARNING, "Invalid patient ID. Please enter a number.", ButtonType.OK);
-            a.show();
+            AppointmentService.deleteAppointment(selected.getId());
+            loadAppointments();
         } catch (Exception e) {
             e.printStackTrace();
-            Alert a = new Alert(Alert.AlertType.ERROR, "Failed to fetch appointments.", ButtonType.OK);
-            a.show();
+            showError("Could not delete appointment", e);
         }
     }
 
     @FXML
-    private void handleReset() {
-        loadAppointments();
+    private void handleCancelAppointment() {
+        Appointment selected = appointmentsTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return; // No selection; button should be disabled anyway
+        }
 
-        if (startDatePicker != null) startDatePicker.setValue(null);
-        if (endDatePicker != null) endDatePicker.setValue(null);
-        if (patientIdField != null) patientIdField.clear();
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Cancel appointment");
+        confirm.setHeaderText("Cancel selected appointment?");
+        confirm.setContentText("Date/time: " + selected.getDate() + "\nStatus: " + selected.getStatus());
+        Optional<ButtonType> result = confirm.showAndWait();
+
+        if (result.isEmpty() || result.get() != ButtonType.OK) {
+            return; // User cancelled
+        }
+
+        try {
+            selected.setPatient(null);
+            selected.setStatus("CANCELLED");
+            AppointmentService.updateAppointment(selected);
+            loadAppointments();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not cancel appointment", e);
+        }
     }
+
+    // -------- Create appointment (same as before) --------
 
     @FXML
     private void onCreateAppointmentClicked() {
         try {
-            // 1) Ask for date & time
             TextInputDialog dateDialog = new TextInputDialog();
             dateDialog.setTitle("Create available appointment");
             dateDialog.setHeaderText("Enter date and time for the available slot");
@@ -195,7 +198,6 @@ public class DoctorPageController extends BaseController {
                 return;
             }
 
-            // 2) Ask for notes / reason (optional)
             TextInputDialog notesDialog = new TextInputDialog();
             notesDialog.setTitle("Appointment notes");
             notesDialog.setHeaderText("Optional: describe the appointment");
@@ -203,17 +205,13 @@ public class DoctorPageController extends BaseController {
 
             String notes = notesDialog.showAndWait().orElse("").trim();
 
-            // 3) Get the logged-in doctor and create the slot
-            // We assume the logged-in user is a Doctor
             if (appState.getUser() instanceof users.Doctor doctor) {
                 doctor.createAvailableSlot(dateTime, notes);
             } else {
-                // Fallback: call the service directly using the current user id as doctor_id
                 int doctorId = appState.getUserId();
                 DoctorService.createAvailableSlot(doctorId, dateTime, notes);
             }
 
-            // 4) Refresh the table so the new slot appears
             loadAppointments();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -224,12 +222,142 @@ public class DoctorPageController extends BaseController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Could not create appointment");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            showError("Could not create appointment", e);
         }
     }
-}
 
+    // -------- Filters + table setup --------
+
+    private void setupTableColumns() {
+        if (dateColumn != null) {
+            dateColumn.setCellValueFactory(cell -> {
+                Appointment appt = cell.getValue();
+                LocalDateTime dt = appt.getDate();
+                String dateStr = dt != null ? dt.format(dateFmt) : "";
+                return new SimpleStringProperty(dateStr);
+            });
+        }
+
+        if (timeColumn != null) {
+            timeColumn.setCellValueFactory(cell -> {
+                Appointment appt = cell.getValue();
+                LocalDateTime dt = appt.getDate();
+                String timeStr = dt != null ? dt.format(timeFmt) : "";
+                return new SimpleStringProperty(timeStr);
+            });
+        }
+
+        if (patientColumn != null) {
+            patientColumn.setCellValueFactory(cell -> {
+                Appointment appt = cell.getValue();
+                if (appt.getPatient() == null) {
+                    return new SimpleStringProperty("(None)");
+                } else {
+                    String fullName = appt.getPatient().getName() + " " + appt.getPatient().getLastName();
+                    return new SimpleStringProperty(fullName);
+                }
+            });
+        }
+
+        if (reasonColumn != null) {
+            reasonColumn.setCellValueFactory(cell -> {
+                String notes = cell.getValue().getNotes();
+                return new SimpleStringProperty(notes != null ? notes : "");
+            });
+        }
+
+        if (statusColumn != null) {
+            statusColumn.setCellValueFactory(cell -> {
+                String status = cell.getValue().getStatus();
+                return new SimpleStringProperty(status != null ? status : "");
+            });
+        }
+    }
+
+    private void loadAppointments() {
+        if (appointmentsTable == null) {
+            System.err.println("loadAppointments(): appointmentsTable is null");
+            return;
+        }
+
+        try {
+            int doctorId = appState.getUserId();
+            List<Appointment> appointments = DoctorService.fetchAppointmentsForDoctorFiltered(
+                    doctorId, null, null, null
+            );
+            appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Failed to load appointments.", e);
+        }
+    }
+
+    @FXML
+    private void handleFilter() {
+        if (appointmentsTable == null) return;
+
+        try {
+            LocalDateTime start = null;
+            LocalDateTime end = null;
+            Integer patientId = null;
+
+            if (startDatePicker != null && startDatePicker.getValue() != null) {
+                start = startDatePicker.getValue().atStartOfDay();
+            }
+            if (endDatePicker != null && endDatePicker.getValue() != null) {
+                end = endDatePicker.getValue().atTime(23, 59, 59);
+            }
+            if (patientIdField != null && !patientIdField.getText().trim().isEmpty()) {
+                patientId = Integer.parseInt(patientIdField.getText().trim());
+            }
+
+            int doctorId = appState.getUserId();
+            List<Appointment> filtered = DoctorService.fetchAppointmentsForDoctorFiltered(
+                    doctorId, start, end, patientId
+            );
+
+            appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
+
+        } catch (NumberFormatException nfe) {
+            Alert a = new Alert(Alert.AlertType.WARNING, "Invalid patient ID. Please enter a number.", ButtonType.OK);
+            a.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Failed to fetch appointments.", e);
+        }
+    }
+
+    @FXML
+    private void handleReset() {
+        loadAppointments();
+        if (startDatePicker != null) startDatePicker.setValue(null);
+        if (endDatePicker != null) endDatePicker.setValue(null);
+        if (patientIdField != null) patientIdField.clear();
+    }
+
+    // -------- helpers --------
+
+    private void showError(String header, Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(header);
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+    }
+
+    // -------- top navbar handlers --------
+
+    @FXML
+    private void handleAppointmentsButton() {
+        System.out.println("Doctor clicked My Appointments (top navbar)");
+        // If you have a dedicated appointments screen, keep this:
+        screenManager.show("doctorAppointmentsPage.fxml");
+        // Otherwise, change the FXML or this target later as needed.
+    }
+
+    @FXML
+    private void handleProfileButton() {
+        System.out.println("Doctor clicked Profile (top navbar)");
+        screenManager.show("doctorProfilePage.fxml");
+    }
+}
