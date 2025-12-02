@@ -11,7 +11,7 @@ import java.util.Map;
 import static database_management.AppointmentService.fetchAppointments;
 
 public class PatientService {
-    public static List<Appointment> fetchAppointmentsForPatientFiltered(int patientId, LocalDateTime start, LocalDateTime end, Integer doctorId) throws Exception {
+    public static List<Appointment> fetchAppointmentsForPatientFiltered(int patientId, LocalDateTime start, LocalDateTime end, Integer doctorId, String status) throws Exception {
 
         Map<String, Object> filters = new HashMap<>();
         filters.put("patient_id", "eq." + patientId);
@@ -24,6 +24,9 @@ public class PatientService {
         }
         if (doctorId != null) {
             filters.put("doctor_id", "eq." + doctorId);
+        }
+        if (status != null) {
+            filters.put("status", "eq." + status);
         }
 
         return fetchAppointments(filters);

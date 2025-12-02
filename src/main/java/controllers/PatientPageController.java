@@ -32,6 +32,7 @@ public class PatientPageController extends BaseController {
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private TextField doctorIdField;
+    @FXML private ComboBox<String> statusCombo;
 
     private final AppState appState = AppState.getInstance();
 
@@ -42,6 +43,15 @@ public class PatientPageController extends BaseController {
 
     public void initialize() {
         System.out.println("PatientPageController initialized for user ID: " + appState.getUserId());
+
+        statusCombo.getItems().addAll(
+                "SCHEDULED",
+                "COMPLETED",
+                "CANCELLED"
+        );
+
+        statusCombo.setValue("SCHEDULED");
+
         patientGreetingLabel.setText("Hello, " + appState.getUser().getName());
         setupTableColumns();
         loadAppointments();
@@ -119,7 +129,7 @@ public class PatientPageController extends BaseController {
         try {
             int patientId = appState.getUserId();
             List<Appointment> appointments = PatientService.fetchAppointmentsForPatientFiltered(
-                    patientId, null, null, null
+                    patientId, null, null, null, null
             );
             appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
         } catch (Exception e) {
@@ -132,6 +142,7 @@ public class PatientPageController extends BaseController {
             LocalDateTime start = null;
             LocalDateTime end = null;
             Integer doctorId = null;
+            String status = null;
 
             if (startDatePicker != null && startDatePicker.getValue() != null) {
                 start = startDatePicker.getValue().atStartOfDay();
@@ -142,11 +153,12 @@ public class PatientPageController extends BaseController {
             if (doctorIdField != null && !doctorIdField.getText().trim().isEmpty()) {
               doctorId = Integer.parseInt(doctorIdField.getText().trim());
             }
+            if (statusCombo != null && !statusCombo.getValue().trim().isEmpty()) {
+                status = statusCombo.getValue().trim();
+            }
 
             int patientId = appState.getUserId();
-            List<Appointment> filtered = PatientService.fetchAppointmentsForPatientFiltered(
-                    patientId, start, end, doctorId
-            );
+            List<Appointment> filtered = PatientService.fetchAppointmentsForPatientFiltered(patientId, start, end, doctorId, status);
 
             appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
 
@@ -168,5 +180,6 @@ public class PatientPageController extends BaseController {
         if (startDatePicker != null) startDatePicker.setValue(null);
         if (endDatePicker != null) endDatePicker.setValue(null);
         if (doctorIdField != null) doctorIdField.clear();
+        if (statusCombo != null) statusCombo.setValue("SCHEDULED");
     }
 }

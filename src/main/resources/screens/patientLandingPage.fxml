@@ -98,6 +98,9 @@
                         <Label text="Doctor ID:"/>
                         <TextField fx:id="doctorIdField" prefWidth="70"/>
 
+                        <Label text="Status:"/>
+                        <ComboBox fx:id="statusCombo" prefWidth="120"/>
+
                         <Pane HBox.hgrow="ALWAYS"/>
 
                         <Button text="Filter" onAction="#handleFilter"
