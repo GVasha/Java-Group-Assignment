@@ -218,7 +218,7 @@ public class AppUI {
         System.out.println("Running auto-completion check...");
 
         Map<String, Object> filters = new HashMap<>();
-        filters.put("status", "SCHEDULED");
+        filters.put("status", "eq.SCHEDULED");
 
         List<Appointment> list = AppointmentService.fetchAppointments(filters);
 

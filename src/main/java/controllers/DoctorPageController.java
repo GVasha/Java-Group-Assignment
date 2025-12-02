@@ -31,8 +31,9 @@ public class DoctorPageController extends BaseController {
     @FXML private TableView<Appointment> appointmentsTable;
     @FXML private TableColumn<Appointment, String> dateColumn;
     @FXML private TableColumn<Appointment, String> timeColumn;
+    @FXML private TableColumn<Appointment, String> patientIdColumn;
     @FXML private TableColumn<Appointment, String> patientColumn;
-    @FXML private TableColumn<Appointment, String> reasonColumn;
+    @FXML private TableColumn<Appointment, String> notesColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
 
     // Filters
