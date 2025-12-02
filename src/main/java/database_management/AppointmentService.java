@@ -121,6 +121,80 @@ public class AppointmentService {
         }
     }
 
+    //For patients to filter through appointment types
+    public static List<Appointment> searchAvailableAppointments(
+            LocalDateTime from,      // nullable
+            LocalDateTime to,        // nullable
+            Integer doctorId,        // nullable
+            String specialization    // nullable
+    ) throws Exception {
+
+        StringBuilder endpoint = new StringBuilder("Appointment?status=eq.AVAILABLE");
+
+        // 1) Date filters
+        if (from != null) {
+            endpoint.append("&date_time=gte.").append(from.toString());
+        }
+        if (to != null) {
+            endpoint.append("&date_time=lte.").append(to.toString());
+        }
+
+        // 2) Doctor / specialization filters
+        if (doctorId != null) {
+            // Direct filter by specific doctor
+            endpoint.append("&doctor_id=eq.").append(doctorId);
+        } else if (specialization != null && !specialization.isBlank()) {
+            // Find all doctor IDs that match that specialization
+            List<Integer> ids = UserService.fetchDoctorIdsBySpecialization(specialization);
+
+            if (ids.isEmpty()) {
+                // No doctor with that specialization -> no appointments
+                return new ArrayList<>();
+            }
+
+            // Build IN list: doctor_id=in.(22,24,30)
+            endpoint.append("&doctor_id=in.(");
+            for (int i = 0; i < ids.size(); i++) {
+                if (i > 0) endpoint.append(",");
+                endpoint.append(ids.get(i));
+            }
+            endpoint.append(")");
+        }
+
+        // 3) Call Supabase and reuse your existing parsing logic
+        String json = SupabaseClient.get(endpoint.toString());
+        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
+
+        List<Appointment> result = new ArrayList<>();
+
+        for (JsonElement elem : arr) {
+            JsonObject obj = elem.getAsJsonObject();
+
+            int id = obj.get("id").getAsInt();
+            int docId = obj.get("doctor_id").getAsInt();
+
+            int patientId;
+            if (obj.get("patient_id").isJsonNull()) {
+                patientId = -1;
+            } else {
+                patientId = obj.get("patient_id").getAsInt();
+            }
+
+            String dateTimeStr = obj.get("date_time").getAsString();
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+            String status = obj.get("status").getAsString();
+            String notes = obj.get("notes").getAsString();
+
+            Appointment appointment =
+                    new Appointment(id, docId, patientId, dateTime, status, notes);
+
+            result.add(appointment);
+        }
+
+        return result;
+    }
+
 
 }
 

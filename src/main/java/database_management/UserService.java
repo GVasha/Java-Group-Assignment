@@ -91,4 +91,19 @@ public class UserService {
             throw new Exception("Failed to update user, no response returned.");
         }
     }
+
+    public static List<Integer> fetchDoctorIdsBySpecialization(String specialization) throws Exception {
+        // Only doctors with given specialization, only their ids
+        String endpoint = "User?role=eq.doctor&specialization=eq." + specialization + "&select=id";
+
+        String json = SupabaseClient.get(endpoint);
+        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
+
+        List<Integer> ids = new ArrayList<>();
+        for (JsonElement el : arr) {
+            JsonObject obj = el.getAsJsonObject();
+            ids.add(obj.get("id").getAsInt());
+        }
+        return ids;
+    }
 }

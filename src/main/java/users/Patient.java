@@ -1,6 +1,8 @@
 package users;
 
 import appointments.Appointment;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import database_management.AppointmentService;
@@ -44,4 +46,14 @@ public class Patient extends User {
     }
 
     // TODO: Allow the user to search for available appointments with different parameters (date, speciality, specific doctor)
+    // Everything is optional – pass null for filters you don’t want
+    public List<Appointment> searchAvailableAppointments(
+            LocalDateTime from,
+            LocalDateTime to,
+            Integer doctorId,
+            String specialization
+    ) throws Exception {
+        return AppointmentService.searchAvailableAppointments(from, to, doctorId, specialization);
+    }
+
 }
