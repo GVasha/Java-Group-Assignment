@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         ScreenManager screenManager = new ScreenManager(stage);
-        screenManager.show("signin.fxml");
+        screenManager.show("login.fxml");
     }
 
 

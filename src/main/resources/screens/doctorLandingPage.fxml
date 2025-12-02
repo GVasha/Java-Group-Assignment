@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1"
-            prefWidth="900.0" prefHeight="600.0"
-            style="-fx-background-color: #f0f2f5;">
+<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DoctorPageController">
 
     <!-- Top navbar -->
     <top>
-        <HBox spacing="10.0"
-              alignment="CENTER_LEFT"
-              style="-fx-background-color: #ffffff;"
-              BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
             <padding>
-                <Insets top="10" right="20" bottom="10" left="20"/>
+                <Insets bottom="10" left="20" right="20" top="10" />
             </padding>
             <children>
 
                 <!-- Left: portal title / greeting -->
-                <Label text="Hello, Doctor"
-                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #222222;"/>
+                <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #222222;" text="Hello, Doctor" />
 
                 <!-- Spacer to push buttons to the right -->
-                <Region HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS" />
 
                 <!-- Right: nav buttons (Book, My appointments, Profile) -->
-                <Button text="Book"
-                        prefHeight="32" prefWidth="90"
-                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;">
+                <Button prefHeight="32" prefWidth="90" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="Book">
                     <padding>
-                        <Insets top="4" right="16" bottom="4" left="16"/>
+                        <Insets bottom="4" left="16" right="16" top="4" />
                     </padding>
                 </Button>
 
-                <Button text="My appointments"
-                        prefHeight="32" prefWidth="150"
-                        style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;">
+                <Button prefHeight="32" prefWidth="150" style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="My appointments">
                     <padding>
-                        <Insets top="4" right="16" bottom="4" left="16"/>
+                        <Insets bottom="4" left="16" right="16" top="4" />
                     </padding>
                 </Button>
 
-                <Button text="Profile"
-                        prefHeight="32" prefWidth="100"
-                        style="-fx-background-color: #8e24aa; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;">
+                <Button prefHeight="32" prefWidth="100" style="-fx-background-color: #8e24aa; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;" text="Profile">
                     <padding>
-                        <Insets top="4" right="16" bottom="4" left="16"/>
+                        <Insets bottom="4" left="16" right="16" top="4" />
                     </padding>
                 </Button>
 
@@ -60,35 +53,30 @@
     <center>
         <VBox alignment="TOP_CENTER" spacing="20.0">
             <padding>
-                <Insets top="40" right="40" bottom="40" left="40"/>
+                <Insets bottom="40" left="40" right="40" top="40" />
             </padding>
             <children>
 
                 <!-- Main heading similar to "Hello, Patient" -->
-                <Label text="Your appointments"
-                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+                <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Your appointments" />
 
                 <!-- Optional subtitle -->
-                <Label text="Review and manage your upcoming and past visits."
-                       style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+                <Label style="-fx-font-size: 14px; -fx-text-fill: #666666;" text="Review and manage your upcoming and past visits." />
 
                 <!-- Card containing the table -->
-                <VBox spacing="10.0"
-                      style="-fx-background-color: #ffffff;
-                             -fx-background-radius: 12;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);">
+                <VBox spacing="10.0" style="-fx-background-color: #ffffff;                              -fx-background-radius: 12;                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 4);">
                     <padding>
-                        <Insets top="16" right="16" bottom="16" left="16"/>
+                        <Insets bottom="16" left="16" right="16" top="16" />
                     </padding>
                     <children>
 
                         <TableView prefHeight="350.0" prefWidth="800.0">
                             <columns>
-                                <TableColumn text="Date"      prefWidth="140.0"/>
-                                <TableColumn text="Time"      prefWidth="100.0"/>
-                                <TableColumn text="Patient"   prefWidth="220.0"/>
-                                <TableColumn text="Reason"    prefWidth="220.0"/>
-                                <TableColumn text="Status"    prefWidth="120.0"/>
+                                <TableColumn prefWidth="140.0" text="Date" />
+                                <TableColumn prefWidth="100.0" text="Time" />
+                                <TableColumn prefWidth="220.0" text="Patient" />
+                                <TableColumn prefWidth="220.0" text="Reason" />
+                                <TableColumn prefWidth="120.0" text="Status" />
                             </columns>
                         </TableView>
 

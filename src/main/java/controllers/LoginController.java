@@ -1,26 +1,70 @@
 package controllers;
 
+import authentication.Authentication;
+import core.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
+import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
+import users.User;
+
+import static utils.MessageUtils.*;
 
 public class LoginController extends BaseController {
 
-    @FXML
-    private TextField usernameSignUp;
+    @FXML private TextField emailLogin;
+    @FXML private PasswordField passwordLogin;
+
+    @FXML private Text formMessage;
+
+    private final AppState appState = AppState.getInstance();
 
     @FXML
-    private TextField emailSignUp;
-
-    @FXML
-    private PasswordField passwordSignUp;
-
-    @FXML
-    public void handleSignUpSubmit(){
-        System.out.println("PRESSED BUTTON!");
-        String username = usernameSignUp.getText();
-        String email = emailSignUp.getText();
-        String password = passwordSignUp.getText();
-        System.out.println(username + " " + email + " " + password);
+    public void initialize() {
+        System.out.println("LoginController initialized");
     }
+
+    @FXML
+    private void handleLogin() {
+        clearMessage(formMessage);
+
+        String email = emailLogin.getText();
+        String password = passwordLogin.getText();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            showError(formMessage,"Please enter both email and password.");
+            return;
+        }
+
+        try {
+            User user = Authentication.logIn(email, password);
+
+            if (user == null) {
+                showError(formMessage,"Invalid email or password!");
+                return;
+            }
+
+            showSuccess(formMessage,"Login successful!");
+
+            // Maybe change to storing the user instead of id
+            appState.setUserId(user.getId());
+
+            if (user.getSpecialization().equals("none")) {
+                screenManager.show("patientLandingPage.fxml");
+            } else {
+                screenManager.show("doctorLandingPage.fxml");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError(formMessage,"An unexpected error occurred.");
+        }
+    }
+
+    @FXML
+    private void handleGoToSignUp() {
+        clearMessage(formMessage);
+        screenManager.show("signup.fxml");
+    }
+
 }
