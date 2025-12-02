@@ -2,7 +2,7 @@ package users;
 
 import appointments.Appointment;
 import database_management.AppointmentService;
-import database_management.DoctorsService;
+import database_management.DoctorService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Doctor extends User {
     }
 
     public void createAvailableSlot(LocalDateTime dateTime, String notes) throws Exception {
-        String json = DoctorsService.createAvailableSlot(this.getId(), dateTime, notes);
+        String json = DoctorService.createAvailableSlot(this.getId(), dateTime, notes);
     }
 
     // When a patient is correctly served, the doctor marks the appointment as completed
@@ -46,5 +46,9 @@ public class Doctor extends User {
     @Override
     public List<Appointment> getMyAppointments() throws Exception {
         return AppointmentService.fetchAppointmentsByUserId(this.getId(), "doctor");
+    }
+
+    public List<Appointment> getMyAppointmentsFiltered(LocalDateTime start, LocalDateTime end, Integer patientId) throws Exception {
+        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientId);
     }
 }

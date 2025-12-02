@@ -1,10 +1,10 @@
-package Testing;
+package testing;
 
 import authentication.Authentication;
 import users.*;
 import appointments.Appointment;
 import database_management.AppointmentService;
-import database_management.DoctorsService;
+import database_management.DoctorService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -184,7 +184,7 @@ public class AppUI {
         System.out.print("Notes: ");
         String notes = sc.nextLine();
 
-        DoctorsService.createAvailableSlot(d.getId(), dt, notes);
+        DoctorService.createAvailableSlot(d.getId(), dt, notes);
         System.out.println("Slot created.");
     }
 

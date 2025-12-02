@@ -46,8 +46,7 @@ public class LoginController extends BaseController {
 
             showSuccess(formMessage,"Login successful!");
 
-            // Maybe change to storing the user instead of id
-            appState.setUserId(user.getId());
+            appState.setUser(user);
 
             if (user.getSpecialization().equals("none")) {
                 screenManager.show("patientLandingPage.fxml");

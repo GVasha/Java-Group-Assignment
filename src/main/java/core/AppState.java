@@ -22,4 +22,8 @@ public class AppState {
     public int getUserId(){
         return this.user.getId();
     }
+
+    public User getUser(){
+        return this.user;
+    }
 }
