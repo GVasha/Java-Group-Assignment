@@ -4,6 +4,7 @@ import appointments.Appointment;
 import core.AppState;
 import database_management.DoctorService;
 import database_management.AppointmentService;
+import database_management.UserService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -18,9 +19,7 @@ import java.util.Optional;
 public class DoctorPageController extends BaseController {
 
     // Top nav buttons (optional; can be null if not in FXML)
-    @FXML private Button bookButton;
-    @FXML private Button appointmentsButton;
-    @FXML private Button profileButton;
+    @FXML private MenuButton profileMenuButton;
 
     // Bottom action buttons
     @FXML private Button cancelAppointmentButton;
@@ -359,5 +358,54 @@ public class DoctorPageController extends BaseController {
     private void handleProfileButton() {
         System.out.println("Doctor clicked Profile (top navbar)");
         screenManager.show("doctorProfilePage.fxml");
+    }
+
+    // -------- profile menu actions --------
+
+    @FXML
+    private void handleLogout() {
+        // Clear in-memory session
+        appState.setUser(null);
+        screenManager.show("login.fxml");
+    }
+
+    @FXML
+    private void handleDeleteAccount() {
+        if (appState.getUser() == null) {
+            showError("No logged in user.", new IllegalStateException("No user"));
+            return;
+        }
+
+        int userId = appState.getUser().getId();
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Account");
+        confirm.setHeaderText("Are you sure you want to delete your account?");
+        confirm.setContentText(
+                "This will:\n" +
+                        "• Delete ALL your appointments (as doctor or patient)\n" +
+                        "• Permanently delete your account\n\n" +
+                        "This action cannot be undone."
+        );
+
+        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            // 1) Delete all appointments tied to this user
+            AppointmentService.deleteAllAppointmentsForUser(userId);
+
+            // 2) Delete the user row
+            UserService.deleteUser(userId);
+
+            // 3) Clear session and go to login
+            appState.setUser(null);
+            screenManager.show("loginPage.fxml");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Account deletion failed.", e);
+        }
     }
 }

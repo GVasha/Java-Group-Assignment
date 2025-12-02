@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TextField?>
@@ -31,35 +33,13 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <!-- Right: nav buttons (Book, My appointments, Profile) -->
-                <Button fx:id="bookButton"
-                        prefHeight="32" prefWidth="150"
-                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
-                        text="Create appointment"
-                        onAction="#onCreateAppointmentClicked">
-                    <padding>
-                        <Insets bottom="4" left="16" right="16" top="4" />
-                    </padding>
-                </Button>
 
-                <Button fx:id="appointmentsButton"
-                        prefHeight="32" prefWidth="150"
-                        style="-fx-background-color: #2979ff; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
-                        text="My appointments"
-                        onAction="#handleAppointmentsButton">
-                    <padding>
-                        <Insets bottom="4" left="16" right="16" top="4" />
-                    </padding>
-                </Button>
-
-                <Button fx:id="profileButton"
-                        prefHeight="32" prefWidth="100"
-                        style="-fx-background-color: #8e24aa; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 18;"
-                        text="Profile"
-                        onAction="#handleProfileButton">
-                    <padding>
-                        <Insets bottom="4" left="16" right="16" top="4" />
-                    </padding>
-                </Button>
+                <MenuButton fx:id="profileMenuButton" text="Profile">
+                    <items>
+                        <MenuItem text="Log out" onAction="#handleLogout" />
+                        <MenuItem text="Delete account" onAction="#handleDeleteAccount" />
+                    </items>
+                </MenuButton>
 
             </children>
         </HBox>

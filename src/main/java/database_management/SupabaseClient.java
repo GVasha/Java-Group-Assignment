@@ -60,5 +60,18 @@ public class SupabaseClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
+
+    public static String deleteByFilter(String endpoint, String column, int id) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(URL + endpoint + "?" + column + "=eq." + id))
+                .header("apikey", API_KEY)
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Prefer", "return=representation")
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
 }
 
