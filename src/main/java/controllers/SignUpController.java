@@ -103,7 +103,7 @@ public class SignUpController extends BaseController {
                 showError(formMessage,"Problem signing up the doctor!");
             } else {
                 showSuccess(formMessage,"Successfully created the doctor!");
-                appState.setUserId(newDoctor.getId());
+                appState.setUser(newDoctor);
                 screenManager.show("doctorLandingPage.fxml");
             }
         }
@@ -140,8 +140,7 @@ public class SignUpController extends BaseController {
             }
             else{
                 showSuccess(formMessage,"Successfully created the user!");
-                // TODO: Potentially change app state to store User object not only ID
-                appState.setUserId(newPatient.getId());
+                appState.setUser(newPatient);
                 screenManager.show("patientLandingPage.fxml");
             }
         }

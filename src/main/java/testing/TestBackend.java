@@ -1,8 +1,8 @@
-package Testing;
+package testing;
 
 import authentication.Authentication;
 import database_management.AppointmentService;
-import database_management.DoctorsService;
+import database_management.DoctorService;
 import database_management.SupabaseClient;
 import users.*;
 import appointments.Appointment;
@@ -20,7 +20,7 @@ public class TestBackend {
             System.out.println("Logins OK: Doctor ID=" + doctor.getId() + ", Patient ID=" + patient.getId());
 
             // 2️⃣ Fetch doctor's available slots as JSON
-            String rawSlots = DoctorsService.getAvailableSlotsForDoctor(doctor.getId());
+            String rawSlots = DoctorService.getAvailableSlotsForDoctor(doctor.getId());
             System.out.println("Raw available slots JSON = " + rawSlots);
 
             // 3️⃣ Map them to Appointment objects

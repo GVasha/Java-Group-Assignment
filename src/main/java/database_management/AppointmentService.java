@@ -24,7 +24,7 @@ public class AppointmentService {
 
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
             query.append(entry.getKey())
-                    .append("=eq.")
+                    .append("=")
                     .append(entry.getValue())
                     .append("&");
         }
