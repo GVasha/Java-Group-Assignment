@@ -5,10 +5,12 @@ import core.AppState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import users.Doctor;
 import users.Patient;
 
 
@@ -32,6 +34,20 @@ public class SignUpController extends BaseController {
     @FXML private TextField doctorEmail;
     @FXML private PasswordField doctorPassword;
     @FXML private PasswordField doctorConfirmPassword;
+
+    @FXML
+    private ComboBox<String> doctorSpecialization;
+
+    @FXML
+    public void initialize() {
+        doctorSpecialization.getItems().addAll(
+                "Cardiology",
+                "Dermatology",
+                "Neurology",
+                "Pediatrics",
+                "General Medicine"
+        );
+    }
 
     AppState appState = AppState.getInstance();
 
@@ -60,6 +76,57 @@ public class SignUpController extends BaseController {
     private void activateTab(Button active, Button inactive) {
         active.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 999;");
         inactive.setStyle("-fx-background-color: transparent; -fx-text-fill: #cbd5f5; -fx-border-color: #64748b; -fx-border-radius: 999;");
+    }
+
+    @FXML
+    private void handleDoctorSignUp(ActionEvent event) {
+        System.out.println("Doctor Sign Up clicked!");
+        String doctorName = this.doctorName.getText();
+        String doctorLastName = this.doctorLastName.getText();
+        String doctorEmail = this.doctorEmail.getText();
+        String doctorPassword = this.doctorPassword.getText();
+        String doctorConfirmPassword = this.doctorConfirmPassword.getText();
+
+        if (doctorName.isEmpty() ||
+                doctorLastName.isEmpty() ||
+                doctorEmail.isEmpty() ||
+                doctorPassword.isEmpty() ||
+                doctorConfirmPassword.isEmpty()
+        ) {
+            showError("Something is missing in the form!");
+            return;
+        }
+
+        if (doctorSpecialization.getValue() == null) {
+            showError("Please select a specialization.");
+            return;
+        }
+
+        if (!doctorPassword.equals(doctorConfirmPassword)) {
+            showError("Passwords do not match!");
+            return;
+        }
+
+        try {
+            Doctor newDoctor = Authentication.doctorSignUp(
+                    doctorEmail,
+                    doctorName,
+                    doctorLastName,
+                    doctorPassword,
+                    doctorSpecialization.getValue()
+            );
+
+            if (newDoctor == null) {
+                showError("Problem signing up the doctor!");
+            } else {
+                showSuccess("Successfully created the doctor!");
+                appState.setUserId(newDoctor.getId());
+                screenManager.show("doctorLandingPage.fxml");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -98,12 +165,6 @@ public class SignUpController extends BaseController {
         catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void handleDoctorSignUp(ActionEvent event) {
-        System.out.println("Doctor Sign Up clicked!");
-        // TODO: validate sign up
     }
 
     @FXML

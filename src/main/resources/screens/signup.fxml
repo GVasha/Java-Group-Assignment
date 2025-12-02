@@ -10,6 +10,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane prefHeight="500.0" prefWidth="620.0" style="-fx-background-color: linear-gradient(to bottom right, #1e293b, #0f172a);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
 
     <children>
@@ -96,6 +98,10 @@
 
                         <ComboBox fx:id="doctorSpecialization" promptText="Specialization" style="-fx-background-radius: 10;                                          -fx-padding: 4;                                          -fx-background-color: #020617;                                          -fx-text-fill: white;">
                             <!-- You can also populate items in the controller -->
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                </FXCollections>
+                            </items>
                         </ComboBox>
 
                         <Button fx:id="doctorSignUpButton" onAction="#handleDoctorSignUp" prefHeight="36.0" style="-fx-background-radius: 10;                                        -fx-background-color: #22c55e;                                        -fx-text-fill: white;                                        -fx-font-weight: bold;                                        -fx-cursor: hand;                                        -fx-padding: 6 14 6 14;" text="Create Doctor Account" />
