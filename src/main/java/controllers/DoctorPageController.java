@@ -18,12 +18,12 @@ public class DoctorPageController extends BaseController {
     @FXML private Button appointmentsButton;
     @FXML private Button profileButton;
 
-    // Use concrete generic types so Java can infer correctly
     @FXML private TableView<Appointment> appointmentsTable;
     @FXML private TableColumn<Appointment, String> dateColumn;
     @FXML private TableColumn<Appointment, String> timeColumn;
+    @FXML private TableColumn<Appointment, String> patientIdColumn;
     @FXML private TableColumn<Appointment, String> patientColumn;
-    @FXML private TableColumn<Appointment, String> reasonColumn;
+    @FXML private TableColumn<Appointment, String> notesColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
 
     @FXML private DatePicker startDatePicker;
@@ -47,7 +47,8 @@ public class DoctorPageController extends BaseController {
     }
 
     private void setupTableColumns() {
-        // Date column -> formatted date part
+
+        // Year - Month - Day
         dateColumn.setCellValueFactory(cell -> {
             Appointment appt = cell.getValue();
             LocalDateTime dt = appt.getDate();
@@ -55,7 +56,7 @@ public class DoctorPageController extends BaseController {
             return new SimpleStringProperty(dateStr);
         });
 
-        // Time column -> formatted time part
+        // Hour
         timeColumn.setCellValueFactory(cell -> {
             Appointment appt = cell.getValue();
             LocalDateTime dt = appt.getDate();
@@ -63,7 +64,15 @@ public class DoctorPageController extends BaseController {
             return new SimpleStringProperty(timeStr);
         });
 
-        // Patient column -> patient name or (None)
+        patientIdColumn.setCellValueFactory(cell -> {
+            Appointment appt = cell.getValue();
+            if (appt.getPatient() == null) {
+                return new SimpleStringProperty(" ");
+            } else {
+                return new SimpleStringProperty("" + appt.getPatient().getId());
+            }
+        });
+
         patientColumn.setCellValueFactory(cell -> {
             Appointment appt = cell.getValue();
             if (appt.getPatient() == null) {
@@ -74,19 +83,15 @@ public class DoctorPageController extends BaseController {
             }
         });
 
-        // Reason column -> use notes (or empty)
-        reasonColumn.setCellValueFactory(cell -> {
+        notesColumn.setCellValueFactory(cell -> {
             String notes = cell.getValue().getNotes();
             return new SimpleStringProperty(notes != null ? notes : "");
         });
 
-        // Status column
         statusColumn.setCellValueFactory(cell -> {
             String status = cell.getValue().getStatus();
             return new SimpleStringProperty(status != null ? status : "");
         });
-
-        // Optional: make columns sortable (TableColumn<String, ...> are sortable by default)
     }
 
     private void loadAppointments() {
