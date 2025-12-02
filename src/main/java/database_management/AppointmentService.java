@@ -195,6 +195,21 @@ public class AppointmentService {
         return result;
     }
 
+    public static void deleteAppointment(int appointmentId) throws Exception {
+        if (appointmentId <= 0) {
+            throw new IllegalArgumentException("Appointment ID must be valid to delete");
+        }
+        SupabaseClient.delete("Appointment", appointmentId, null);
+    }
+
+    public static void deleteAllAppointmentsForUser(int userId) throws Exception {
+        // Delete any appointments where this user is the doctor
+        SupabaseClient.deleteByFilter("Appointment", "doctor_id", userId);
+
+        // Delete any appointments where this user is the patient
+        SupabaseClient.deleteByFilter("Appointment", "patient_id", userId);
+    }
+
 
 }
 

@@ -106,4 +106,11 @@ public class UserService {
         }
         return ids;
     }
+
+    public static void deleteUser(int userId) throws Exception {
+        if (userId <= 0) {
+            throw new IllegalArgumentException("User ID must be valid to delete");
+        }
+        SupabaseClient.delete("User", userId, "");   // or delete("User", userId, "")
+    }
 }
