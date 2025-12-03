@@ -127,9 +127,9 @@ public class PatientPageController extends BaseController {
 
     private void loadAppointments() {
         try {
-            String patientName = appState.getUser().getName();
+            int patientId = appState.getUserId();
             List<Appointment> appointments = PatientService.fetchAppointmentsForPatientFiltered(
-                    patientName, null, null, null, null
+                    patientId, null, null, null, null
             );
             appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
         } catch (Exception e) {
@@ -157,8 +157,8 @@ public class PatientPageController extends BaseController {
                 status = statusCombo.getValue().trim();
             }
 
-            String patientName = appState.getUser().getName();
-            List<Appointment> filtered = PatientService.fetchAppointmentsForPatientFiltered(patientName, start, end, doctorId, status);
+            int patientId = appState.getUserId();
+            List<Appointment> filtered = PatientService.fetchAppointmentsForPatientFiltered(patientId, start, end, doctorId, status);
 
             appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
 

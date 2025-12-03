@@ -393,8 +393,8 @@ public class DoctorPageController extends BaseController {
         }
 
         try {
-            // 1) Delete or cancel all appointments tied to this user (doctor role)
-            AppointmentService.deleteAllAppointmentsForUser(userId, "doctor");
+            // 1) Delete all appointments tied to this user
+            AppointmentService.deleteAllAppointmentsForUser(userId);
 
             // 2) Delete the user row
             UserService.deleteUser(userId);
