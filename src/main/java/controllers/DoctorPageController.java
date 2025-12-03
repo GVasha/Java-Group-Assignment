@@ -7,6 +7,7 @@ import database_management.AppointmentService;
 import database_management.UserService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -407,5 +408,9 @@ public class DoctorPageController extends BaseController {
             e.printStackTrace();
             showError("Account deletion failed.", e);
         }
+    }
+
+    public void handleModifyAccount(ActionEvent actionEvent) {
+        screenManager.show("modifyAccount.fxml");
     }
 }

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ModifyAccountController">
+
+    <children>
+
+        <!-- Vibrant Top Navigation Bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="70" prefWidth="900"
+              spacing="20"
+              style="-fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                     -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.3), 12, 0, 0, 4);">
+            <padding>
+                <Insets left="30" right="30" top="15" bottom="15"/>
+            </padding>
+            <children>
+
+                <Label fx:id="accountTitleLabel"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"
+                       text="Modify Account"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+
+        <!-- Main Body -->
+        <VBox alignment="TOP_CENTER" spacing="20" layoutY="70" prefWidth="900">
+            <padding>
+                <Insets top="30" bottom="30" left="30" right="30"/>
+            </padding>
+
+            <children>
+
+                <!-- Page Title -->
+                <Label text="Edit Account Information"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+
+                <!-- Main Form Container -->
+                <VBox spacing="20"
+                      maxWidth="840"
+                      style="-fx-background-color: #ffffff;
+                             -fx-background-radius: 16;
+                             -fx-padding: 24;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 16, 0, 0, 6);
+                             -fx-border-color: #e2e8f0;
+                             -fx-border-width: 1;
+                             -fx-border-radius: 16;">
+
+                    <VBox spacing="16">
+
+                        <!-- Email -->
+                        <Label text="Email"
+                               style="-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                        <TextField fx:id="emailField"
+                                   promptText="Enter your email"
+                                   style="-fx-background-radius: 10;
+                                          -fx-background-color: #f8fafc;
+                                          -fx-border-color: #cbd5e1;
+                                          -fx-border-radius: 10;
+                                          -fx-padding: 10;
+                                          -fx-font-size: 14px;"/>
+
+                        <!-- Password -->
+                        <Label text="Password"
+                               style="-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                        <PasswordField fx:id="passwordField"
+                                       promptText="Enter new password"
+                                       style="-fx-background-radius: 10;
+                                              -fx-background-color: #f8fafc;
+                                              -fx-border-color: #cbd5e1;
+                                              -fx-border-radius: 10;
+                                              -fx-padding: 10;
+                                              -fx-font-size: 14px;"/>
+
+                        <!-- Confirm Password -->
+                        <Label text="Confirm Password"
+                               style="-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                        <PasswordField fx:id="confirmPasswordField"
+                                       promptText="Confirm password"
+                                       style="-fx-background-radius: 10;
+                                              -fx-background-color: #f8fafc;
+                                              -fx-border-color: #cbd5e1;
+                                              -fx-border-radius: 10;
+                                              -fx-padding: 10;
+                                              -fx-font-size: 14px;"/>
+                    </VBox>
+
+                    <!-- Buttons -->
+                    <HBox spacing="14" alignment="CENTER_RIGHT">
+                        <Button text="Save Changes"
+                                onAction="#handleSaveButton"
+                                style="-fx-background-radius: 10;
+                                       -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                                       -fx-text-fill: white;
+                                       -fx-font-size: 14px;
+                                       -fx-font-weight: bold;
+                                       -fx-padding: 12 28;
+                                       -fx-cursor: hand;"/>
+
+                        <Button text="Cancel"
+                                onAction="#handleCancelButton"
+                                style="-fx-background-radius: 10;
+                                       -fx-background-color: #f1f5f9;
+                                       -fx-text-fill: #64748b;
+                                       -fx-font-size: 14px;
+                                       -fx-font-weight: 600;
+                                       -fx-padding: 12 26;
+                                       -fx-border-color: #e2e8f0;
+                                       -fx-border-width: 1;
+                                       -fx-border-radius: 10;
+                                       -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
