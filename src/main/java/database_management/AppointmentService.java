@@ -76,7 +76,7 @@ public class AppointmentService {
         }
 
         Map<String, Object> filters = new HashMap<>();
-        filters.put(role + "_id", userId);
+        filters.put(role + "_id", "eq." + userId);
 
         return fetchAppointments(filters);
     }
@@ -193,6 +193,18 @@ public class AppointmentService {
         }
 
         return result;
+    }
+
+    public static void deleteAppointment(int appointmentId) throws Exception {
+        if (appointmentId <= 0) {
+            throw new IllegalArgumentException("Appointment ID must be valid to delete");
+        }
+        SupabaseClient.delete("Appointment", appointmentId, null);
+    }
+
+    public static void deleteAllAppointmentsForUser(int userId) throws Exception {
+        // Delete any appointments where this user is the doctor
+        SupabaseClient.deleteByFilter("Appointment", "doctor_id", userId);
     }
 
 

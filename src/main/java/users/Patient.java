@@ -17,27 +17,21 @@ public class Patient extends User {
     }
 
 
-    public boolean bookAppointment(int appointmentId) throws Exception {
-        Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
-        if(fetchedAppointment == null){
-            return false;
+    public void bookAppointment(Appointment appointment){
+        try{
+            appointment.setPatient(this);
+            appointment.setStatus("SCHEDULED");
+            AppointmentService.updateAppointment(appointment);
+        }catch (Exception exception){
+            throw new RuntimeException(exception);
         }
-        fetchedAppointment.setPatient(this);
-        fetchedAppointment.setStatus("SCHEDULED");
-        AppointmentService.updateAppointment(fetchedAppointment);
-        return true;
     }
 
     @Override
-    public boolean cancelAppointment(int appointmentId) throws Exception {
-        Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
-        if(fetchedAppointment == null){
-            return false;
-        }
-        fetchedAppointment.setPatient(null);
-        fetchedAppointment.setStatus("AVAILABLE");
-        AppointmentService.updateAppointment(fetchedAppointment);
-        return true;
+    public void cancelAppointment(Appointment appointment) throws Exception {
+        appointment.setPatient(null);
+        appointment.setStatus("AVAILABLE");
+        AppointmentService.updateAppointment(appointment);
     }
 
     @Override

@@ -2,7 +2,6 @@ package controllers;
 
 import appointments.Appointment;
 import core.AppState;
-import database_management.AppointmentService;
 import database_management.PatientService;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
@@ -19,8 +18,6 @@ import users.Doctor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import static database_management.AppointmentService.fetchAppointmentById;
 
 public class PatientPageController extends BaseController {
 
@@ -56,6 +53,16 @@ public class PatientPageController extends BaseController {
         // TODO: navigate to patient profile/settings page
     }
 
+    @FXML
+    private void handleLogout() {
+        // Clear in-memory session
+        appState.setUser(null);
+        screenManager.show("login.fxml");
+    }
+
+    public void handleModifyAccount(ActionEvent actionEvent) {
+        screenManager.show("modifyAccount.fxml");
+    }
 
     private void loadAppointments() {
         try {
@@ -211,21 +218,5 @@ public class PatientPageController extends BaseController {
         }
 
         return card;
-    }
-
-    private void handleCancelAppointment(int appointmentId) {
-        try {
-            Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
-            if (fetchedAppointment == null) {
-                System.err.println("Appointment not found: " + appointmentId);
-                return;
-            }
-            fetchedAppointment.setStatus("CANCELLED");
-            AppointmentService.updateAppointment(fetchedAppointment);
-            loadAppointments(); // Reload to reflect the change
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Failed to cancel appointment: " + e.getMessage());
-        }
     }
 }

@@ -39,9 +39,9 @@
                                -fx-cursor: hand;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);"/>
 
-                <Button fx:id="profileButton"
-                        text="Profile"
-                        onAction="#handleProfileButton"
+                <Button fx:id="appointmentsButton"
+                        text="My Appointments"
+                        onAction="#handleAppointmentsButton"
                         style="-fx-background-color: rgba(255,255,255,0.2);
                                -fx-text-fill: white;
                                -fx-font-size: 14px;
@@ -49,6 +49,21 @@
                                -fx-padding: 10 20;
                                -fx-background-radius: 12;
                                -fx-cursor: hand;"/>
+
+                <MenuButton fx:id="profileMenuButton"
+                            text="Profile"
+                            style="-fx-background-color: rgba(255,255,255,0.2);
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: 600;
+                                   -fx-padding: 10 20;
+                                   -fx-background-radius: 12;
+                                   -fx-cursor: hand;">
+                    <items>
+                        <MenuItem text="Modify Account Settings" onAction="#handleModifyAccount"/>
+                        <MenuItem text="Log out" onAction="#handleLogout"/>
+                    </items>
+                </MenuButton>
             </children>
         </HBox>
 

@@ -63,5 +63,5 @@ public abstract class User {
     }
 
     public abstract List<Appointment> getMyAppointments() throws Exception;
-    public abstract boolean cancelAppointment(int appointmentId) throws Exception;
+    public abstract void cancelAppointment(Appointment appointment) throws Exception;
 }
