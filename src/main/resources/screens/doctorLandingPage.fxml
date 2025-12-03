@@ -74,8 +74,8 @@
                             <Label text="To:" />
                             <DatePicker fx:id="endDatePicker"/>
 
-                            <Label text="Patient ID:" />
-                            <TextField fx:id="patientIdField" prefWidth="70"/>
+                            <Label text="Patient Name:" />
+                            <TextField fx:id="patientNameField" prefWidth="70"/>
 
                             <Button text="Filter" onAction="#handleFilter"/>
                             <Button text="Reset" onAction="#handleReset"/>

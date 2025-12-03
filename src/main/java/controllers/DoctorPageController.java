@@ -39,7 +39,7 @@ public class DoctorPageController extends BaseController {
     // Filters
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
-    @FXML private TextField patientIdField; // now used to input patient full name (first + last)
+    @FXML private TextField patientNameField; // now used to input patient full name (first + last)
 
     @FXML private Label doctorGreetingLabel;
 
@@ -306,8 +306,8 @@ public class DoctorPageController extends BaseController {
             if (endDatePicker != null && endDatePicker.getValue() != null) {
                 end = endDatePicker.getValue().atTime(23, 59, 59);
             }
-            if (patientIdField != null && !patientIdField.getText().trim().isEmpty()) {
-                patientName = patientIdField.getText().trim();
+            if (patientNameField != null && !patientNameField.getText().trim().isEmpty()) {
+                patientName = patientNameField.getText().trim();
             }
 
             int doctorId = appState.getUserId();
@@ -331,7 +331,7 @@ public class DoctorPageController extends BaseController {
         loadAppointments();
         if (startDatePicker != null) startDatePicker.setValue(null);
         if (endDatePicker != null) endDatePicker.setValue(null);
-        if (patientIdField != null) patientIdField.clear();
+        if (patientNameField != null) patientNameField.clear();
     }
 
     // -------- helpers --------
