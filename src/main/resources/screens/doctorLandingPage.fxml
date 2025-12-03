@@ -107,6 +107,14 @@
                                               -fx-padding: 0 12;
                                               -fx-font-size: 14px;"/>
 
+                            <ComboBox fx:id="statusCombo"
+                                      prefWidth="130"
+                                      prefHeight="38"
+                                      style="-fx-background-radius: 10;
+                                             -fx-background-color: #f8fafc;
+                                             -fx-border-color: #cbd5e1;
+                                             -fx-border-radius: 10;"/>
+
                             <Region HBox.hgrow="ALWAYS"/>
 
                             <Button text="Filter"
@@ -176,15 +184,11 @@
                             <children>
                                 <Region HBox.hgrow="ALWAYS"/>
                                 <Button text="Create appointment"
-                                        onAction="#onCreateAppointmentClicked"
-                                        style="-fx-background-radius: 10;
-                                               -fx-background-color: #22c55e;
-                                               -fx-text-fill: white;
-                                               -fx-font-size: 14px;
-                                               -fx-font-weight: 600;
-                                               -fx-padding: 8 18;
-                                               -fx-cursor: hand;"/>
-
+                                        onAction="#handleCreateAppointment" />
+                                <!-- Make selected slot AVAILABLE again -->
+                                <Button fx:id="completeButton"
+                                        text="Complete Appointment"
+                                        onAction="#handleCompleteAppointment" />
                                 <Button fx:id="makeAvailableButton"
                                         text="Make available"
                                         onAction="#handleMakeAvailable"

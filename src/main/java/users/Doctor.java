@@ -22,25 +22,24 @@ public class Doctor extends User {
     }
 
     // When a patient is correctly served, the doctor marks the appointment as completed
-    public boolean completeAppointment(int appointmentId) throws Exception {
-        Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
-        if(fetchedAppointment == null){
-            return false;
+    public void completeAppointment(Appointment appointment){
+        try {
+            appointment.setStatus("COMPLETED");
+            AppointmentService.updateAppointment(appointment);
+        }catch (Exception exception){
+            throw new RuntimeException(exception);
         }
-        fetchedAppointment.setStatus("COMPLETED");
-        AppointmentService.updateAppointment(fetchedAppointment);
-        return true;
     }
 
     @Override
-    public boolean cancelAppointment(int appointmentId) throws Exception {
-        Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
-        if(fetchedAppointment == null){
-            return false;
+    public void cancelAppointment(Appointment appointment){
+        try {
+            appointment.setStatus("CANCELLED");
+            AppointmentService.updateAppointment(appointment);
+
+        }catch (Exception exception){
+            throw new RuntimeException(exception);
         }
-        fetchedAppointment.setStatus("CANCELLED");
-        AppointmentService.updateAppointment(fetchedAppointment);
-        return true;
     }
 
     @Override
@@ -48,7 +47,27 @@ public class Doctor extends User {
         return AppointmentService.fetchAppointmentsByUserId(this.getId(), "doctor");
     }
 
-    public List<Appointment> getMyAppointmentsFiltered(LocalDateTime start, LocalDateTime end, String patientFullName) throws Exception {
-        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientFullName);
+    public List<Appointment> getMyAppointments(LocalDateTime start, LocalDateTime end, String patientFullName, String status) throws Exception {
+        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientFullName, status);
+    }
+
+    // This function eliminates the current patient and makes the appointment available again
+    public void makeAppointmentAvailable(Appointment appointment){
+        try {
+            appointment.setPatient(null);
+            appointment.setStatus("AVAILABLE");
+            AppointmentService.updateAppointment(appointment);
+
+        }catch(Exception exception){
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public void deleteAppointment(Appointment appointment){
+        try {
+            AppointmentService.deleteAppointment(appointment.getId());
+        }catch(Exception exception){
+            throw new RuntimeException(exception);
+        }
     }
 }
