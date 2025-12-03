@@ -344,7 +344,6 @@ public class DoctorPageController extends BaseController {
              List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName, status);
 
              appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
-             refreshAppointmentBreakdown(filtered);
          } catch (Exception e) {
              e.printStackTrace();
              showError("Failed to fetch appointments.", e);
