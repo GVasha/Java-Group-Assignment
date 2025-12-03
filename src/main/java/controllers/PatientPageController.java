@@ -4,12 +4,16 @@ import appointments.Appointment;
 import core.AppState;
 import database_management.AppointmentService;
 import database_management.PatientService;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
+import javafx.animation.ParallelTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import users.Doctor;
 
 import java.time.LocalDateTime;
@@ -62,13 +66,38 @@ public class PatientPageController extends BaseController {
 
             appointmentsGrid.getChildren().clear();
 
-            for (Appointment appt : appointments) {
+            for (int i = 0; i < appointments.size(); i++) {
+                Appointment appt = appointments.get(i);
                 VBox card = createAppointmentCard(appt);
                 appointmentsGrid.getChildren().add(card);
+                
+                // Animate card appearance with staggered delay
+                animateCardAppearance(card, i * 80); // 80ms delay between each card
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void animateCardAppearance(VBox card, double delay) {
+        // Set initial state - invisible and slightly below
+        card.setOpacity(0);
+        card.setTranslateY(20);
+
+        // Create fade in animation
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), card);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+
+        // Create slide up animation
+        TranslateTransition slideUp = new TranslateTransition(Duration.millis(400), card);
+        slideUp.setFromY(20);
+        slideUp.setToY(0);
+
+        // Combine animations
+        ParallelTransition parallelTransition = new ParallelTransition(fadeIn, slideUp);
+        parallelTransition.setDelay(Duration.millis(delay));
+        parallelTransition.play();
     }
 
     private VBox createAppointmentCard(Appointment appt) {
