@@ -80,6 +80,18 @@
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
 
+                <!-- Appointments Grid -->
+                <ScrollPane fitToWidth="true"
+                            prefHeight="450"
+                            style="-fx-background-color: transparent;
+                                   -fx-border-color: transparent;
+                                   -fx-padding: 0;">
+                    <FlowPane fx:id="appointmentsGrid"
+                              hgap="20"
+                              vgap="20"
+                              prefWidth="840"
+                              style="-fx-background-color: #f0f2f5;"/>
+                </ScrollPane>
                 <!-- Main Card with Colorful Accent -->
                 <VBox spacing="20"
                       maxWidth="840"
