@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Text?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -90,6 +91,11 @@
                                               -fx-padding: 10;
                                               -fx-font-size: 14px;"/>
                     </VBox>
+
+                    <Text fx:id="formMessage"
+                          visible="false"
+                          style="-fx-fill: white;"
+                          wrappingWidth="330" />
 
                     <!-- Buttons -->
                     <HBox spacing="14" alignment="CENTER_RIGHT">
