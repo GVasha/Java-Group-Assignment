@@ -27,11 +27,6 @@ public class DoctorService {
         return SupabaseClient.post("Appointment", body.toString());
     }
 
-    //For doctors only: to fetch doctors available slots
-    public static String getAvailableSlotsForDoctor(int doctorId) throws Exception {
-        String endpoint = "Appointment?doctor_id=eq." + doctorId + "&status=eq.AVAILABLE";
-        return SupabaseClient.get(endpoint);
-    }
     public static List<Integer> fetchPatientIdsByName(String fullName) throws Exception {
         if (fullName == null || fullName.trim().isEmpty()) {
             throw new IllegalArgumentException("Full name must not be empty");
