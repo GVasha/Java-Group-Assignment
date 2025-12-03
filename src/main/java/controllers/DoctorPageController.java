@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.chart.PieChart;
 import users.Doctor;
 import users.Patient;
 
@@ -36,6 +37,8 @@ public class DoctorPageController extends BaseController {
     @FXML private TableColumn<Appointment, String> patientColumn;
     @FXML private TableColumn<Appointment, String> notesColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
+
+    @FXML private PieChart appointmentBreakdownChart;
 
     // Filters
     @FXML private DatePicker startDatePicker;
@@ -212,11 +215,11 @@ public class DoctorPageController extends BaseController {
 
             loadAppointments();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Available appointment created for " + dateTime.format(formatter));
-            alert.showAndWait();
+             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+             alert.setTitle("Success");
+             alert.setHeaderText(null);
+             alert.setContentText("Available appointment created for " + dateTime.format(formatter));
+             alert.showAndWait();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -290,9 +293,16 @@ public class DoctorPageController extends BaseController {
         try {
             List<Appointment> appointments = doctor.getMyAppointments();
             appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Failed to load appointments.", e);
+            refreshAppointmentBreakdown(appointments);
+         } catch (Exception e) {
+             e.printStackTrace();
+             showError("Failed to load appointments.", e);
+         }
+     }
+
+    private void refreshAppointmentBreakdown(List<Appointment> source) {
+        if (appointmentBreakdownChart == null || source == null) {
+            return;
         }
     }
 
@@ -316,23 +326,27 @@ public class DoctorPageController extends BaseController {
                 status = statusCombo.getValue().trim();
             }
 
-            List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName, status);
+        long scheduled = source.stream()
+                .filter(appt -> "SCHEDULED".equalsIgnoreCase(appt.getStatus()))
+                .count();
+        long available = source.stream()
+                .filter(appt -> "AVAILABLE".equalsIgnoreCase(appt.getStatus()))
+                .count();
 
-            appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Failed to fetch appointments.", e);
-        }
+        appointmentBreakdownChart.getData().setAll(
+                new PieChart.Data("Scheduled", scheduled),
+                new PieChart.Data("Available", available)
+        );
     }
 
-    @FXML
-    private void handleReset(){
-        loadAppointments();
-        if (startDatePicker != null) startDatePicker.setValue(null);
-        if (endDatePicker != null) endDatePicker.setValue(null);
-        if (patientNameField != null) patientNameField.clear();
-        if (statusCombo != null) statusCombo.setValue("SCHEDULED");
-    }
+     @FXML
+     private void handleReset() {
+         loadAppointments();
+         if (startDatePicker != null) startDatePicker.setValue(null);
+         if (endDatePicker != null) endDatePicker.setValue(null);
+         if (patientNameField != null) patientNameField.clear();
+         if (statusCombo != null) statusCombo.setValue("SCHEDULED");
+     }
 
     // HELPERS
 

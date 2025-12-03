@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;"
@@ -11,7 +12,7 @@
 
     <children>
 
-        <!-- Top Navigation Bar (matching patient style) -->
+        <!-- Top Navigation Bar -->
         <HBox alignment="CENTER_LEFT" prefHeight="70" prefWidth="900"
               spacing="20"
               style="-fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
@@ -19,6 +20,7 @@
             <padding>
                 <Insets left="30" right="30" top="15" bottom="15"/>
             </padding>
+
             <children>
 
                 <Label fx:id="doctorGreetingLabel"
@@ -30,13 +32,13 @@
                 <!-- Profile dropdown -->
                 <MenuButton fx:id="profileMenuButton"
                             text="Profile"
-                            style="-fx-background-color: rgba(255,255,255,0.2);
-                                   -fx-text-fill: white;
-                                   -fx-font-size: 14px;
-                                   -fx-font-weight: 600;
-                                   -fx-padding: 10 20;
-                                   -fx-background-radius: 12;
-                                   -fx-cursor: hand;">
+                            style="-fx-background-radius: 12;
+                   -fx-background-color: rgba(255,255,255,0.28);
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: 600;
+                   -fx-padding: 8 22;
+                   -fx-cursor: hand;">
                     <items>
                         <MenuItem text="Modify Account Settings" onAction="#handleModifyAccount"/>
                         <MenuItem text="Log out" onAction="#handleLogout"/>
@@ -54,6 +56,7 @@
             <padding>
                 <Insets top="30" bottom="30" left="30" right="30"/>
             </padding>
+
             <children>
 
                 <!-- Page Title -->
@@ -117,6 +120,7 @@
 
                             <Region HBox.hgrow="ALWAYS"/>
 
+                            <!-- Filter button -->
                             <Button text="Filter"
                                     onAction="#handleFilter"
                                     style="-fx-background-radius: 10;
@@ -124,11 +128,13 @@
                                            -fx-text-fill: white;
                                            -fx-font-size: 14px;
                                            -fx-font-weight: bold;
-                                           -fx-padding: 10 22;
+                                           -fx-padding: 10 28;
+                                           -fx-pref-width: 110;
                                            -fx-pref-height: 38;
                                            -fx-cursor: hand;
                                            -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.4), 8, 0, 0, 3);"/>
 
+                            <!-- Reset button -->
                             <Button text="Reset"
                                     onAction="#handleReset"
                                     style="-fx-background-radius: 10;
@@ -136,7 +142,8 @@
                                            -fx-text-fill: #64748b;
                                            -fx-font-size: 14px;
                                            -fx-font-weight: 600;
-                                           -fx-padding: 10 22;
+                                           -fx-padding: 10 28;
+                                           -fx-pref-width: 110;
                                            -fx-pref-height: 38;
                                            -fx-cursor: hand;
                                            -fx-border-color: #e2e8f0;
@@ -151,11 +158,13 @@
                     <!-- Table + bottom actions -->
                     <VBox spacing="12">
 
-                        <!-- Appointments Table -->
-                        <TableView fx:id="appointmentsTable"
-                                   prefHeight="280"
-                                   prefWidth="792"
-                                   style="-fx-background-color: #ffffff;
+                        <!-- Appointments Table + Overview -->
+                        <HBox spacing="20" alignment="CENTER_LEFT">
+                            <TableView fx:id="appointmentsTable"
+                                       HBox.hgrow="ALWAYS"
+                                       prefHeight="280"
+                                       prefWidth="792"
+                                       style="-fx-background-color: #ffffff;
                                           -fx-background-radius: 12;
                                           -fx-border-color: #e2e8f0;
                                           -fx-border-width: 1;
@@ -163,32 +172,65 @@
                                           -fx-table-header-border-color: transparent;
                                           -fx-table-cell-border-color: #f1f5f9;">
 
-                            <columns>
-                                <TableColumn fx:id="dateColumn" text="Date" prefWidth="130"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="timeColumn" text="Time" prefWidth="90"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="patientIdColumn" text="Patient ID" prefWidth="90"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="patientColumn" text="Patient" prefWidth="180"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="notesColumn" text="Reason" prefWidth="210"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="92"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                            </columns>
-                        </TableView>
+                                <columns>
+                                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="130"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="timeColumn" text="Time" prefWidth="90"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="patientIdColumn" text="Patient ID" prefWidth="90"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="patientColumn" text="Patient" prefWidth="180"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="notesColumn" text="Reason" prefWidth="210"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="92"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                </columns>
+                            </TableView>
+
+                            <VBox spacing="10" alignment="TOP_CENTER" prefWidth="220">
+                                <Label text="Schedule Breakdown"
+                                       style="-fx-font-size: 15px; -fx-font-weight: 600; -fx-text-fill: #1e293b;"/>
+                                <PieChart fx:id="appointmentBreakdownChart"
+                                          prefHeight="220"
+                                          prefWidth="220"
+                                          legendVisible="true"
+                                          labelsVisible="false"
+                                          style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);"/>
+                            </VBox>
+                        </HBox>
 
                         <!-- Bottom action buttons -->
                         <HBox spacing="10" alignment="CENTER_RIGHT">
                             <children>
                                 <Region HBox.hgrow="ALWAYS"/>
-                                <Button text="Create appointment"
-                                        onAction="#handleCreateAppointment" />
-                                <!-- Make selected slot AVAILABLE again -->
+
+                                <!-- Create appointment -->
+                                <Button text="Create"
+                                        onAction="#handleCreateAppointment"
+                                        style="-fx-background-radius: 10;
+                                               -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                                               -fx-text-fill: white;
+                                               -fx-font-size: 14px;
+                                               -fx-font-weight: bold;
+                                               -fx-padding: 8 20;
+                                               -fx-cursor: hand;
+                                               -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.4), 6, 0, 0, 2);"/>
+
+                                <!-- Complete appointment -->
                                 <Button fx:id="completeButton"
                                         text="Complete Appointment"
-                                        onAction="#handleCompleteAppointment" />
+                                        onAction="#handleCompleteAppointment"
+                                        style="-fx-background-radius: 10;
+                                               -fx-background-color: linear-gradient(to right, #22c55e, #16a34a);
+                                               -fx-text-fill: white;
+                                               -fx-font-size: 14px;
+                                               -fx-font-weight: 600;
+                                               -fx-padding: 8 20;
+                                               -fx-cursor: hand;
+                                               -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.35), 6, 0, 0, 2);"/>
+
+                                <!-- Make available -->
                                 <Button fx:id="makeAvailableButton"
                                         text="Make available"
                                         onAction="#handleMakeAvailable"
@@ -201,6 +243,7 @@
                                                -fx-padding: 8 18;
                                                -fx-cursor: hand;"/>
 
+                                <!-- Cancel -->
                                 <Button fx:id="cancelAppointmentButton"
                                         text="Cancel appointment"
                                         onAction="#handleCancelAppointment"
@@ -213,6 +256,7 @@
                                                -fx-padding: 8 18;
                                                -fx-cursor: hand;"/>
 
+                                <!-- Delete -->
                                 <Button fx:id="deleteAppointmentButton"
                                         text="Delete appointment"
                                         onAction="#handleDeleteAppointment"
