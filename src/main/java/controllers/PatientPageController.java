@@ -38,6 +38,16 @@ public class PatientPageController extends BaseController {
         System.out.println("PatientPageController initialized for user ID: " + appState.getUserId());
 
         patientGreetingLabel.setText("Hello, " + appState.getUser().getName());
+        statusCombo.getItems().addAll(
+                "SCHEDULED",
+                "COMPLETED",
+                "CANCELLED"
+        );
+
+        statusCombo.setValue("SCHEDULED");
+
+        patientGreetingLabel.setText("Hello, " + appState.getUser().getName());
+        setupTableColumns();
         loadAppointments();
     }
 
@@ -199,5 +209,51 @@ public class PatientPageController extends BaseController {
             e.printStackTrace();
             System.err.println("Failed to cancel appointment: " + e.getMessage());
         }
+    }
+    @FXML
+    private void handleFilter() {
+        try {
+            LocalDateTime start = null;
+            LocalDateTime end = null;
+            Integer doctorId = null;
+            String status = null;
+
+            if (startDatePicker != null && startDatePicker.getValue() != null) {
+                start = startDatePicker.getValue().atStartOfDay();
+            }
+            if (endDatePicker != null && endDatePicker.getValue() != null) {
+                end = endDatePicker.getValue().atTime(23, 59, 59);
+            }
+            if (doctorIdField != null && !doctorIdField.getText().trim().isEmpty()) {
+              doctorId = Integer.parseInt(doctorIdField.getText().trim());
+            }
+            if (statusCombo != null && !statusCombo.getValue().trim().isEmpty()) {
+                status = statusCombo.getValue().trim();
+            }
+
+            int patientId = appState.getUserId();
+            List<Appointment> filtered = PatientService.fetchAppointmentsForPatientFiltered(patientId, start, end, doctorId, status);
+
+            appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
+
+        } catch (NumberFormatException nfe) {
+            System.out.println("Invalid doctor ID entered.");
+            Alert a = new Alert(Alert.AlertType.WARNING, "Invalid doctor ID. Please enter a number.", ButtonType.OK);
+            a.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, "Failed to fetch appointments.", ButtonType.OK);
+            a.show();
+        }
+    }
+
+    @FXML
+    private void handleReset() {
+        loadAppointments();
+
+        if (startDatePicker != null) startDatePicker.setValue(null);
+        if (endDatePicker != null) endDatePicker.setValue(null);
+        if (doctorIdField != null) doctorIdField.clear();
+        if (statusCombo != null) statusCombo.setValue("SCHEDULED");
     }
 }

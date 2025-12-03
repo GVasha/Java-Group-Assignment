@@ -48,7 +48,7 @@ public class Doctor extends User {
         return AppointmentService.fetchAppointmentsByUserId(this.getId(), "doctor");
     }
 
-    public List<Appointment> getMyAppointmentsFiltered(LocalDateTime start, LocalDateTime end, Integer patientId) throws Exception {
-        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientId);
+    public List<Appointment> getMyAppointmentsFiltered(LocalDateTime start, LocalDateTime end, String patientFullName) throws Exception {
+        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientFullName);
     }
 }
