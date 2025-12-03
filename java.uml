@@ -3,113 +3,292 @@
   <ID>JAVA</ID>
   <OriginalElement>/Users/blancavaldes/Desktop/Java-Group-Assignment/src/main/java</OriginalElement>
   <nodes>
-    <node x="578.1843200627353" y="1256.4863457392596">controllers.SignUpController</node>
-    <node x="2430.369897318187" y="1256.569753485758">controllers.LoginController</node>
-    <node x="1985.596646117787" y="1255.4024173927762">controllers.PatientPageController</node>
-    <node x="-140.9666622193797" y="599.9233568730482">users.Doctor</node>
-    <node x="1520.0129134007177" y="772.4721471673389">controllers.PatientBookingPageController</node>
-    <node x="2421.3437358339766" y="666.8598298786212">core.AppState</node>
-    <node x="2916.0572116876087" y="990.5741956501757">utils.JsonTransformer</node>
-    <node x="980.5922045063327" y="1078.496283135852">controllers.DoctorPageController</node>
-    <node x="1985.0217573779423" y="456.81290633287006">database_management.UserService</node>
-    <node x="2327.843458865939" y="937.8818849738448">database_management.AppointmentService</node>
-    <node x="190.61289121360403" y="1088.724590109562">controllers.BaseController</node>
-    <node x="2055.9172053936336" y="875.859860929316">core.ScreenManager</node>
-    <node x="1052.2352386752173" y="627.5436916751712">authentication.Authentication</node>
-    <node x="1523.0105586421705" y="233.4155891092506">appointments.Appointment</node>
-    <node x="937.580234720403" y="841.2680904686582">database_management.PatientService</node>
-    <node x="916.2511785594667" y="424.0661837749975">database_management.DoctorService</node>
-    <node x="478.2407702510343" y="567.9403282184776">database_management.SupabaseClient</node>
-    <node x="825.7626499597097" y="642.9874444241416">app.Main</node>
-    <node x="530.1144740825218" y="-13.852200199800905">users.User</node>
-    <node x="278.10617732998764" y="892.3056730888586">utils.MessageUtils</node>
-    <node x="2694.2502961720465" y="716.3896072300452">users.Patient</node>
-    <node x="586.9850779027682" y="886.2809581644775">controllers.ModifyAccountController</node>
+    <node x="179.5" y="2351.0">controllers.SignUpController</node>
+    <node x="641.5" y="2411.0">controllers.LoginController</node>
+    <node x="824.0" y="1819.0">controllers.PatientPageController</node>
+    <node x="1847.5" y="478.0">users.Doctor</node>
+    <node x="1084.0" y="2315.0">controllers.PatientBookingPageController</node>
+    <node x="329.5" y="519.0">core.AppState</node>
+    <node x="1267.5" y="979.0">utils.JsonTransformer</node>
+    <node x="1449.0" y="1627.0">controllers.DoctorPageController</node>
+    <node x="1598.0" y="1203.0">database_management.UserService</node>
+    <node x="1882.5" y="2363.0">database_management.AppointmentService</node>
+    <node x="634.5" y="1275.0">controllers.BaseController</node>
+    <node x="728.0" y="775.0">core.ScreenManager</node>
+    <node x="982.5" y="1251.0">authentication.Authentication</node>
+    <node x="2032.0" y="1155.0">appointments.Appointment</node>
+    <node x="1418.5" y="135.0">database_management.PatientService</node>
+    <node x="1455.5" y="751.0">database_management.DoctorService</node>
+    <node x="182.5" y="1227.0">database_management.SupabaseClient</node>
+    <node x="883.0" y="1003.0">app.Main</node>
+    <node x="1063.5" y="-14.0">users.User</node>
+    <node x="163.5" y="751.0">utils.MessageUtils</node>
+    <node x="1042.5" y="519.0">users.Patient</node>
+    <node x="423.5" y="1879.0">controllers.ModifyAccountController</node>
   </nodes>
   <notes />
   <edges>
     <edge source="controllers.DoctorPageController" target="controllers.BaseController" relationship="GENERALIZATION">
-      <point x="236.9997954936673" y="-2.831358519870264E-4" />
-      <point x="1720.0" y="1662.996" />
-      <point x="1720.0" y="1603.0" />
-      <point x="1502.513" y="1603.0" />
-      <point x="1502.513" y="1060.996" />
-      <point x="883.485" y="1060.996" />
-      <point x="883.485" y="1224.0" />
-      <point x="569.485" y="1224.0" />
-      <point x="569.485" y="1157.225" />
-      <point x="151.50010878639597" y="4.0989043793615565E-4" />
+      <point x="-118.5" y="-332.0" />
+      <point x="1567.5" y="1599.0" />
+      <point x="806.0" y="1599.0" />
+      <point x="806.0" y="1399.0" />
+      <point x="786.0" y="1399.0" />
+      <point x="0.0" y="44.0" />
     </edge>
-    <edge source="users.Doctor" target="users.User" relationship="GENERALIZATION">
-      <point x="-3.377806202706779E-4" y="-116.00035687304819" />
-      <point x="137.53300000000002" y="-31.351999999999975" />
-      <point x="2064.0" y="-31.351999999999975" />
-      <point x="2064.0" y="70.5" />
-      <point x="162.49952591747808" y="-176.1477998001991" />
+    <edge source="core.AppState" target="users.User" relationship="TO_ONE">
+      <point x="0.0" y="-80.0" />
+      <point x="426.0" y="479.0" />
+      <point x="1144.75" y="479.0" />
+      <point x="-81.25" y="193.0" />
     </edge>
-    <edge source="controllers.PatientBookingPageController" target="controllers.BaseController" relationship="GENERALIZATION">
-      <point x="-17.512913400717707" y="332.4998528326611" />
-      <point x="1705.0" y="1603.0" />
-      <point x="1502.513" y="1603.0" />
-      <point x="1502.513" y="1060.996" />
-      <point x="883.485" y="1060.996" />
-      <point x="883.485" y="1224.0" />
-      <point x="569.485" y="1224.0" />
-      <point x="569.485" y="1157.225" />
-      <point x="151.50010878639597" y="4.0989043793615565E-4" />
+    <edge source="controllers.PatientBookingPageController" target="core.AppState" relationship="TO_ONE">
+      <point x="81.0" y="-164.0" />
+      <point x="1327.0" y="2279.0" />
+      <point x="1326.0" y="2279.0" />
+      <point x="1326.0" y="1519.0" />
+      <point x="566.0" y="1519.0" />
+      <point x="566.0" y="1199.0" />
+      <point x="526.0" y="1199.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
     </edge>
-    <edge source="controllers.LoginController" target="controllers.BaseController" relationship="GENERALIZATION">
-      <point x="1.0268181245010055E-4" y="116.50024651424201" />
-      <point x="2548.37" y="1745.902" />
-      <point x="1720.0" y="1745.902" />
-      <point x="1720.0" y="1603.0" />
-      <point x="1502.513" y="1603.0" />
-      <point x="1502.513" y="1060.996" />
-      <point x="883.485" y="1060.996" />
-      <point x="883.485" y="1224.0" />
-      <point x="569.485" y="1224.0" />
-      <point x="569.485" y="1157.225" />
-      <point x="151.50010878639597" y="4.0989043793615565E-4" />
+    <edge source="utils.JsonTransformer" target="users.Doctor" relationship="CREATE">
+      <point x="0.0" y="-80.0" />
+      <point x="1406.0" y="959.0" />
+      <point x="1786.0" y="959.0" />
+      <point x="1786.0" y="919.0" />
+      <point x="1986.75" y="919.0" />
+      <point x="-139.25" y="121.0" />
     </edge>
-    <edge source="controllers.PatientPageController" target="controllers.BaseController" relationship="GENERALIZATION">
-      <point x="-161.99964611778705" y="-4.173927761712548E-4" />
-      <point x="1720.0" y="1491.902" />
-      <point x="1720.0" y="1603.0" />
-      <point x="1502.513" y="1603.0" />
-      <point x="1502.513" y="1060.996" />
-      <point x="883.485" y="1060.996" />
-      <point x="883.485" y="1224.0" />
-      <point x="569.485" y="1224.0" />
-      <point x="569.485" y="1157.225" />
-      <point x="151.50010878639597" y="4.0989043793615565E-4" />
+    <edge source="controllers.ModifyAccountController" target="core.AppState" relationship="TO_ONE">
+      <point x="-61.25" y="-80.0" />
+      <point x="484.75" y="1579.0" />
+      <point x="166.0" y="1579.0" />
+      <point x="166.0" y="1199.0" />
+      <point x="526.0" y="1199.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
     </edge>
-    <edge source="controllers.ModifyAccountController" target="controllers.BaseController" relationship="GENERALIZATION">
-      <point x="-7.790276825403453E-5" y="152.50004183552244" />
-      <point x="726.485" y="1224.0" />
-      <point x="569.485" y="1224.0" />
-      <point x="569.485" y="1157.225" />
-      <point x="151.50010878639597" y="4.0989043793615565E-4" />
+    <edge source="controllers.PatientPageController" target="core.AppState" relationship="TO_ONE">
+      <point x="-81.0" y="-140.0" />
+      <point x="905.0" y="1539.0" />
+      <point x="526.0" y="1539.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
+    </edge>
+    <edge source="controllers.DoctorPageController" target="users.Doctor" relationship="TO_ONE">
+      <point x="118.5" y="-332.0" />
+      <point x="1804.5" y="1599.0" />
+      <point x="1806.0" y="1599.0" />
+      <point x="1806.0" y="1499.0" />
+      <point x="2446.0" y="1499.0" />
+      <point x="2446.0" y="1139.0" />
+      <point x="2266.0" y="1139.0" />
+      <point x="2266.0" y="759.0" />
+      <point x="2265.25" y="759.0" />
+      <point x="139.25" y="121.0" />
     </edge>
     <edge source="controllers.SignUpController" target="controllers.BaseController" relationship="GENERALIZATION">
-      <point x="-3.200627353407981E-4" y="-332.5003457392596" />
-      <point x="728.184" y="1224.0" />
-      <point x="569.485" y="1224.0" />
-      <point x="569.485" y="1157.225" />
-      <point x="151.50010878639597" y="4.0989043793615565E-4" />
+      <point x="73.25" y="-128.0" />
+      <point x="399.25" y="1599.0" />
+      <point x="806.0" y="1599.0" />
+      <point x="806.0" y="1399.0" />
+      <point x="786.0" y="1399.0" />
+      <point x="0.0" y="44.0" />
     </edge>
     <edge source="users.Patient" target="users.User" relationship="GENERALIZATION">
-      <point x="-2.961720465464168E-4" y="-79.99960723004523" />
-      <point x="2957.75" y="90.0" />
-      <point x="2064.0" y="90.0" />
-      <point x="2064.0" y="70.5" />
-      <point x="162.49952591747808" y="-176.1477998001991" />
+      <point x="0.0" y="-80.0" />
+      <point x="1306.0" y="399.0" />
+      <point x="1307.25" y="399.0" />
+      <point x="81.25" y="193.0" />
+    </edge>
+    <edge source="controllers.PatientBookingPageController" target="users.Patient" relationship="TO_ONE">
+      <point x="81.0" y="-164.0" />
+      <point x="1327.0" y="2279.0" />
+      <point x="1326.0" y="2279.0" />
+      <point x="1326.0" y="1519.0" />
+      <point x="1566.0" y="1519.0" />
+      <point x="1566.0" y="1179.0" />
+      <point x="1826.0" y="1179.0" />
+      <point x="1826.0" y="899.0" />
+      <point x="1437.75" y="899.0" />
+      <point x="131.75" y="80.0" />
+    </edge>
+    <edge source="users.Doctor" target="users.User" relationship="GENERALIZATION">
+      <point x="0.0" y="-121.0" />
+      <point x="2126.0" y="439.0" />
+      <point x="1306.0" y="439.0" />
+      <point x="1306.0" y="399.0" />
+      <point x="1307.25" y="399.0" />
+      <point x="81.25" y="193.0" />
+    </edge>
+    <edge source="controllers.PatientBookingPageController" target="controllers.BaseController" relationship="GENERALIZATION">
+      <point x="-81.0" y="-164.0" />
+      <point x="1165.0" y="1599.0" />
+      <point x="806.0" y="1599.0" />
+      <point x="806.0" y="1399.0" />
+      <point x="786.0" y="1399.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="controllers.LoginController" target="controllers.BaseController" relationship="GENERALIZATION">
+      <point x="52.25" y="-68.0" />
+      <point x="798.25" y="1599.0" />
+      <point x="806.0" y="1599.0" />
+      <point x="806.0" y="1399.0" />
+      <point x="786.0" y="1399.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="database_management.AppointmentService" target="appointments.Appointment" relationship="CREATE">
+      <point x="0.0" y="-116.0" />
+      <point x="2146.0" y="2339.0" />
+      <point x="2226.0" y="2339.0" />
+      <point x="0.0" y="164.0" />
+    </edge>
+    <edge source="controllers.DoctorPageController" target="core.AppState" relationship="TO_ONE">
+      <point x="118.5" y="-332.0" />
+      <point x="1804.5" y="1599.0" />
+      <point x="1806.0" y="1599.0" />
+      <point x="1806.0" y="1499.0" />
+      <point x="606.0" y="1499.0" />
+      <point x="606.0" y="1199.0" />
+      <point x="526.0" y="1199.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
+    </edge>
+    <edge source="controllers.BaseController" target="core.ScreenManager" relationship="TO_ONE">
+      <point x="0.0" y="-44.0" />
+      <point x="786.0" y="899.0" />
+      <point x="777.0" y="899.0" />
+      <point x="-49.0" y="44.0" />
+    </edge>
+    <edge source="controllers.PatientPageController" target="controllers.BaseController" relationship="GENERALIZATION">
+      <point x="81.0" y="-140.0" />
+      <point x="1067.0" y="1599.0" />
+      <point x="806.0" y="1599.0" />
+      <point x="806.0" y="1399.0" />
+      <point x="786.0" y="1399.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="controllers.ModifyAccountController" target="controllers.BaseController" relationship="GENERALIZATION">
+      <point x="61.25" y="-80.0" />
+      <point x="607.25" y="1599.0" />
+      <point x="806.0" y="1599.0" />
+      <point x="806.0" y="1399.0" />
+      <point x="786.0" y="1399.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="controllers.BaseController" target="core.AppState" relationship="TO_ONE">
+      <point x="0.0" y="-44.0" />
+      <point x="786.0" y="1179.0" />
+      <point x="526.0" y="1179.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
+    </edge>
+    <edge source="utils.JsonTransformer" target="users.Patient" relationship="CREATE">
+      <point x="0.0" y="-80.0" />
+      <point x="1406.0" y="719.0" />
+      <point x="1186.0" y="719.0" />
+      <point x="1186.0" y="699.0" />
+      <point x="1174.25" y="699.0" />
+      <point x="-131.75" y="80.0" />
+    </edge>
+    <edge source="controllers.SignUpController" target="core.AppState" relationship="TO_ONE">
+      <point x="-73.25" y="-128.0" />
+      <point x="252.75" y="2319.0" />
+      <point x="126.0" y="2319.0" />
+      <point x="126.0" y="1199.0" />
+      <point x="526.0" y="1199.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
+    </edge>
+    <edge source="controllers.LoginController" target="core.AppState" relationship="TO_ONE">
+      <point x="-52.25" y="-68.0" />
+      <point x="693.75" y="1559.0" />
+      <point x="486.0" y="1559.0" />
+      <point x="486.0" y="1199.0" />
+      <point x="526.0" y="1199.0" />
+      <point x="526.0" y="839.0" />
+      <point x="546.0" y="839.0" />
+      <point x="546.0" y="499.0" />
+      <point x="426.0" y="499.0" />
+      <point x="0.0" y="-80.0" />
+    </edge>
+    <edge source="authentication.Authentication" target="users.Patient" relationship="CREATE">
+      <point x="0.0" y="-68.0" />
+      <point x="1186.0" y="699.0" />
+      <point x="1174.25" y="699.0" />
+      <point x="-131.75" y="80.0" />
+    </edge>
+    <edge source="authentication.Authentication" target="users.Doctor" relationship="CREATE">
+      <point x="0.0" y="-68.0" />
+      <point x="1186.0" y="939.0" />
+      <point x="1786.0" y="939.0" />
+      <point x="1786.0" y="919.0" />
+      <point x="1986.75" y="919.0" />
+      <point x="-139.25" y="121.0" />
+    </edge>
+    <edge source="controllers.PatientBookingPageController" target="appointments.Appointment" relationship="TO_MANY">
+      <point x="81.0" y="-164.0" />
+      <point x="1327.0" y="2279.0" />
+      <point x="1326.0" y="2279.0" />
+      <point x="1326.0" y="1519.0" />
+      <point x="2006.0" y="1519.0" />
+      <point x="2006.0" y="1119.0" />
+      <point x="2226.0" y="1119.0" />
+      <point x="0.0" y="-164.0" />
+    </edge>
+    <edge source="database_management.UserService" target="users.Doctor" relationship="CREATE">
+      <point x="0.0" y="-116.0" />
+      <point x="1786.0" y="919.0" />
+      <point x="1986.75" y="919.0" />
+      <point x="-139.25" y="121.0" />
+    </edge>
+    <edge source="app.Main" target="core.ScreenManager" relationship="CREATE">
+      <point x="0.0" y="-56.0" />
+      <point x="966.0" y="979.0" />
+      <point x="875.0" y="979.0" />
+      <point x="49.0" y="44.0" />
+    </edge>
+    <edge source="appointments.Appointment" target="users.Doctor" relationship="TO_ONE">
+      <point x="0.0" y="-164.0" />
+      <point x="2226.0" y="1099.0" />
+      <point x="2266.0" y="1099.0" />
+      <point x="2266.0" y="759.0" />
+      <point x="2265.25" y="759.0" />
+      <point x="139.25" y="121.0" />
+    </edge>
+    <edge source="appointments.Appointment" target="users.Patient" relationship="TO_ONE">
+      <point x="0.0" y="-164.0" />
+      <point x="2226.0" y="939.0" />
+      <point x="1826.0" y="939.0" />
+      <point x="1826.0" y="899.0" />
+      <point x="1437.75" y="899.0" />
+      <point x="131.75" y="80.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Compact" zoom="0.4860804063926403" showDependencies="false" x="1306.9249080202892" y="1079.9295914134595" />
+  <settings layout="Hierarchic Compact" zoom="0.4210269802811034" showDependencies="true" x="1309.0391306826982" y="1302.0337048562196" />
   <SelectedNodes />
   <Categories>
     <Category>Constructors</Category>
-    <Category>Fields</Category>
     <Category>Methods</Category>
   </Categories>
   <SCOPE>All</SCOPE>
