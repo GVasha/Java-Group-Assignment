@@ -3,11 +3,11 @@ package database_management;
 // This class is for methods that only doctors can use
 
 import appointments.Appointment;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +32,38 @@ public class DoctorService {
         String endpoint = "Appointment?doctor_id=eq." + doctorId + "&status=eq.AVAILABLE";
         return SupabaseClient.get(endpoint);
     }
+    public static List<Integer> fetchPatientIdsByName(String fullName) throws Exception {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Full name must not be empty");
+        }
+
+        String trimmed = fullName.trim();
+        String[] parts = trimmed.split("\\s+");
+        if (parts.length < 2) {
+            // keep it simple for now: require both first and last name
+            throw new IllegalArgumentException("Please enter both first and last name (e.g. \"Pat Ient\")");
+        }
+
+        String firstName = parts[0];
+        String lastName  = parts[parts.length - 1];
+
+        // Only patients, and only their IDs
+        String endpoint = "User"
+                + "?role=eq.patient"
+                + "&first_name=eq." + firstName
+                + "&last_name=eq." + lastName
+                + "&select=id";
+
+        String json = SupabaseClient.get(endpoint);
+        JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
+
+        List<Integer> ids = new ArrayList<>();
+        for (JsonElement el : arr) {
+            JsonObject obj = el.getAsJsonObject();
+            ids.add(obj.get("id").getAsInt());
+        }
+        return ids;
+    }
 
     public static List<Appointment> fetchAppointmentsForDoctorFiltered(int doctorId, LocalDateTime start, LocalDateTime end, String patientFullName) throws Exception {
 
@@ -47,7 +79,7 @@ public class DoctorService {
 
         if (patientFullName != null && !patientFullName.isBlank()) {
             // Resolve name -> user IDs
-            List<Integer> ids = UserService.fetchUserIdsByName(patientFullName);
+            List<Integer> ids = fetchPatientIdsByName(patientFullName);
             if (ids.isEmpty()) {
                 return new java.util.ArrayList<>();
             }
