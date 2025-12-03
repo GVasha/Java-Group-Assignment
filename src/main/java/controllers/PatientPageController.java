@@ -167,15 +167,16 @@ public class PatientPageController extends BaseController {
         // Cancel button - only show if status is not CANCELLED
         String currentStatus = appt.getStatus();
         if (currentStatus == null || !currentStatus.toUpperCase().equals("CANCELLED")) {
-            Button cancelButton = new Button("Cancel Appointment");
-            cancelButton.setStyle("-fx-background-color: #ef4444; " +
-                    "-fx-text-fill: white; " +
-                    "-fx-font-size: 13px; " +
-                    "-fx-font-weight: 600; " +
-                    "-fx-padding: 8 16; " +
-                    "-fx-background-radius: 8; " +
-                    "-fx-cursor: hand; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);");
+            Button cancelButton = new Button("Cancel");
+            cancelButton.setStyle("-fx-background-color: transparent; " +
+                    "-fx-text-fill: #ef4444; " +
+                    "-fx-font-size: 12px; " +
+                    "-fx-font-weight: 500; " +
+                    "-fx-padding: 4 8; " +
+                    "-fx-border-color: #ef4444; " +
+                    "-fx-border-width: 1; " +
+                    "-fx-border-radius: 4; " +
+                    "-fx-cursor: hand;");
             cancelButton.setOnAction(e -> handleCancelAppointment(appt.getId()));
             card.getChildren().add(cancelButton);
         }
