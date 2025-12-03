@@ -304,10 +304,22 @@ public class DoctorPageController extends BaseController {
         if (appointmentBreakdownChart == null || source == null) {
             return;
         }
+
+        long scheduled = source.stream()
+                .filter(appt -> "SCHEDULED".equalsIgnoreCase(appt.getStatus()))
+                .count();
+        long available = source.stream()
+                .filter(appt -> "AVAILABLE".equalsIgnoreCase(appt.getStatus()))
+                .count();
+
+        appointmentBreakdownChart.getData().setAll(
+                new PieChart.Data("Scheduled", scheduled),
+                new PieChart.Data("Available", available)
+        );
     }
 
     @FXML
-    private void handleFilter(){
+    private void handleFilter() {
         try {
             LocalDateTime start = null;
             LocalDateTime end = null;
@@ -326,17 +338,13 @@ public class DoctorPageController extends BaseController {
                 status = statusCombo.getValue().trim();
             }
 
-        long scheduled = source.stream()
-                .filter(appt -> "SCHEDULED".equalsIgnoreCase(appt.getStatus()))
-                .count();
-        long available = source.stream()
-                .filter(appt -> "AVAILABLE".equalsIgnoreCase(appt.getStatus()))
-                .count();
+            List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName, status);
 
-        appointmentBreakdownChart.getData().setAll(
-                new PieChart.Data("Scheduled", scheduled),
-                new PieChart.Data("Available", available)
-        );
+            appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Failed to fetch appointments.", e);
+        }
     }
 
      @FXML
