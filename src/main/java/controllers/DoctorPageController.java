@@ -356,20 +356,13 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleProfileButton() {
-        System.out.println("Doctor clicked Profile (top navbar)");
-        screenManager.show("doctorProfilePage.fxml");
-    }
-
-    // -------- profile menu actions --------
-
-    @FXML
     private void handleLogout() {
         // Clear in-memory session
         appState.setUser(null);
         screenManager.show("login.fxml");
     }
 
+    @FXML
     public void handleModifyAccount(ActionEvent actionEvent) {
         screenManager.show("modifyAccount.fxml");
     }
