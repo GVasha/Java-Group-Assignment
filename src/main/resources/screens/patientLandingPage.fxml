@@ -1,45 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="650" prefWidth="1000" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PatientPageController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.PatientPageController">
 
     <children>
-        <!-- Soft blurred background image -->
-        <ImageView fitHeight="650" fitWidth="1000" opacity="0.23" preserveRatio="false" style="-fx-effect: gaussian-blur(20px);">
-            <image>
-                <Image url="@../images/patient_page.jpg" />
-            </image>
-        </ImageView>
 
-        <!-- Navigation Bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="80" prefWidth="1000.0" spacing="35" style="-fx-background-color: rgba(255,255,255,0.85); -fx-padding: 0 40; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 18, 0, 0, 4);">
-
+        <!-- Vibrant Top Navigation Bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="70" prefWidth="900"
+              spacing="20"
+              style="-fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                     -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.3), 12, 0, 0, 4);">
+            <padding>
+                <Insets left="30" right="30" top="15" bottom="15"/>
+            </padding>
             <children>
-                <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;" text="Patient Portal" />
-                <Pane HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="bookButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="Book" />
+                <Label fx:id="patientGreetingLabel"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"
+                       text="Hello, Patient"/>
 
-                <Button fx:id="appointmentsButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="My appointments" />
+                <Region HBox.hgrow="ALWAYS"/>
 
-                <Button fx:id="profileButton" style="-fx-background-color: #2E86C1; -fx-text-fill: white; -fx-font-size: 17; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;" text="Profile" />
+                <Button fx:id="bookButton"
+                        text="Book Appointment"
+                        onAction="#handleBookButton"
+                        style="-fx-background-radius: 12;
+                               -fx-background-color: #ffffff;
+                               -fx-text-fill: #3b82f6;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 10 24;
+                               -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);"/>
+
+                <Button fx:id="appointmentsButton"
+                        text="My Appointments"
+                        onAction="#handleAppointmentsButton"
+                        style="-fx-background-color: rgba(255,255,255,0.2);
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-padding: 10 20;
+                               -fx-background-radius: 12;
+                               -fx-cursor: hand;"/>
+
+                <Button fx:id="profileButton"
+                        text="Profile"
+                        onAction="#handleProfileButton"
+                        style="-fx-background-color: rgba(255,255,255,0.2);
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-padding: 10 20;
+                               -fx-background-radius: 12;
+                               -fx-cursor: hand;"/>
             </children>
         </HBox>
 
-        <!-- Center Content -->
-        <VBox alignment="CENTER" layoutX="0" layoutY="0" prefHeight="650" prefWidth="1000" spacing="20">
+        <!-- Main Content -->
+        <VBox alignment="TOP_CENTER" spacing="20"
+              layoutY="70"
+              prefWidth="900"
+              style="-fx-background-color: #f0f2f5;">
+            <padding>
+                <Insets top="30" bottom="30" left="30" right="30"/>
+            </padding>
             <children>
-                <Label style="-fx-font-size: 58px; -fx-font-weight: bold; -fx-text-fill: #ffffff;                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 20, 0.3, 0, 0);" text="Hello, Patient" />
 
-                <Label style="-fx-font-size: 24px; -fx-text-fill: #e8e8e8;                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 15, 0.3, 0, 0);" text="Manage appointments with ease and privacy" />
+                <!-- Page Title with Accent -->
+                <HBox alignment="CENTER_LEFT" spacing="12" prefWidth="840">
+                    <Label text="Your Appointments"
+                           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+                <!-- Appointments Grid -->
+                <ScrollPane fitToWidth="true"
+                            prefHeight="450"
+                            style="-fx-background-color: transparent;
+                                   -fx-border-color: transparent;
+                                   -fx-padding: 0;">
+                    <FlowPane fx:id="appointmentsGrid"
+                              hgap="20"
+                              vgap="20"
+                              prefWidth="840"
+                              style="-fx-background-color: #f0f2f5;"/>
+                </ScrollPane>
             </children>
         </VBox>
     </children>
