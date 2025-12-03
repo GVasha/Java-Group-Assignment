@@ -52,14 +52,13 @@
 
                 <MenuButton fx:id="profileMenuButton"
                             text="Profile"
-                            style="-fx-background-radius: 12;
-                   -fx-background-color: rgba(255,255,255,0.28);
-                   -fx-text-fill: white;
-                   -fx-font-size: 14px;
-                   -fx-font-weight: 600;
-                   -fx-padding: 8 22;
-                   -fx-cursor: hand;">
-
+                            style="-fx-background-color: rgba(255,255,255,0.2);
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: 600;
+                                   -fx-padding: 10 20;
+                                   -fx-background-radius: 12;
+                                   -fx-cursor: hand;">
                     <items>
                         <MenuItem text="Modify Account Settings" onAction="#handleModifyAccount"/>
                         <MenuItem text="Log out" onAction="#handleLogout"/>
