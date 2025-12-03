@@ -97,31 +97,50 @@
                           style="-fx-fill: white;"
                           wrappingWidth="330" />
 
-                    <!-- Buttons -->
-                    <HBox spacing="14" alignment="CENTER_RIGHT">
+                    <!-- Buttons Row -->
+                    <HBox spacing="14" alignment="CENTER_LEFT">
+
+                        <!-- LEFT: Delete Button -->
+                        <Button text="Delete Account"
+                                onAction="#handleDeleteAccount"
+                                style="-fx-background-radius: 10;
+                   -fx-background-color: linear-gradient(to right, #ef4444, #dc2626);
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-padding: 12 26;
+                   -fx-cursor: hand;
+                   -fx-effect: dropshadow(gaussian, rgba(239,68,68,0.4), 8, 0, 0, 2);"/>
+
+                        <!-- Spacer to push other buttons to the right -->
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <!-- RIGHT: Save + Go Back -->
                         <Button text="Save Changes"
                                 onAction="#handleSaveButton"
                                 style="-fx-background-radius: 10;
-                                       -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
-                                       -fx-text-fill: white;
-                                       -fx-font-size: 14px;
-                                       -fx-font-weight: bold;
-                                       -fx-padding: 12 28;
-                                       -fx-cursor: hand;"/>
+                   -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-padding: 12 28;
+                   -fx-cursor: hand;"/>
 
                         <Button text="Go Back"
                                 onAction="#handleCancelButton"
                                 style="-fx-background-radius: 10;
-                                       -fx-background-color: #f1f5f9;
-                                       -fx-text-fill: #64748b;
-                                       -fx-font-size: 14px;
-                                       -fx-font-weight: 600;
-                                       -fx-padding: 12 26;
-                                       -fx-border-color: #e2e8f0;
-                                       -fx-border-width: 1;
-                                       -fx-border-radius: 10;
-                                       -fx-cursor: hand;"/>
+                   -fx-background-color: #f1f5f9;
+                   -fx-text-fill: #64748b;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: 600;
+                   -fx-padding: 12 26;
+                   -fx-border-color: #e2e8f0;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 10;
+                   -fx-cursor: hand;"/>
                     </HBox>
+
+
                 </VBox>
             </children>
         </VBox>

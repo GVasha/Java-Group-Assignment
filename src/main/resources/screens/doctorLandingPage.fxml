@@ -40,7 +40,6 @@
                     <items>
                         <MenuItem text="Modify Account Settings" onAction="#handleModifyAccount"/>
                         <MenuItem text="Log out" onAction="#handleLogout"/>
-                        <MenuItem text="Delete account" onAction="#handleDeleteAccount"/>
                     </items>
                 </MenuButton>
 
