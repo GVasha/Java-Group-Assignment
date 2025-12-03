@@ -62,7 +62,7 @@ public class AppointmentService {
 
     public static Appointment fetchAppointmentById(int appointmentId) throws Exception {
         Map<String, Object> filters = new HashMap<>();
-        filters.put("id", appointmentId);
+        filters.put("id", "eq." + appointmentId);
 
         List<Appointment> results = fetchAppointments(filters);
 

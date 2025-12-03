@@ -2,6 +2,7 @@ package controllers;
 
 import appointments.Appointment;
 import core.AppState;
+import database_management.AppointmentService;
 import database_management.PatientService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,6 +15,8 @@ import users.Doctor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static database_management.AppointmentService.fetchAppointmentById;
 
 public class PatientPageController extends BaseController {
 
@@ -165,8 +168,36 @@ public class PatientPageController extends BaseController {
             notesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #94a3b8; -fx-font-style: italic;");
         }
 
-        card.getChildren().addAll(dateLabel, doctorLabel, specializationLabel, statusLabel, notesLabel);
+        // Cancel button
+        Button cancelButton = new Button("Cancel Appointment");
+        cancelButton.setStyle("-fx-background-color: #ef4444; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 13px; " +
+                "-fx-font-weight: 600; " +
+                "-fx-padding: 8 16; " +
+                "-fx-background-radius: 8; " +
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);");
+        cancelButton.setOnAction(e -> handleCancelAppointment(appt.getId()));
+
+        card.getChildren().addAll(dateLabel, doctorLabel, specializationLabel, statusLabel, notesLabel, cancelButton);
 
         return card;
+    }
+
+    private void handleCancelAppointment(int appointmentId) {
+        try {
+            Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
+            if (fetchedAppointment == null) {
+                System.err.println("Appointment not found: " + appointmentId);
+                return;
+            }
+            fetchedAppointment.setStatus("CANCELLED");
+            AppointmentService.updateAppointment(fetchedAppointment);
+            loadAppointments(); // Reload to reflect the change
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to cancel appointment: " + e.getMessage());
+        }
     }
 }
