@@ -60,7 +60,7 @@ public class DoctorService {
         return ids;
     }
 
-    public static List<Appointment> fetchAppointmentsForDoctorFiltered(int doctorId, LocalDateTime start, LocalDateTime end, String patientFullName) throws Exception {
+    public static List<Appointment> fetchAppointmentsForDoctorFiltered(int doctorId, LocalDateTime start, LocalDateTime end, String patientFullName, String status) throws Exception {
 
         Map<String, Object> filters = new HashMap<>();
         filters.put("doctor_id", "eq." + doctorId);
@@ -73,12 +73,10 @@ public class DoctorService {
         }
 
         if (patientFullName != null && !patientFullName.isBlank()) {
-            // Resolve name -> user IDs
             List<Integer> ids = fetchPatientIdsByName(patientFullName);
             if (ids.isEmpty()) {
                 return new java.util.ArrayList<>();
             }
-            // Build IN filter
             StringBuilder inList = new StringBuilder("in.(");
             for (int i = 0; i < ids.size(); i++) {
                 if (i > 0) inList.append(",");
@@ -86,6 +84,9 @@ public class DoctorService {
             }
             inList.append(")");
             filters.put("patient_id", inList.toString());
+        }
+        if (status != null) {
+            filters.put("status", "eq." + status);
         }
 
         return fetchAppointments(filters);

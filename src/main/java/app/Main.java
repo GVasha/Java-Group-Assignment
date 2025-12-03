@@ -10,6 +10,7 @@ public class Main extends Application {
         launch(args);
     }
 
+    // Starts the application with login screen
     @Override
     public void start(Stage stage) {
         ScreenManager screenManager = new ScreenManager(stage);

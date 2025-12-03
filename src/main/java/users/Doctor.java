@@ -47,8 +47,8 @@ public class Doctor extends User {
         return AppointmentService.fetchAppointmentsByUserId(this.getId(), "doctor");
     }
 
-    public List<Appointment> getMyAppointments(LocalDateTime start, LocalDateTime end, String patientFullName) throws Exception {
-        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientFullName);
+    public List<Appointment> getMyAppointments(LocalDateTime start, LocalDateTime end, String patientFullName, String status) throws Exception {
+        return DoctorService.fetchAppointmentsForDoctorFiltered(this.getId(), start, end, patientFullName, status);
     }
 
     // This function eliminates the current patient and makes the appointment available again

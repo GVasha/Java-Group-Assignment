@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.PatientBookingPageController">
+
+    <children>
+
+        <!-- Top Navigation Bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="70" prefWidth="900"
+              spacing="20"
+              style="-fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                     -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.3), 12, 0, 0, 4);">
+            <padding>
+                <Insets left="30" right="30" top="15" bottom="15"/>
+            </padding>
+            <children>
+                <Button text="← Back"
+                        onAction="#handleBackButton"
+                        style="-fx-background-color: rgba(255,255,255,0.2);
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-padding: 10 20;
+                               -fx-background-radius: 12;
+                               -fx-cursor: hand;"/>
+
+                <Label text="Book Appointment"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+
+        <!-- Main Content -->
+        <VBox alignment="TOP_CENTER" spacing="20" layoutY="70" prefWidth="900" style="-fx-background-color: #f0f2f5;">
+            <padding>
+                <Insets top="30" bottom="30" left="30" right="30"/>
+            </padding>
+
+            <!-- Page Title -->
+            <HBox alignment="CENTER_LEFT" spacing="12" prefWidth="840">
+                <Label text="Available Appointments"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Filters + Table Card -->
+            <VBox spacing="20"
+                  maxWidth="840"
+                  style="-fx-background-color: #ffffff;
+                         -fx-background-radius: 16;
+                         -fx-padding: 24;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 16, 0, 0, 6);
+                         -fx-border-color: #e2e8f0;
+                         -fx-border-width: 1;
+                         -fx-border-radius: 16;">
+
+                <!-- Filters Section -->
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <DatePicker fx:id="appointmentDatePicker" promptText="Date"
+                                style="-fx-background-radius: 10; -fx-background-color: #f8fafc; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-pref-width: 150; -fx-pref-height: 38;"/>
+                    <ComboBox fx:id="specializationCombo" promptText="Specialization"
+                              style="-fx-background-radius: 10; -fx-background-color: #f8fafc; -fx-border-color: #cbd5e1; -fx-border-radius: 10; -fx-pref-width: 180; -fx-pref-height: 38;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Filter" onAction="#handleFilter"
+                            style="-fx-background-radius: 10; -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 22; -fx-pref-height: 38; -fx-cursor: hand;"/>
+                    <Button text="Reset" onAction="#handleReset"
+                            style="-fx-background-radius: 10; -fx-background-color: #f1f5f9; -fx-text-fill: #64748b; -fx-font-size: 14px; -fx-font-weight: 600; -fx-padding: 10 22; -fx-pref-height: 38; -fx-cursor: hand; -fx-border-color: #e2e8f0; -fx-border-width: 1;"/>
+                </HBox>
+
+                <!-- Appointments Table -->
+                <!-- Appointments Table -->
+                <TableView fx:id="appointmentsTable" prefHeight="280" prefWidth="792"
+                           style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 12;">
+                    <columns>
+                        <TableColumn fx:id="dateColumn" text="Date" prefWidth="130"/>
+                        <TableColumn fx:id="timeColumn" text="Time" prefWidth="90"/>
+                        <TableColumn fx:id="doctorColumn" text="Doctor" prefWidth="180"/>
+                        <TableColumn fx:id="specializationColumn" text="Specialization" prefWidth="150"/>
+                        <TableColumn fx:id="notesColumn" text="Reason" prefWidth="210"/>
+                    </columns>
+                </TableView>
+
+                <!-- Book Appointment Button -->
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="bookAppointment"
+                            text="Book Appointment"
+                            onAction="#handleBookAppointment"
+                            style="-fx-background-radius: 10;
+                   -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-padding: 10 22;
+                   -fx-cursor: hand;"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </children>
+</AnchorPane>
+
