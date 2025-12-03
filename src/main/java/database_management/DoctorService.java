@@ -33,7 +33,7 @@ public class DoctorService {
         return SupabaseClient.get(endpoint);
     }
 
-    public static List<Appointment> fetchAppointmentsForDoctorFiltered(int doctorId, LocalDateTime start, LocalDateTime end, Integer patientId) throws Exception {
+    public static List<Appointment> fetchAppointmentsForDoctorFiltered(int doctorId, LocalDateTime start, LocalDateTime end, String patientFullName) throws Exception {
 
         Map<String, Object> filters = new HashMap<>();
         filters.put("doctor_id", "eq." + doctorId);
@@ -44,8 +44,21 @@ public class DoctorService {
         if (end != null) {
             filters.put("date_time", "lte." + end.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         }
-        if (patientId != null) {
-            filters.put("patient_id", "eq." + patientId);
+
+        if (patientFullName != null && !patientFullName.isBlank()) {
+            // Resolve name -> user IDs
+            List<Integer> ids = UserService.fetchUserIdsByName(patientFullName);
+            if (ids.isEmpty()) {
+                return new java.util.ArrayList<>();
+            }
+            // Build IN filter
+            StringBuilder inList = new StringBuilder("in.(");
+            for (int i = 0; i < ids.size(); i++) {
+                if (i > 0) inList.append(",");
+                inList.append(ids.get(i));
+            }
+            inList.append(")");
+            filters.put("patient_id", inList.toString());
         }
 
         return fetchAppointments(filters);

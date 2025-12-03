@@ -39,7 +39,7 @@ public class DoctorPageController extends BaseController {
     // Filters
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
-    @FXML private TextField patientIdField;
+    @FXML private TextField patientIdField; // now used to input patient full name (first + last)
 
     @FXML private Label doctorGreetingLabel;
 
@@ -299,8 +299,7 @@ public class DoctorPageController extends BaseController {
         try {
             LocalDateTime start = null;
             LocalDateTime end = null;
-            Integer patientId = null;
-
+            String patientName = null;
             if (startDatePicker != null && startDatePicker.getValue() != null) {
                 start = startDatePicker.getValue().atStartOfDay();
             }
@@ -308,12 +307,12 @@ public class DoctorPageController extends BaseController {
                 end = endDatePicker.getValue().atTime(23, 59, 59);
             }
             if (patientIdField != null && !patientIdField.getText().trim().isEmpty()) {
-                patientId = Integer.parseInt(patientIdField.getText().trim());
+                patientName = patientIdField.getText().trim();
             }
 
             int doctorId = appState.getUserId();
             List<Appointment> filtered = DoctorService.fetchAppointmentsForDoctorFiltered(
-                    doctorId, start, end, patientId
+                    doctorId, start, end, patientName
             );
 
             appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
