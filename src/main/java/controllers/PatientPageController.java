@@ -48,7 +48,7 @@ public class PatientPageController extends BaseController {
     @FXML
     private void handleBookButton() {
         System.out.println("Book button clicked!");
-        screenManager.show("PatientBookingPage.fxml");
+        screenManager.show("patientBookingPage.fxml");
     }
 
     @FXML

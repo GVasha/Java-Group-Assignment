@@ -52,10 +52,8 @@ public class ModifyAccountController extends BaseController {
                 if(success) {
                     showSuccess(formMessage, "Successfully modified credentials!");
                 }
-                // TODO: modularize this part?
                 if(!email.isEmpty()) {
                     success = false; // refresh success if also changing email
-                    // TODO: VALIDATE EMAIL!
                     try {
                         currentUser.setEmail(email);
                         success = true;
@@ -71,7 +69,6 @@ public class ModifyAccountController extends BaseController {
         else{
             if(!email.isEmpty()) {
                 success = false; // refresh success if also changing email
-                // TODO: VALIDATE EMAIL!
                 try {
                     currentUser.setEmail(email);
                     success = true;
@@ -103,7 +100,8 @@ public class ModifyAccountController extends BaseController {
             return;
         }
 
-        int userId = appState.getUser().getId();
+        User user = appState.getUser();
+        int userId = user.getId();
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Account");
@@ -121,8 +119,14 @@ public class ModifyAccountController extends BaseController {
 
         try {
             // 1) Delete all appointments tied to this user
-            // TODO: Make appointments available for patients and delete for doctors
-            AppointmentService.deleteAllAppointmentsForUser(userId);
+            boolean isPatient = user.getSpecialization().equals("none");
+            if (isPatient) {
+                // Free up any slots this patient had booked
+                AppointmentService.releaseAppointmentsForPatient(userId);
+            } else {
+                // Doctors' slots can be removed entirely
+                AppointmentService.deleteAllAppointmentsForUser(userId);
+            }
 
             // 2) Delete the user row
             UserService.deleteUser(userId);
