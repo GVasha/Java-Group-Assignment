@@ -3,13 +3,16 @@ package controllers;
 import appointments.Appointment;
 import core.AppState;
 import database_management.PatientService;
-import javafx.event.ActionEvent;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
+import javafx.animation.ParallelTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import users.Doctor;
 
 import java.time.LocalDateTime;
@@ -19,7 +22,6 @@ import java.util.List;
 public class PatientPageController extends BaseController {
 
     @FXML private Button bookButton;
-    @FXML private Button appointmentsButton;
     @FXML private Button profileButton;
 
     @FXML private FlowPane appointmentsGrid;
@@ -43,12 +45,6 @@ public class PatientPageController extends BaseController {
     private void handleBookButton() {
         System.out.println("Book button clicked!");
         screenManager.show("PatientBookingPage.fxml");
-    }
-
-    @FXML
-    private void handleAppointmentsButton() {
-        System.out.println("Appointments button clicked!");
-        // TODO: navigate to appointments page
     }
 
     @FXML
@@ -77,13 +73,38 @@ public class PatientPageController extends BaseController {
 
             appointmentsGrid.getChildren().clear();
 
-            for (Appointment appt : appointments) {
+            for (int i = 0; i < appointments.size(); i++) {
+                Appointment appt = appointments.get(i);
                 VBox card = createAppointmentCard(appt);
                 appointmentsGrid.getChildren().add(card);
+                
+                // Animate card appearance with staggered delay
+                animateCardAppearance(card, i * 80); // 80ms delay between each card
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void animateCardAppearance(VBox card, double delay) {
+        // Set initial state - invisible and slightly below
+        card.setOpacity(0);
+        card.setTranslateY(20);
+
+        // Create fade in animation
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), card);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+
+        // Create slide up animation
+        TranslateTransition slideUp = new TranslateTransition(Duration.millis(400), card);
+        slideUp.setFromY(20);
+        slideUp.setToY(0);
+
+        // Combine animations
+        ParallelTransition parallelTransition = new ParallelTransition(fadeIn, slideUp);
+        parallelTransition.setDelay(Duration.millis(delay));
+        parallelTransition.play();
     }
 
     private VBox createAppointmentCard(Appointment appt) {
@@ -176,7 +197,25 @@ public class PatientPageController extends BaseController {
             notesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #94a3b8; -fx-font-style: italic;");
         }
 
+        // Add base children
         card.getChildren().addAll(dateLabel, doctorLabel, specializationLabel, statusLabel, notesLabel);
+
+        // Cancel button - only show if status is not CANCELLED
+        String currentStatus = appt.getStatus();
+        if (currentStatus == null || !currentStatus.toUpperCase().equals("CANCELLED")) {
+            Button cancelButton = new Button("Cancel");
+            cancelButton.setStyle("-fx-background-color: transparent; " +
+                    "-fx-text-fill: #ef4444; " +
+                    "-fx-font-size: 12px; " +
+                    "-fx-font-weight: 500; " +
+                    "-fx-padding: 4 8; " +
+                    "-fx-border-color: #ef4444; " +
+                    "-fx-border-width: 1; " +
+                    "-fx-border-radius: 4; " +
+                    "-fx-cursor: hand;");
+            cancelButton.setOnAction(e -> handleCancelAppointment(appt.getId()));
+            card.getChildren().add(cancelButton);
+        }
 
         return card;
     }
