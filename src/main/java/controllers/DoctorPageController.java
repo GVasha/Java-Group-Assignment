@@ -6,24 +6,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.chart.PieChart;
 import users.Doctor;
 import users.Patient;
 
-import javafx.geometry.Insets;
-
-import java.awt.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -47,6 +37,7 @@ public class DoctorPageController extends BaseController {
     @FXML private TableColumn<Appointment, String> patientColumn;
     @FXML private TableColumn<Appointment, String> notesColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
+
     @FXML private PieChart appointmentBreakdownChart;
 
     // Filters
@@ -186,72 +177,55 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleCreateAppointment() {
-        // Create a custom dialog
-        Dialog<LocalDateTime> dialog = new Dialog<>();
-        dialog.setTitle("Create Available Appointment");
-        dialog.setHeaderText("Select date and time for the appointment");
+    private void handleCreateAppointment(){
+        try {
+            TextInputDialog dateDialog = new TextInputDialog();
+            dateDialog.setTitle("Create available appointment");
+            dateDialog.setHeaderText("Enter date and time for the available slot");
+            dateDialog.setContentText("Format: yyyy-MM-dd HH:mm");
 
-        // Dialog buttons
-        ButtonType createButtonType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
-
-        // Date picker
-        DatePicker datePicker = new DatePicker();
-
-        // Hour and minute spinners
-        Spinner<Integer> hourSpinner = new Spinner<>(0, 23, 9); // default 9 AM
-        hourSpinner.setEditable(true);
-        Spinner<Integer> minuteSpinner = new Spinner<>(0, 59, 0, 5); // step 5 minutes
-        minuteSpinner.setEditable(true);
-
-        // Notes field
-        TextField notesField = new TextField();
-        notesField.setPromptText("Notes / Reason (optional)");
-
-        // Layout
-        VBox content = new VBox(10);
-        content.setPadding(new Insets(10));
-        content.getChildren().addAll(
-                new Label("Date:"), datePicker,
-                new Label("Time:"),
-                new HBox(5, new Label("Hour:"), hourSpinner, new Label("Minute:"), minuteSpinner),
-                new Label("Notes:"), notesField
-        );
-
-        dialog.getDialogPane().setContent(content);
-
-        // Convert dialog result to LocalDateTime
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == createButtonType) {
-                LocalDate date = datePicker.getValue();
-                if (date == null) return null; // date is required
-                int hour = hourSpinner.getValue();
-                int minute = minuteSpinner.getValue();
-                return LocalDateTime.of(date, LocalTime.of(hour, minute));
+            Optional<String> dateResult = dateDialog.showAndWait();
+            if (dateResult.isEmpty()) {
+                return; // user cancelled
             }
-            return null;
-        });
 
-        Optional<LocalDateTime> result = dialog.showAndWait();
-        result.ifPresent(dateTime -> {
+            String dateTimeInput = dateResult.get().trim();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime dateTime;
+
             try {
-                String notes = notesField.getText().trim();
-                doctor.createAvailableSlot(dateTime, notes);
-                loadAppointments();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
+                dateTime = LocalDateTime.parse(dateTimeInput, formatter);
+            } catch (DateTimeParseException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid date/time");
                 alert.setHeaderText(null);
-                alert.setContentText("Available appointment created for " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                alert.setContentText("Please use format: yyyy-MM-dd HH:mm");
                 alert.showAndWait();
-            } catch (Exception e) {
-                e.printStackTrace();
-                showError("Could not create appointment", e);
+                return;
             }
-        });
-    }
 
+            TextInputDialog notesDialog = new TextInputDialog();
+            notesDialog.setTitle("Appointment notes");
+            notesDialog.setHeaderText("Optional: describe the appointment");
+            notesDialog.setContentText("Notes / reason:");
+
+            String notes = notesDialog.showAndWait().orElse("").trim();
+
+            doctor.createAvailableSlot(dateTime, notes);
+
+            loadAppointments();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Available appointment created for " + dateTime.format(formatter));
+            alert.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Could not create appointment", e);
+        }
+    }
 
     // TABLE SETUP
 
@@ -374,7 +348,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleReset(){
+    private void handleReset() {
         loadAppointments();
         if (startDatePicker != null) startDatePicker.setValue(null);
         if (endDatePicker != null) endDatePicker.setValue(null);
@@ -404,4 +378,3 @@ public class DoctorPageController extends BaseController {
         screenManager.show("modifyAccount.fxml");
     }
 }
-
