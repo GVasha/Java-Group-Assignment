@@ -44,6 +44,7 @@ public class DoctorPageController extends BaseController {
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private TextField patientNameField; // Used to input patient full name (first + last)
+    @FXML private ComboBox<String> statusCombo;
 
     @FXML private Label doctorGreetingLabel;
 
@@ -57,11 +58,22 @@ public class DoctorPageController extends BaseController {
     public void initialize() {
         System.out.println("DoctorPageController initialize(), userId = " + appState.getUserId());
 
+        SetUpStatusCombo();
         setUpGreeting();
         setupTableColumns();
         setupSelectionListener();
         loadAppointments();
         initializeActionButtons();
+    }
+
+    private void SetUpStatusCombo(){
+        statusCombo.getItems().addAll(
+                "AVAILABLE",
+                "SCHEDULED",
+                "COMPLETED",
+                "CANCELLED"
+        );
+        statusCombo.setValue("SCHEDULED");
     }
 
     private void setUpGreeting(){
@@ -91,7 +103,7 @@ public class DoctorPageController extends BaseController {
 
     private void setButtonsState(boolean selected, Appointment selectedAppointment){
         if (cancelAppointmentButton != null)
-            cancelAppointmentButton.setDisable(!selected);
+            cancelAppointmentButton.setDisable(!selected || "CANCELLED".equals(selectedAppointment.getStatus()));
 
         if (deleteAppointmentButton != null)
             deleteAppointmentButton.setDisable(!selected);
@@ -226,58 +238,48 @@ public class DoctorPageController extends BaseController {
     }
 
     private void setUpDateCol(){
-        if (dateColumn != null) {
-            dateColumn.setCellValueFactory(cell -> {
-                Appointment appointment = cell.getValue();
-                LocalDateTime dt = appointment.getDate();
-                String dateStr = dt != null ? dt.format(dateFmt) : "";
-                return new SimpleStringProperty(dateStr);
-            });
-        }
+        dateColumn.setCellValueFactory(cell -> {
+            Appointment appointment = cell.getValue();
+            LocalDateTime dt = appointment.getDate();
+            String dateStr = dt != null ? dt.format(dateFmt) : "";
+            return new SimpleStringProperty(dateStr);
+        });
     }
 
     private void setUpTimeCol(){
-        if (timeColumn != null) {
-            timeColumn.setCellValueFactory(cell -> {
-                Appointment appointment = cell.getValue();
-                LocalDateTime dt = appointment.getDate();
-                String timeStr = dt != null ? dt.format(timeFmt) : "";
-                return new SimpleStringProperty(timeStr);
-            });
-        }
+        timeColumn.setCellValueFactory(cell -> {
+            Appointment appointment = cell.getValue();
+            LocalDateTime dt = appointment.getDate();
+            String timeStr = dt != null ? dt.format(timeFmt) : "";
+            return new SimpleStringProperty(timeStr);
+        });
     }
 
     private void setUpPatientCol(){
-        if (patientColumn != null) {
-            patientColumn.setCellValueFactory(cell -> {
-                Appointment appointment = cell.getValue();
-                Patient patient = appointment.getPatient();
-                if (patient == null) {
-                    return new SimpleStringProperty("(None)");
-                } else {
-                    String fullName = patient.getName();
-                    return new SimpleStringProperty(fullName);
-                }
-            });
-        }
+        patientColumn.setCellValueFactory(cell -> {
+            Appointment appointment = cell.getValue();
+            Patient patient = appointment.getPatient();
+            if (patient == null) {
+                return new SimpleStringProperty("(None)");
+            } else {
+                String fullName = patient.getName();
+                return new SimpleStringProperty(fullName);
+            }
+        });
     }
 
     private void setUpNotesCol(){
-        if (notesColumn != null) {
-            notesColumn.setCellValueFactory(cell -> {
-                String notes = cell.getValue().getNotes();
-                return new SimpleStringProperty(notes != null ? notes : "");
-            });
-        }
+        notesColumn.setCellValueFactory(cell -> {
+            String notes = cell.getValue().getNotes();
+            return new SimpleStringProperty(notes != null ? notes : "");
+        });
     }
 
     private void setUpStatusCol(){
-        if (statusColumn != null) {
             statusColumn.setCellValueFactory(cell -> {
                 String status = cell.getValue().getStatus();
                 return new SimpleStringProperty(status != null ? status : "");
             });
-        }
     }
 
 
@@ -299,12 +301,11 @@ public class DoctorPageController extends BaseController {
 
     @FXML
     private void handleFilter() {
-        if (appointmentsTable == null) return;
-
         try {
             LocalDateTime start = null;
             LocalDateTime end = null;
             String patientName = null;
+            String status = null;
             if (startDatePicker != null && startDatePicker.getValue() != null) {
                 start = startDatePicker.getValue().atStartOfDay();
             }
@@ -314,8 +315,11 @@ public class DoctorPageController extends BaseController {
             if (patientNameField != null && !patientNameField.getText().trim().isEmpty()) {
                 patientName = patientNameField.getText().trim();
             }
+            if (statusCombo != null && !statusCombo.getValue().trim().isEmpty()) {
+                status = statusCombo.getValue().trim();
+            }
 
-            List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName);
+            List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName, status);
 
             appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
         } catch (Exception e) {
@@ -330,6 +334,7 @@ public class DoctorPageController extends BaseController {
         if (startDatePicker != null) startDatePicker.setValue(null);
         if (endDatePicker != null) endDatePicker.setValue(null);
         if (patientNameField != null) patientNameField.clear();
+        if (statusCombo != null) statusCombo.setValue("SCHEDULED");
     }
 
     // HELPERS

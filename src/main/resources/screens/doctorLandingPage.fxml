@@ -108,6 +108,14 @@
                                               -fx-padding: 0 12;
                                               -fx-font-size: 14px;"/>
 
+                            <ComboBox fx:id="statusCombo"
+                                      prefWidth="130"
+                                      prefHeight="38"
+                                      style="-fx-background-radius: 10;
+                                             -fx-background-color: #f8fafc;
+                                             -fx-border-color: #cbd5e1;
+                                             -fx-border-radius: 10;"/>
+
                             <Region HBox.hgrow="ALWAYS"/>
 
                             <Button text="Filter"
