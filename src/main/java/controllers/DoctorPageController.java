@@ -321,10 +321,22 @@ public class DoctorPageController extends BaseController {
             e.printStackTrace();
             showError("Failed to load appointments.", e);
         }
+
+        long scheduled = source.stream()
+                .filter(appt -> "SCHEDULED".equalsIgnoreCase(appt.getStatus()))
+                .count();
+        long available = source.stream()
+                .filter(appt -> "AVAILABLE".equalsIgnoreCase(appt.getStatus()))
+                .count();
+
+        appointmentBreakdownChart.getData().setAll(
+                new PieChart.Data("Scheduled", scheduled),
+                new PieChart.Data("Available", available)
+        );
     }
 
     @FXML
-    private void handleFilter(){
+    private void handleFilter() {
         try {
             LocalDateTime start = null;
             LocalDateTime end = null;
