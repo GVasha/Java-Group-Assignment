@@ -205,9 +205,6 @@ public class AppointmentService {
     public static void deleteAllAppointmentsForUser(int userId) throws Exception {
         // Delete any appointments where this user is the doctor
         SupabaseClient.deleteByFilter("Appointment", "doctor_id", userId);
-
-        // Delete any appointments where this user is the patient
-        SupabaseClient.deleteByFilter("Appointment", "patient_id", userId);
     }
 
 
