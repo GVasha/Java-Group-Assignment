@@ -2,16 +2,20 @@ package controllers;
 
 import core.AppState;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 import users.User;
+
+import static utils.MessageUtils.*;
 
 public class ModifyAccountController extends BaseController {
 
     @FXML
     private TextField emailField;
+
+    @FXML
+    private Text formMessage;
 
     @FXML
     private PasswordField passwordField;
@@ -22,40 +26,37 @@ public class ModifyAccountController extends BaseController {
     private final AppState appState = AppState.getInstance();
 
     @FXML
-    public void initialize() {
-        // TODO: Load current account data, e.g.:
-        // emailField.setText(currentUser.getEmail());
-    }
-
-    @FXML
     private void handleSaveButton() {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
-
+        User currentUser = appState.getUser();
         // Basic validation
-        if (email.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Missing Information", "Email cannot be empty.");
-            return;
-        }
-
-        if (!password.isEmpty() || !confirmPassword.isEmpty()) {
+        if(!password.isEmpty() || !confirmPassword.isEmpty()){
             if (!password.equals(confirmPassword)) {
-                showAlert(Alert.AlertType.WARNING, "Password Mismatch", "Passwords do not match.");
-                return;
+                showError(formMessage, "Provided passwords do not match!");
             }
+            else {
+                try {
+                   currentUser.setPassword(password);
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+                showSuccess(formMessage, "Successfully modified credentials!");
 
-            if (password.length() < 6) {
-                showAlert(Alert.AlertType.WARNING, "Invalid Password", "Password must contain at least 6 characters.");
-                return;
             }
         }
 
-        // TODO: Save changes to database
+        if(!email.isEmpty()) {
+            // TODO: VALIDATE EMAIL!
+           try {
+               currentUser.setEmail(email);
+           } catch (Exception e){
+               e.printStackTrace();
+           }
+           showSuccess(formMessage, "Successfully modified credentials!");
+        }
 
-        showAlert(Alert.AlertType.INFORMATION, "Success", "Account information updated successfully.");
-
-        closeWindow();
     }
 
     @FXML
@@ -65,21 +66,4 @@ public class ModifyAccountController extends BaseController {
         screenManager.show(fxmlFile);
     }
 
-
-
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    /**
-     * Closes the current window.
-     */
-    private void closeWindow() {
-        Stage stage = (Stage) emailField.getScene().getWindow();
-        stage.close();
-    }
 }
