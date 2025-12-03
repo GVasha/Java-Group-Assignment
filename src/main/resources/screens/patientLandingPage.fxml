@@ -50,16 +50,20 @@
                                -fx-background-radius: 12;
                                -fx-cursor: hand;"/>
 
-                <Button fx:id="profileButton"
-                        text="Profile"
-                        onAction="#handleProfileButton"
-                        style="-fx-background-color: rgba(255,255,255,0.2);
-                               -fx-text-fill: white;
-                               -fx-font-size: 14px;
-                               -fx-font-weight: 600;
-                               -fx-padding: 10 20;
-                               -fx-background-radius: 12;
-                               -fx-cursor: hand;"/>
+                <MenuButton fx:id="profileMenuButton"
+                            text="Profile"
+                            style="-fx-background-color: rgba(255,255,255,0.2);
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: 600;
+                                   -fx-padding: 10 20;
+                                   -fx-background-radius: 12;
+                                   -fx-cursor: hand;">
+                    <items>
+                        <MenuItem text="Modify Account Settings" onAction="#handleModifyAccount"/>
+                        <MenuItem text="Log out" onAction="#handleLogout"/>
+                    </items>
+                </MenuButton>
             </children>
         </HBox>
 
@@ -80,118 +84,18 @@
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
 
-                <!-- Main Card with Colorful Accent -->
-                <VBox spacing="20"
-                      maxWidth="840"
-                      style="-fx-background-color: #ffffff;
-                             -fx-background-radius: 16;
-                             -fx-padding: 24;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 16, 0, 0, 6);
-                             -fx-border-color: #e2e8f0;
-                             -fx-border-width: 1;
-                             -fx-border-radius: 16;">
-
-                    <!-- Filters Section with Colorful Design -->
-                    <VBox spacing="12">
-                        <HBox spacing="12" alignment="CENTER_LEFT">
-                            <DatePicker fx:id="startDatePicker"
-                                        style="-fx-background-radius: 10;
-                                               -fx-background-color: #f8fafc;
-                                               -fx-border-color: #cbd5e1;
-                                               -fx-border-radius: 10;
-                                               -fx-pref-width: 150;
-                                               -fx-pref-height: 38;"/>
-
-                            <DatePicker fx:id="endDatePicker"
-                                        style="-fx-background-radius: 10;
-                                               -fx-background-color: #f8fafc;
-                                               -fx-border-color: #cbd5e1;
-                                               -fx-border-radius: 10;
-                                               -fx-pref-width: 150;
-                                               -fx-pref-height: 38;"/>
-
-                            <TextField fx:id="doctorIdField"
-                                        prefWidth="110"
-                                        prefHeight="38"
-                                        promptText="Doctor ID"
-                                        style="-fx-background-radius: 10;
-                                               -fx-background-color: #f8fafc;
-                                               -fx-border-color: #cbd5e1;
-                                               -fx-border-radius: 10;
-                                               -fx-padding: 0 12;
-                                               -fx-font-size: 14px;"/>
-
-                            <ComboBox fx:id="statusCombo"
-                                      prefWidth="130"
-                                      prefHeight="38"
-                                      style="-fx-background-radius: 10;
-                                             -fx-background-color: #f8fafc;
-                                             -fx-border-color: #cbd5e1;
-                                             -fx-border-radius: 10;"/>
-
-                            <Region HBox.hgrow="ALWAYS"/>
-
-                            <Button text="Filter"
-                                    onAction="#handleFilter"
-                                    style="-fx-background-radius: 10;
-                                           -fx-background-color: linear-gradient(to right, #3b82f6, #8b5cf6);
-                                           -fx-text-fill: white;
-                                           -fx-font-size: 14px;
-                                           -fx-font-weight: bold;
-                                           -fx-padding: 10 22;
-                                           -fx-pref-height: 38;
-                                           -fx-cursor: hand;
-                                           -fx-effect: dropshadow(gaussian, rgba(59,130,246,0.4), 8, 0, 0, 3);"/>
-
-                            <Button text="Reset"
-                                    onAction="#handleReset"
-                                    style="-fx-background-radius: 10;
-                                           -fx-background-color: #f1f5f9;
-                                           -fx-text-fill: #64748b;
-                                           -fx-font-size: 14px;
-                                           -fx-font-weight: 600;
-                                           -fx-padding: 10 22;
-                                           -fx-pref-height: 38;
-                                           -fx-cursor: hand;
-                                           -fx-border-color: #e2e8f0;
-                                           -fx-border-width: 1;
-                                           -fx-border-radius: 10;"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Divider with Color -->
-                    <Separator style="-fx-background-color: #e2e8f0;"/>
-
-                    <!-- Appointments Table -->
-                    <VBox spacing="8">
-                        <TableView fx:id="appointmentsTable"
-                                   prefHeight="320"
-                                   prefWidth="792"
-                                   style="-fx-background-color: #ffffff;
-                                          -fx-background-radius: 12;
-                                          -fx-border-color: #e2e8f0;
-                                          -fx-border-width: 1;
-                                          -fx-border-radius: 12;
-                                          -fx-table-header-border-color: transparent;
-                                          -fx-table-cell-border-color: #f1f5f9;">
-
-                            <columns>
-                                <TableColumn fx:id="dateColumn" text="Date" prefWidth="130"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="timeColumn" text="Time" prefWidth="100"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="doctorIdColumn" text="Doctor ID" prefWidth="90"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="doctorColumn" text="Doctor" prefWidth="200"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="notesColumn" text="Reason" prefWidth="200"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="82"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                            </columns>
-                        </TableView>
-                    </VBox>
-                </VBox>
+                <!-- Appointments Grid -->
+                <ScrollPane fitToWidth="true"
+                            prefHeight="450"
+                            style="-fx-background-color: transparent;
+                                   -fx-border-color: transparent;
+                                   -fx-padding: 0;">
+                    <FlowPane fx:id="appointmentsGrid"
+                              hgap="20"
+                              vgap="20"
+                              prefWidth="840"
+                              style="-fx-background-color: #f0f2f5;"/>
+                </ScrollPane>
             </children>
         </VBox>
     </children>

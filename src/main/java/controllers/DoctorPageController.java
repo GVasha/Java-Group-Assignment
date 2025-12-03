@@ -347,8 +347,15 @@ public class DoctorPageController extends BaseController {
         alert.showAndWait();
     }
 
+    // -------- top navbar handlers --------
 
-    // USER PROFILE ACTIONS
+    @FXML
+    private void handleAppointmentsButton() {
+        System.out.println("Doctor clicked My Appointments (top navbar)");
+        // If you have a dedicated appointments screen, keep this:
+        screenManager.show("doctorAppointmentsPage.fxml");
+        // Otherwise, change the FXML or this target later as needed.
+    }
 
     @FXML
     private void handleLogout() {
@@ -358,41 +365,6 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleDeleteAccount() {
-        if (appState.getUser() == null) {
-            showError("No logged in user.", new IllegalStateException("No user"));
-            return;
-        }
-
-        int userId = appState.getUser().getId();
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Delete Account");
-        confirm.setHeaderText("Are you sure you want to delete your account?");
-        confirm.setContentText(
-                "This will:\n" +
-                        "• Delete ALL your appointments (as doctor or patient)\n" +
-                        "• Permanently delete your account\n\n" +
-                        "This action cannot be undone."
-        );
-
-        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
-            return;
-        }
-
-        try {
-            AppointmentService.deleteAllAppointmentsForUser(userId);
-            UserService.deleteUser(userId);
-
-            appState.setUser(null);
-            screenManager.show("login.fxml");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Account deletion failed.", e);
-        }
-    }
-
     public void handleModifyAccount(ActionEvent actionEvent) {
         screenManager.show("modifyAccount.fxml");
     }
