@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.chart.PieChart;
 import users.Doctor;
 import users.Patient;
 
@@ -39,6 +40,8 @@ public class DoctorPageController extends BaseController {
     @FXML private TableColumn<Appointment, String> patientColumn;
     @FXML private TableColumn<Appointment, String> notesColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
+
+    @FXML private PieChart appointmentBreakdownChart;
 
     // Filters
     @FXML private DatePicker startDatePicker;
@@ -215,11 +218,11 @@ public class DoctorPageController extends BaseController {
 
             loadAppointments();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Available appointment created for " + dateTime.format(formatter));
-            alert.showAndWait();
+             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+             alert.setTitle("Success");
+             alert.setHeaderText(null);
+             alert.setContentText("Available appointment created for " + dateTime.format(formatter));
+             alert.showAndWait();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -293,49 +296,69 @@ public class DoctorPageController extends BaseController {
         try {
             List<Appointment> appointments = doctor.getMyAppointments();
             appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Failed to load appointments.", e);
+            refreshAppointmentBreakdown(appointments);
+         } catch (Exception e) {
+             e.printStackTrace();
+             showError("Failed to load appointments.", e);
+         }
+     }
+
+    private void refreshAppointmentBreakdown(List<Appointment> source) {
+        if (appointmentBreakdownChart == null || source == null) {
+            return;
         }
+
+        long scheduled = source.stream()
+                .filter(appt -> "SCHEDULED".equalsIgnoreCase(appt.getStatus()))
+                .count();
+        long available = source.stream()
+                .filter(appt -> "AVAILABLE".equalsIgnoreCase(appt.getStatus()))
+                .count();
+
+        appointmentBreakdownChart.getData().setAll(
+                new PieChart.Data("Scheduled", scheduled),
+                new PieChart.Data("Available", available)
+        );
     }
 
-    @FXML
-    private void handleFilter() {
-        try {
-            LocalDateTime start = null;
-            LocalDateTime end = null;
-            String patientName = null;
-            String status = null;
-            if (startDatePicker != null && startDatePicker.getValue() != null) {
-                start = startDatePicker.getValue().atStartOfDay();
-            }
-            if (endDatePicker != null && endDatePicker.getValue() != null) {
-                end = endDatePicker.getValue().atTime(23, 59, 59);
-            }
-            if (patientNameField != null && !patientNameField.getText().trim().isEmpty()) {
-                patientName = patientNameField.getText().trim();
-            }
-            if (statusCombo != null && !statusCombo.getValue().trim().isEmpty()) {
-                status = statusCombo.getValue().trim();
-            }
+     @FXML
+     private void handleFilter() {
+         try {
+             LocalDateTime start = null;
+             LocalDateTime end = null;
+             String patientName = null;
+             String status = null;
+             if (startDatePicker != null && startDatePicker.getValue() != null) {
+                 start = startDatePicker.getValue().atStartOfDay();
+             }
+             if (endDatePicker != null && endDatePicker.getValue() != null) {
+                 end = endDatePicker.getValue().atTime(23, 59, 59);
+             }
+             if (patientNameField != null && !patientNameField.getText().trim().isEmpty()) {
+                 patientName = patientNameField.getText().trim();
+             }
+             if (statusCombo != null && !statusCombo.getValue().trim().isEmpty()) {
+                 status = statusCombo.getValue().trim();
+             }
 
-            List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName, status);
+             List<Appointment> filtered = doctor.getMyAppointments(start, end, patientName, status);
 
-            appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Failed to fetch appointments.", e);
-        }
-    }
+             appointmentsTable.setItems(FXCollections.observableArrayList(filtered));
+             refreshAppointmentBreakdown(filtered);
+         } catch (Exception e) {
+             e.printStackTrace();
+             showError("Failed to fetch appointments.", e);
+         }
+     }
 
-    @FXML
-    private void handleReset() {
-        loadAppointments();
-        if (startDatePicker != null) startDatePicker.setValue(null);
-        if (endDatePicker != null) endDatePicker.setValue(null);
-        if (patientNameField != null) patientNameField.clear();
-        if (statusCombo != null) statusCombo.setValue("SCHEDULED");
-    }
+     @FXML
+     private void handleReset() {
+         loadAppointments();
+         if (startDatePicker != null) startDatePicker.setValue(null);
+         if (endDatePicker != null) endDatePicker.setValue(null);
+         if (patientNameField != null) patientNameField.clear();
+         if (statusCombo != null) statusCombo.setValue("SCHEDULED");
+     }
 
     // HELPERS
 
@@ -345,16 +368,6 @@ public class DoctorPageController extends BaseController {
         alert.setHeaderText(header);
         alert.setContentText(e.getMessage());
         alert.showAndWait();
-    }
-
-    // -------- top navbar handlers --------
-
-    @FXML
-    private void handleAppointmentsButton() {
-        System.out.println("Doctor clicked My Appointments (top navbar)");
-        // If you have a dedicated appointments screen, keep this:
-        screenManager.show("doctorAppointmentsPage.fxml");
-        // Otherwise, change the FXML or this target later as needed.
     }
 
     @FXML

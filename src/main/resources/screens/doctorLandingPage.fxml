@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f0f2f5;"
@@ -157,11 +158,13 @@
                     <!-- Table + bottom actions -->
                     <VBox spacing="12">
 
-                        <!-- Appointments Table -->
-                        <TableView fx:id="appointmentsTable"
-                                   prefHeight="280"
-                                   prefWidth="792"
-                                   style="-fx-background-color: #ffffff;
+                        <!-- Appointments Table + Overview -->
+                        <HBox spacing="20" alignment="CENTER_LEFT">
+                            <TableView fx:id="appointmentsTable"
+                                       HBox.hgrow="ALWAYS"
+                                       prefHeight="280"
+                                       prefWidth="792"
+                                       style="-fx-background-color: #ffffff;
                                           -fx-background-radius: 12;
                                           -fx-border-color: #e2e8f0;
                                           -fx-border-width: 1;
@@ -169,21 +172,33 @@
                                           -fx-table-header-border-color: transparent;
                                           -fx-table-cell-border-color: #f1f5f9;">
 
-                            <columns>
-                                <TableColumn fx:id="dateColumn" text="Date" prefWidth="130"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="timeColumn" text="Time" prefWidth="90"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="patientIdColumn" text="Patient ID" prefWidth="90"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="patientColumn" text="Patient" prefWidth="180"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="notesColumn" text="Reason" prefWidth="210"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="92"
-                                             style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
-                            </columns>
-                        </TableView>
+                                <columns>
+                                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="130"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="timeColumn" text="Time" prefWidth="90"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="patientIdColumn" text="Patient ID" prefWidth="90"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="patientColumn" text="Patient" prefWidth="180"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="notesColumn" text="Reason" prefWidth="210"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="92"
+                                                 style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                                </columns>
+                            </TableView>
+
+                            <VBox spacing="10" alignment="TOP_CENTER" prefWidth="220">
+                                <Label text="Schedule Breakdown"
+                                       style="-fx-font-size: 15px; -fx-font-weight: 600; -fx-text-fill: #1e293b;"/>
+                                <PieChart fx:id="appointmentBreakdownChart"
+                                          prefHeight="220"
+                                          prefWidth="220"
+                                          legendVisible="true"
+                                          labelsVisible="false"
+                                          style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);"/>
+                            </VBox>
+                        </HBox>
 
                         <!-- Bottom action buttons -->
                         <HBox spacing="10" alignment="CENTER_RIGHT">
