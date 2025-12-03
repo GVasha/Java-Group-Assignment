@@ -21,7 +21,6 @@ import static database_management.AppointmentService.fetchAppointmentById;
 public class PatientPageController extends BaseController {
 
     @FXML private Button bookButton;
-    @FXML private Button appointmentsButton;
     @FXML private Button profileButton;
 
     @FXML private FlowPane appointmentsGrid;
@@ -45,12 +44,6 @@ public class PatientPageController extends BaseController {
     private void handleBookButton() {
         System.out.println("Book button clicked!");
         screenManager.show("PatientBookingPage.fxml");
-    }
-
-    @FXML
-    private void handleAppointmentsButton() {
-        System.out.println("Appointments button clicked!");
-        // TODO: navigate to appointments page
     }
 
     @FXML
