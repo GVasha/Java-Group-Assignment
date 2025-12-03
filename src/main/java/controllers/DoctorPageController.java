@@ -401,7 +401,7 @@ public class DoctorPageController extends BaseController {
 
             // 3) Clear session and go to login
             appState.setUser(null);
-            screenManager.show("loginPage.fxml");
+            screenManager.show("login.fxml");
 
         } catch (Exception e) {
             e.printStackTrace();
