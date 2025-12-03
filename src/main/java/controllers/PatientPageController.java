@@ -2,10 +2,12 @@ package controllers;
 
 import appointments.Appointment;
 import core.AppState;
+import database_management.AppointmentService;
 import database_management.PatientService;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.ParallelTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -18,6 +20,8 @@ import users.Doctor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static database_management.AppointmentService.fetchAppointmentById;
 
 public class PatientPageController extends BaseController {
 
@@ -218,5 +222,20 @@ public class PatientPageController extends BaseController {
         }
 
         return card;
+    }
+    private void handleCancelAppointment(int appointmentId) {
+        try {
+            Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
+            if (fetchedAppointment == null) {
+                System.err.println("Appointment not found: " + appointmentId);
+                return;
+            }
+            fetchedAppointment.setStatus("CANCELLED");
+            AppointmentService.updateAppointment(fetchedAppointment);
+            loadAppointments(); // Reload to reflect the change
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to cancel appointment: " + e.getMessage());
+        }
     }
 }

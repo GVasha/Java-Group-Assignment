@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -46,6 +47,7 @@ public class DoctorPageController extends BaseController {
     @FXML private TableColumn<Appointment, String> patientColumn;
     @FXML private TableColumn<Appointment, String> notesColumn;
     @FXML private TableColumn<Appointment, String> statusColumn;
+    @FXML private PieChart appointmentBreakdownChart;
 
     // Filters
     @FXML private DatePicker startDatePicker;
@@ -300,10 +302,10 @@ public class DoctorPageController extends BaseController {
     }
 
     private void setUpStatusCol(){
-            statusColumn.setCellValueFactory(cell -> {
-                String status = cell.getValue().getStatus();
-                return new SimpleStringProperty(status != null ? status : "");
-            });
+        statusColumn.setCellValueFactory(cell -> {
+            String status = cell.getValue().getStatus();
+            return new SimpleStringProperty(status != null ? status : "");
+        });
     }
 
 
@@ -317,9 +319,16 @@ public class DoctorPageController extends BaseController {
         try {
             List<Appointment> appointments = doctor.getMyAppointments();
             appointmentsTable.setItems(FXCollections.observableArrayList(appointments));
+            refreshAppointmentBreakdown(appointments);
         } catch (Exception e) {
             e.printStackTrace();
             showError("Failed to load appointments.", e);
+        }
+    }
+
+    private void refreshAppointmentBreakdown(List<Appointment> source) {
+        if (appointmentBreakdownChart == null || source == null) {
+            return;
         }
 
         long scheduled = source.stream()
@@ -395,3 +404,4 @@ public class DoctorPageController extends BaseController {
         screenManager.show("modifyAccount.fxml");
     }
 }
+
