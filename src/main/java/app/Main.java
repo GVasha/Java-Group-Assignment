@@ -15,6 +15,4 @@ public class Main extends Application {
         ScreenManager screenManager = new ScreenManager(stage);
         screenManager.show("login.fxml");
     }
-
-
 }
