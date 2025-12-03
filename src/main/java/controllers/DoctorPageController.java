@@ -2,9 +2,6 @@ package controllers;
 
 import appointments.Appointment;
 import core.AppState;
-import database_management.DoctorService;
-import database_management.AppointmentService;
-import database_management.UserService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -55,7 +52,7 @@ public class DoctorPageController extends BaseController {
     // INITIALIZATION
 
     @FXML
-    public void initialize() {
+    public void initialize(){
         System.out.println("DoctorPageController initialize(), userId = " + appState.getUserId());
 
         SetUpStatusCombo();
@@ -85,7 +82,7 @@ public class DoctorPageController extends BaseController {
             }
         }
     }
-    private void setupSelectionListener() {
+    private void setupSelectionListener(){
         if (appointmentsTable == null) return;
 
         appointmentsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
@@ -94,7 +91,7 @@ public class DoctorPageController extends BaseController {
         });
     }
 
-    private void initializeActionButtons() {
+    private void initializeActionButtons(){
         if (cancelAppointmentButton != null) cancelAppointmentButton.setDisable(true);
         if (deleteAppointmentButton != null) deleteAppointmentButton.setDisable(true);
         if (makeAvailableButton != null) makeAvailableButton.setDisable(true);
@@ -119,7 +116,7 @@ public class DoctorPageController extends BaseController {
     // DOCTOR'S APPOINTMENT MANAGEMENT BUTTONS
 
     @FXML
-    private void handleMakeAvailable() {
+    private void handleMakeAvailable(){
         runAppointmentAction(
                 "Make appointment available",
                 "Make this appointment available again?",
@@ -127,7 +124,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleDeleteAppointment() {
+    private void handleDeleteAppointment(){
         runAppointmentAction(
                 "Delete appointment",
                 "Delete this appointment? This cannot be undone.",
@@ -136,7 +133,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleCancelAppointment() {
+    private void handleCancelAppointment(){
         runAppointmentAction(
                 "Cancel appointment",
                 "Cancel the selected appointment?",
@@ -145,7 +142,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleCompleteAppointment() {
+    private void handleCompleteAppointment(){
         runAppointmentAction(
                 "Complete appointment",
                 "Mark appointment as completed?",
@@ -177,7 +174,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleCreateAppointment() {
+    private void handleCreateAppointment(){
         try {
             TextInputDialog dateDialog = new TextInputDialog();
             dateDialog.setTitle("Create available appointment");
@@ -229,7 +226,7 @@ public class DoctorPageController extends BaseController {
 
     // TABLE SETUP
 
-    private void setupTableColumns() {
+    private void setupTableColumns(){
         setUpDateCol();
         setUpTimeCol();
         setUpPatientCol();
@@ -285,7 +282,7 @@ public class DoctorPageController extends BaseController {
 
     // LOAD AND FILTER APPOINTMENTS
 
-    private void loadAppointments() {
+    private void loadAppointments(){
         if (appointmentsTable == null) {
             return;
         }
@@ -300,7 +297,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleFilter() {
+    private void handleFilter(){
         try {
             LocalDateTime start = null;
             LocalDateTime end = null;
@@ -329,7 +326,7 @@ public class DoctorPageController extends BaseController {
     }
 
     @FXML
-    private void handleReset() {
+    private void handleReset(){
         loadAppointments();
         if (startDatePicker != null) startDatePicker.setValue(null);
         if (endDatePicker != null) endDatePicker.setValue(null);
@@ -347,18 +344,8 @@ public class DoctorPageController extends BaseController {
         alert.showAndWait();
     }
 
-    // -------- top navbar handlers --------
-
     @FXML
-    private void handleAppointmentsButton() {
-        System.out.println("Doctor clicked My Appointments (top navbar)");
-        // If you have a dedicated appointments screen, keep this:
-        screenManager.show("doctorAppointmentsPage.fxml");
-        // Otherwise, change the FXML or this target later as needed.
-    }
-
-    @FXML
-    private void handleLogout() {
+    private void handleLogout(){
         // Clear in-memory session
         appState.setUser(null);
         screenManager.show("login.fxml");
