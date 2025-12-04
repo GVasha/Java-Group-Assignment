@@ -10,23 +10,17 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import users.User;
+import utils.Validator;
 
 import static utils.MessageUtils.*;
 
 public class ModifyAccountController extends BaseController {
 
-    private final static int WAIT_BEFORE_CLOSE = 2000;
-    @FXML
-    private TextField emailField;
-
-    @FXML
-    private Text formMessage;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private PasswordField confirmPasswordField;
+    @FXML private TextField emailField;
+    @FXML private Text passwordFormMessage;
+    @FXML private Text emailFormMessage;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
 
     private final AppState appState = AppState.getInstance();
 
@@ -40,7 +34,7 @@ public class ModifyAccountController extends BaseController {
         // Basic validation
         if(!password.isEmpty() || !confirmPassword.isEmpty()){
             if (!password.equals(confirmPassword)) {
-                showError(formMessage, "Provided passwords do not match!");
+                showError(passwordFormMessage, "Provided passwords do not match!");
             }
             else {
                 try {
@@ -50,33 +44,55 @@ public class ModifyAccountController extends BaseController {
                     e.printStackTrace();
                 }
                 if(success) {
-                    showSuccess(formMessage, "Successfully modified credentials!");
+                    showSuccess(passwordFormMessage, "Successfully modified password!");
                 }
                 if(!email.isEmpty()) {
-                    success = false; // refresh success if also changing email
-                    try {
-                        currentUser.setEmail(email);
-                        success = true;
-                    } catch (Exception e){
-                        e.printStackTrace();
+                    if(!Validator.isValidEmailFormat(email)){
+                        showError(emailFormMessage, "Invalid email format!");
                     }
-                    if(success){
-                        showSuccess(formMessage, "Successfully modified credentials!");
+                    else {
+                        success = false; // refresh success if also changing email
+                        try {
+                            User taken_email = UserService.fetchUser(email);
+                            if(taken_email == null){
+                                currentUser.setEmail(email);
+                                success = true;
+                            }
+                            else{
+                                showError(emailFormMessage, "Email is already taken!");
+                            }
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        if(success){
+                            showSuccess(emailFormMessage, "Successfully modified email!");
+                        }
                     }
                 }
             }
         }
         else{
             if(!email.isEmpty()) {
+                if(!Validator.isValidEmailFormat(email)){
+                    showError(emailFormMessage, "Invalid email format!");
+                }
+                else {
                 success = false; // refresh success if also changing email
                 try {
-                    currentUser.setEmail(email);
-                    success = true;
+                    User taken_email = UserService.fetchUser(email);
+                    if(taken_email == null){
+                        currentUser.setEmail(email);
+                        success = true;
+                    }
+                    else{
+                        showError(emailFormMessage, "Email is already taken!");
+                    }
                 } catch (Exception e){
                     e.printStackTrace();
                 }
                 if(success){
-                    showSuccess(formMessage, "Successfully modified credentials!");
+                    showSuccess(emailFormMessage, "Successfully modified email!");
+                }
                 }
             }
         }
@@ -96,7 +112,7 @@ public class ModifyAccountController extends BaseController {
     @FXML
     private void handleDeleteAccount() {
         if (appState.getUser() == null) {
-            showError(formMessage,"No logged in user.");
+            showError(emailFormMessage,"No logged in user.");
             return;
         }
 
@@ -118,17 +134,15 @@ public class ModifyAccountController extends BaseController {
         }
 
         try {
-            // 1) Delete all appointments tied to this user
             boolean isPatient = user.getSpecialization().equals("none");
             if (isPatient) {
-                // Free up any slots this patient had booked
+                // Releasing slots for patients / Cant delete appointment for patients!
                 AppointmentService.releaseAppointmentsForPatient(userId);
             } else {
-                // Doctors' slots can be removed entirely
+                // Doctors can delete the appointments FULLY!
                 AppointmentService.deleteAllAppointmentsForUser(userId);
             }
 
-            // 2) Delete the user row
             UserService.deleteUser(userId);
 
             appState.setUser(null);
@@ -136,7 +150,7 @@ public class ModifyAccountController extends BaseController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError(formMessage,"Account deletion failed.");
+            showError(emailFormMessage,"Account deletion failed.");
         }
     }
 }

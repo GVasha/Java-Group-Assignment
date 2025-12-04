@@ -92,7 +92,12 @@
                                               -fx-font-size: 14px;"/>
                     </VBox>
 
-                    <Text fx:id="formMessage"
+                    <Text fx:id="passwordFormMessage"
+                          visible="false"
+                          style="-fx-fill: white;"
+                          wrappingWidth="330" />
+
+                    <Text fx:id="emailFormMessage"
                           visible="false"
                           style="-fx-fill: white;"
                           wrappingWidth="330" />

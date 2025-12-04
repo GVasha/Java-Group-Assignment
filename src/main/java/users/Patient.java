@@ -7,9 +7,6 @@ import java.util.List;
 
 import database_management.AppointmentService;
 
-
-import static database_management.AppointmentService.fetchAppointmentById;
-
 public class Patient extends User {
     // Constructor
     public Patient(int id, String email, String firstName, String lastName, String password) throws Exception {
@@ -39,8 +36,6 @@ public class Patient extends User {
         return AppointmentService.fetchAppointmentsByUserId(this.getId(), "patient");
     }
 
-    // TODO: Allow the user to search for available appointments with different parameters (date, speciality, specific doctor)
-    // Everything is optional – pass null for filters you don’t want
     public List<Appointment> searchAvailableAppointments(
             LocalDateTime from,
             LocalDateTime to,

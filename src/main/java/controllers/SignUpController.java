@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import users.Doctor;
 import users.Patient;
+import utils.Validator;
 
 import static utils.MessageUtils.*;
 
@@ -55,20 +56,6 @@ public class SignUpController extends BaseController {
 
     @FXML private Text formMessage;
 
-    /**
-     * Validates email format using regex pattern
-     * @param email The email string to validate
-     * @return true if email format is valid, false otherwise
-     */
-    private boolean isValidEmailFormat(String email) {
-        if (email == null || email.isEmpty()) {
-            return false;
-        }
-        // Standard email regex pattern
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return email.matches(emailRegex);
-    }
-
     private void activateTab(Button active, Button inactive) {
         active.setStyle("-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 999;");
         inactive.setStyle("-fx-background-color: transparent; -fx-text-fill: #cbd5f5; -fx-border-color: #64748b; -fx-border-radius: 999;");
@@ -93,7 +80,7 @@ public class SignUpController extends BaseController {
             return;
         }
 
-        if (!isValidEmailFormat(doctorEmail)) {
+        if (!Validator.isValidEmailFormat(doctorEmail)) {
             showError(formMessage,"Please enter a valid email address!");
             return;
         }
@@ -148,7 +135,7 @@ public class SignUpController extends BaseController {
             return;
         }
 
-        if (!isValidEmailFormat(patientEmail)) {
+        if (!Validator.isValidEmailFormat(patientEmail)) {
             showError(formMessage,"Please enter a valid email address!");
             return;
         }

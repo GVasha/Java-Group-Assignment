@@ -7,6 +7,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import users.User;
+import utils.Validator;
 
 import static utils.MessageUtils.*;
 
@@ -33,6 +34,10 @@ public class LoginController extends BaseController {
 
         if (email.isEmpty() || password.isEmpty()) {
             showError(formMessage,"Please enter both email and password.");
+            return;
+        }
+        if(!Validator.isValidEmailFormat(email)){
+            showError(formMessage, "Please enter a valid email address.");
             return;
         }
 
