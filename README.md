@@ -129,7 +129,14 @@ Or (if using Maven):
 mvn clean install
 mvn javafx:run
 ```
+---
+Doctor
+jlancer@gmail.com
+password: abc
 
+Patient:
+jsmith@gmail.com
+password: 123
 ---
 
 ## 📝 Future Improvements

@@ -3,7 +3,6 @@ package controllers;
 import appointments.Appointment;
 import core.AppState;
 import database_management.AppointmentService;
-import database_management.PatientService;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.ParallelTransition;
@@ -11,11 +10,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import users.Doctor;
+import users.Patient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,12 +24,10 @@ import static database_management.AppointmentService.fetchAppointmentById;
 
 public class PatientPageController extends BaseController {
 
-    @FXML private Button bookButton;
-    @FXML private Button profileButton;
+    private final AppState appState = AppState.getInstance();
+    private Patient patient =(Patient) appState.getUser();
 
     @FXML private FlowPane appointmentsGrid;
-
-    private final AppState appState = AppState.getInstance();
 
     private final DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
@@ -52,12 +49,6 @@ public class PatientPageController extends BaseController {
     }
 
     @FXML
-    private void handleProfileButton() {
-        System.out.println("Profile button clicked!");
-        // TODO: navigate to patient profile/settings page
-    }
-
-    @FXML
     private void handleLogout() {
         // Clear in-memory session
         appState.setUser(null);
@@ -70,10 +61,7 @@ public class PatientPageController extends BaseController {
 
     private void loadAppointments() {
         try {
-            int patientId = appState.getUserId();
-            List<Appointment> appointments = PatientService.fetchAppointmentsForPatientFiltered(
-                    patientId, null, null, null, null
-            );
+            List<Appointment> appointments = patient.getMyAppointments();
 
             appointmentsGrid.getChildren().clear();
 
@@ -81,8 +69,7 @@ public class PatientPageController extends BaseController {
                 Appointment appt = appointments.get(i);
                 VBox card = createAppointmentCard(appt);
                 appointmentsGrid.getChildren().add(card);
-                
-                // Animate card appearance with staggered delay
+
                 animateCardAppearance(card, i * 80); // 80ms delay between each card
             }
         } catch (Exception e) {
@@ -91,7 +78,6 @@ public class PatientPageController extends BaseController {
     }
 
     private void animateCardAppearance(VBox card, double delay) {
-        // Set initial state - invisible and slightly below
         card.setOpacity(0);
         card.setTranslateY(20);
 
@@ -217,21 +203,19 @@ public class PatientPageController extends BaseController {
                     "-fx-border-width: 1; " +
                     "-fx-border-radius: 4; " +
                     "-fx-cursor: hand;");
-            cancelButton.setOnAction(e -> handleCancelAppointment(appt.getId()));
+            cancelButton.setOnAction(e -> handleCancelAppointment(appt));
             card.getChildren().add(cancelButton);
         }
 
         return card;
     }
-    private void handleCancelAppointment(int appointmentId) {
+    private void handleCancelAppointment(Appointment appointment) {
         try {
-            Appointment fetchedAppointment = fetchAppointmentById(appointmentId);
-            if (fetchedAppointment == null) {
-                System.err.println("Appointment not found: " + appointmentId);
+            if (appointment == null) {
+                System.err.println("Appointment not found: " + appointment.getId());
                 return;
             }
-            fetchedAppointment.setStatus("CANCELLED");
-            AppointmentService.updateAppointment(fetchedAppointment);
+            patient.cancelAppointment(appointment);
             loadAppointments(); // Reload to reflect the change
         } catch (Exception e) {
             e.printStackTrace();
